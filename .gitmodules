@@ -1,3 +1,3 @@
 [submodule "dependencies/la"]
-	path = marathon/dependencies/la
+	path = dependencies/la/la
 	url = git@github.com:SamP-S/LA.git
