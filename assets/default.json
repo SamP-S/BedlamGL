@@ -1,0 +1,50 @@
+{
+    "models": [
+        "./models/ico_sphere.gltf",
+        "./models/prism.gltf",
+        "./models/cylinder.gltf",
+        "./models/sphere.gltf",
+        "./models/plane.gltf",
+        "./models/cube.gltf",
+        "./models/dome.gltf",
+        "./models/cone.gltf"
+    ],
+    "textures": [
+        "./textures/wooden_garage_door/wooden_garage_door_diff_1k.jpg",
+        "./textures/wooden_garage_door/wooden_garage_door_disp_1k.png",
+        "./textures/wooden_garage_door/wooden_garage_door_nor_gl_1k.exr",
+        "./textures/wooden_garage_door/wooden_garage_door_rough_1k.exr",
+        "./textures/wood_planks/wood_planks_rough_1k.exr",
+        "./textures/wood_planks/wood_planks_disp_1k.png",
+        "./textures/wood_planks/wood_planks_diff_1k.jpg",
+        "./textures/wood_planks/wood_planks_nor_gl_1k.exr",
+        "./textures/asphalt/asphalt_04_nor_gl_1k.exr",
+        "./textures/asphalt/asphalt_04_diff_1k.jpg",
+        "./textures/asphalt/asphalt_04_disp_1k.png",
+        "./textures/asphalt/asphalt_04_rough_1k.exr",
+        "./textures/coral_stone_wall/coral_stone_wall_nor_gl_1k.exr",
+        "./textures/coral_stone_wall/coral_stone_wall_diff_1k.jpg",
+        "./textures/coral_stone_wall/coral_stone_wall_disp_1k.png",
+        "./textures/coral_stone_wall/coral_stone_wall_rough_1k.exr",
+        "./textures/coast_sand_rocks/coast_sand_rocks_02_nor_gl_1k.exr",
+        "./textures/coast_sand_rocks/coast_sand_rocks_02_diff_1k.jpg",
+        "./textures/coast_sand_rocks/coast_sand_rocks_02_disp_1k.png",
+        "./textures/coast_sand_rocks/coast_sand_rocks_02_rough_1k.exr"
+    ],
+    "scenes": [
+        "./scenes/Preset.json",
+        "./scenes/Default.json"
+    ],
+    "cubemaps": [
+        "./cubemaps/rosendal_park_sunset_2k.hdr"
+    ],
+    "shaders": [
+        "./shaders/super-cool.frag",
+        "./shaders/base.vert",
+        "./shaders/lighting.frag",
+        "./shaders/base.frag",
+        "./shaders/cool.frag",
+        "./shaders/lighting.vert",
+        "./shaders/colour.frag"
+    ]
+}

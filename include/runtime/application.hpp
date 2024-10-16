@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <cassert>
+#include <filesystem>
 
 #include "core/tick_timer.hpp"
 #include "runtime/interactive.hpp"
@@ -21,7 +22,8 @@
 
 struct ApplicationConfig {
     std::string name = "Example Project";
-    std::string cwd = "~";
+    std::filesystem::path cwd = ".";
+    std::filesystem::path editor = "..";
     OpenGLConfig openglConfig = OpenGLConfig();
     WindowConfig windowConfig = WindowConfig();
 };
