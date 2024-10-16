@@ -58,14 +58,14 @@ public:
         loaderManager.AddLoader(std::make_shared<ShaderLoader>());
 
         // load default model(s)
-        loaderManager.Load("assets/models/presets/cone.gltf");
-        loaderManager.Load("assets/models/presets/cube.gltf");
-        loaderManager.Load("assets/models/presets/cylinder.gltf");
-        loaderManager.Load("assets/models/presets/dome.gltf");
-        loaderManager.Load("assets/models/presets/ico_sphere.gltf");
-        loaderManager.Load("assets/models/presets/plane.gltf");
-        loaderManager.Load("assets/models/presets/prism.gltf");
-        loaderManager.Load("assets/models/presets/sphere.gltf");
+        loaderManager.Load("assets/models/cone.gltf");
+        loaderManager.Load("assets/models/cube.gltf");
+        loaderManager.Load("assets/models/cylinder.gltf");
+        loaderManager.Load("assets/models/dome.gltf");
+        loaderManager.Load("assets/models/ico_sphere.gltf");
+        loaderManager.Load("assets/models/plane.gltf");
+        loaderManager.Load("assets/models/prism.gltf");
+        loaderManager.Load("assets/models/sphere.gltf");
 
         // load default shader source(s)
         loaderManager.Load("assets/shaders/base.vert");
