@@ -58,20 +58,20 @@ public:
         loaderManager.AddLoader(std::make_shared<ShaderLoader>());
 
         // load default model(s)
-        loaderManager.Load("marathon/assets/models/presets/cone.gltf");
-        loaderManager.Load("marathon/assets/models/presets/cube.gltf");
-        loaderManager.Load("marathon/assets/models/presets/cylinder.gltf");
-        loaderManager.Load("marathon/assets/models/presets/dome.gltf");
-        loaderManager.Load("marathon/assets/models/presets/ico_sphere.gltf");
-        loaderManager.Load("marathon/assets/models/presets/plane.gltf");
-        loaderManager.Load("marathon/assets/models/presets/prism.gltf");
-        loaderManager.Load("marathon/assets/models/presets/sphere.gltf");
+        loaderManager.Load("assets/models/presets/cone.gltf");
+        loaderManager.Load("assets/models/presets/cube.gltf");
+        loaderManager.Load("assets/models/presets/cylinder.gltf");
+        loaderManager.Load("assets/models/presets/dome.gltf");
+        loaderManager.Load("assets/models/presets/ico_sphere.gltf");
+        loaderManager.Load("assets/models/presets/plane.gltf");
+        loaderManager.Load("assets/models/presets/prism.gltf");
+        loaderManager.Load("assets/models/presets/sphere.gltf");
 
         // load default shader source(s)
-        loaderManager.Load("marathon/assets/shaders/base.vert");
-        loaderManager.Load("marathon/assets/shaders/base.frag");
-        loaderManager.Load("marathon/assets/shaders/lighting.vert");
-        loaderManager.Load("marathon/assets/shaders/lighting.frag");
+        loaderManager.Load("assets/shaders/base.vert");
+        loaderManager.Load("assets/shaders/base.frag");
+        loaderManager.Load("assets/shaders/lighting.vert");
+        loaderManager.Load("assets/shaders/lighting.frag");
 
         // load default shader(s)
         std::shared_ptr<Shader> base = assetManager.CreateAsset<OpenGLShader>(
@@ -93,7 +93,7 @@ public:
         material->shader = lighting;
 
         // load scene
-        LoadScene("marathon/assets/scenes/Preset.json");
+        LoadScene("assets/scenes/Preset.json");
     }
 
     void Update(double dt) override {

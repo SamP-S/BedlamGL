@@ -21,14 +21,14 @@ if (NOT EXISTS ${LIBTFD_DIR}/CMakeLists.txt)
 endif()
 
 # add submodule libraries
-add_subdirectory("marathon/dependencies/la")
+add_subdirectory("dependencies/la")
 
 set(INCLUDE_DIRS
-    "marathon/include" 
-    "marathon/external/entt/include"
-    "marathon/external/tinygltf/include"
+    "include" 
+    "external/entt/include"
+    "external/tinygltf/include"
 )
-file(GLOB_RECURSE SRC_FILES "marathon/src/**.cpp")
+file(GLOB_RECURSE SRC_FILES "src/**.cpp")
 message(STATUS "INCLUDE_DIRS: " ${INCLUDE_DIRS})
 message(STATUS "SRC_FILES: ${SRC_FILES}")
 
