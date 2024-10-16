@@ -8,7 +8,6 @@
 #include <map>
 #include <vector>
 
-#include "core/filepath.hpp"
 #include "ecs/asset.hpp"
 #include "renderer/mesh.hpp"
 #include "renderer/material.hpp"
@@ -30,7 +29,7 @@ class ModelLoader : public IAssetLoader {
 
 private:
     std::vector<std::string> _extensions = {".gltf"};
-	std::string _currentlyLoading = "";
+	std::filesystem::path _currentlyLoading = "";
 
 	void ProcessMesh(const tinygltf::Mesh& mesh, const tinygltf::Model& model) {
 		std::vector<vec3> vertices;
@@ -111,18 +110,18 @@ public:
 	ModelLoader()
 		: IAssetLoader() {}
 
-	bool Load(const std::string& filepath) {
+	bool Load(const std::filesystem::path& filepath) {
 		tinygltf::Model model;
 		tinygltf::TinyGLTF loader;
 		std::string err;
 		std::string warn;
 		
-		bool result = loader.LoadASCIIFromFile(&model, &err, &warn, filepath);
+		bool result = loader.LoadASCIIFromFile(&model, &err, &warn, filepath.string());
 		if (!result) {
 			std::cout << "WARNING: Failed to load glTF file: " << err << std::endl;
 			return false;
 		}
-		_currentlyLoading = filepath;
+		
 		for (const tinygltf::Material& material : model.materials) {
 			ProcessMaterial(material, model);
 		}
@@ -130,15 +129,15 @@ public:
 		for (const tinygltf::Mesh& mesh : model.meshes) {
 			ProcessMesh(mesh, model);
 		}
-		_currentlyLoading = "";
+		
 		return true;
 	}
 
 	std::vector<std::string> GetSupportedExt() {
 		return _extensions;
 	}
-    bool CanLoad(const std::string& filepath) {
-		std::string test_ext = GetFileExtension(filepath);
+    bool CanLoad(const std::filesystem::path& filepath) {
+		std::string test_ext = filepath.extension().string();
 		return (test_ext.compare(".gltf") == 0);
 	};
 

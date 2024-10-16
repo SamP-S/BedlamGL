@@ -10,6 +10,7 @@
 #include <iostream>
 #include <memory>
 #include <algorithm>
+#include <filesystem>
 
 // internal libs
 #include "core/uuid.hpp"
@@ -163,9 +164,9 @@ class IAssetLoader {
         
     public:
         AssetManager&  assetManager = AssetManager::Instance();
-        virtual bool Load(const std::string& filepath) = 0;
+        virtual bool Load(const std::filesystem::path& filepath) = 0;
         virtual std::vector<std::string> GetSupportedExt() = 0;
-        virtual bool CanLoad(const std::string& filepath) = 0;
+        virtual bool CanLoad(const std::filesystem::path& filepath) = 0;
         
 };
 

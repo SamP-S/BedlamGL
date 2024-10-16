@@ -9,7 +9,6 @@
 #include <vector>
 
 #include "ecs/asset.hpp"
-#include "core/filepath.hpp"
 #include "platform/opengl/opengl_shader.hpp"
 #include "platform/opengl/opengl_shader_source.hpp"
 
@@ -39,10 +38,9 @@ public:
 	ShaderLoader()
 		: IAssetLoader() {}
 
-	bool Load(const std::string& filepath) {
+	bool Load(const std::filesystem::path& filepath) {
 		// inspect file extension
-        std::string ext = GetFileExtension(filepath);
-        if (!CanLoad(ext)) {
+        if (!CanLoad(filepath)) {
             std::cout << "WARNING (ShaderLoader): Trying to open file of unsupported ext @ " << filepath << std::endl;
             return false;
         }
@@ -62,11 +60,11 @@ public:
             // dump file as string
             std::string source = strBuffer.str();
             // get name from filepath
-            std::string name = GetFileName(filepath) + GetFileExtension(filepath);
+            std::string name = filepath.filename().string();
             // replace ".ext" to "_ext"
             std::replace(name.begin(), name.end(), '.', '_');
             // look up stage type
-            auto it = _extToType.find(ext);
+            auto it = _extToType.find(filepath.extension().string());
             if (it != _extToType.end()) {
                 ShaderStage stage = it->second;
                 std::shared_ptr<ShaderSource> shaderSource = assetManager.CreateAsset<OpenGLShaderSource>();
@@ -89,8 +87,8 @@ public:
 	std::vector<std::string> GetSupportedExt() {
 		return _extensions;
 	}
-    bool CanLoad(const std::string& filepath) {
-        std::string test_ext = GetFileExtension(filepath);
+    bool CanLoad(const std::filesystem::path& filepath) {
+        std::string test_ext = filepath.extension().string();
         for (const auto& ext : _extensions) {
             if (test_ext.compare(ext) == 0)
                 return true;
