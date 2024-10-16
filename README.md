@@ -1,5 +1,5 @@
-# SceneGL - Sam Pearson-Smith
-### C++ | SDL2 | OpenGL
+# Marathon Engine - Sam Pearson-Smith
+### *Powered By: C++ | SDL2 | OpenGL*
 
 ## Requirements
 - CMake
@@ -13,7 +13,19 @@
 ```
 
 ## Summary
-A simple OpenGL rendering engine for experimenting with graphics and game engine features.
+A simple core game engine supporting:
+- [ ] Window/Context Manager (powered by SDL2)
+- [ ] Rendering (powered by OpenGL)
+- [ ] Physics
+- [ ] Entity Component System (powered by Entt)
+- [ ] Audio
+- [ ] Scripting
+- [ ] Resource Management
+- [ ] File Loading/Saving
+- [ ] Scene Tree
+- [ ] Serialization
+- [ ] Maths
+- [ ] Input
 
 Goals:
 

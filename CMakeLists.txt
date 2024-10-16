@@ -20,8 +20,7 @@ if (NOT EXISTS ${LIBTFD_DIR}/CMakeLists.txt)
         WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 endif()
 
-add_subdirectory("marathon/dependencies/tinyfiledialogs")
-add_subdirectory("marathon/dependencies/imguizmo")
+# add submodule libraries
 add_subdirectory("marathon/dependencies/la")
 
 set(INCLUDE_DIRS
@@ -57,16 +56,9 @@ message(STATUS "GLEW included at ${GLEW_INCLUDE_DIRS}")
 message(STATUS "GLEW libraries are ${GLEW_LIBRARIES}")
 
 # runtime
-add_executable(sprinter "sprinter/src/sprinter.cpp")
-target_include_directories(sprinter PUBLIC "sprinter/include")
-target_link_libraries(sprinter PUBLIC marathon)
-
-# # editor
-add_executable(spectator "spectator/src/main.cpp")
-target_include_directories(spectator PUBLIC "spectator/include")
-target_link_libraries(spectator PUBLIC tinyfiledialogs)
-target_link_libraries(spectator PUBLIC imguizmo)
-target_link_libraries(spectator PUBLIC marathon)
+add_executable(live_test "test/live_test/src/main.cpp")
+target_include_directories(live_test PUBLIC "test/live_test/include")
+target_link_libraries(live_test PUBLIC marathon)
 
 # test scripts
 add_executable(ecs_test "test/ecs_test.cpp")
@@ -75,7 +67,3 @@ target_link_libraries(ecs_test PUBLIC la)
 
 add_executable(la_test "test/la_test.cpp")
 target_link_libraries(la_test PUBLIC la)
-
-add_executable(imguizmo_test "test/imguizmo_test.cpp")
-target_link_libraries(imguizmo_test PUBLIC la)
-target_link_libraries(imguizmo_test PUBLIC imguizmo)
