@@ -6,13 +6,11 @@
 #include "core/tick_timer.hpp"
 #include "serializer/scene_serializer.hpp"
 #include "input/input.hpp"
-#include "platform/opengl/opengl_material.hpp"
-#include "platform/opengl/opengl_renderer.hpp"
+#include "renderer/opengl/opengl_material.hpp"
+#include "renderer/opengl/opengl_renderer.hpp"
 #include "renderer/shader_loader.hpp"
 #include "renderer/model_loader.hpp"
 
-
-#include "first_person_camera.hpp"
 
 //// TODO:
 // consolidate naming such that Tick is every frame/on timer
@@ -32,21 +30,9 @@ private:
     std::shared_ptr<Scene> scene = std::make_shared<Scene>();
 
     // local stuff
-    FirstPersonCamera firstPersonCamera = FirstPersonCamera();
-    ShadingMode shadingMode = ShadingMode::SHADED_WIREFRAME;
+    ShadingMode shadingMode = ShadingMode::SHADED_WIREFRAM;
 
-    // Load Scene from JSON
-    void LoadScene(const std::string& filepath) {
-        SceneSerializer js = SceneSerializer(*scene);
-        js.Deserialize(filepath);
-    }
 
-    // Save scene to JSON
-    void SaveScene(const std::string& filepath) {
-        SceneSerializer js = SceneSerializer(*scene);
-        js.Serialize(filepath);
-    }
-    
 
 public:
     Runtime() {}

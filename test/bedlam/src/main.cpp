@@ -9,8 +9,9 @@ int main(int argc, char *argv[]) {
 
     // instance app cfg
     ApplicationConfig appCfg;
-    appCfg.name = "live_test";
-    appCfg.cwd = "~/source/repos/hobby/SceneGL/sample_project";
+    appCfg.name = "Bedlam";
+    appCfg.cwd = "~/source/Marathon/test/bedlam";
+    appCfg.editor = "~/source/Marathon"
     // write more application pre-launch configuration
     // appCfg.####
 
