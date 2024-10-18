@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-#include "platform/opengl/opengl.hpp"
+#include "renderer/opengl/opengl.hpp"
 #include "renderer/mesh.hpp"
 
 //// TODO:

@@ -1,4 +1,4 @@
-#include "platform/opengl/opengl.hpp"
+#include "renderer/opengl/opengl.hpp"
 
 bool OpenGLErrorCheck() {
     uint32_t error = glGetError();

@@ -1,5 +1,5 @@
 #include "renderer/frame_buffer.hpp"
-#include "platform/opengl/opengl_frame_buffer.hpp"
+#include "renderer/opengl/opengl_frame_buffer.hpp"
 
 std::shared_ptr<FrameBuffer> FrameBuffer::Create(const std::string& name, int width, int height) {
     switch (RendererAPI::GetAPI()) {

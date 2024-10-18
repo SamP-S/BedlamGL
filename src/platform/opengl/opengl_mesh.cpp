@@ -1,4 +1,4 @@
-#include "platform/opengl/opengl_mesh.hpp"
+#include "renderer/opengl/opengl_mesh.hpp"
 
 OpenGLMesh::OpenGLMesh(std::string name)
     : Mesh(name) {}

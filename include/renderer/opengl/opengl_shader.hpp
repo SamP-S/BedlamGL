@@ -5,7 +5,7 @@
 #include <fstream>
 #include <sstream>
 
-#include "platform/opengl/opengl.hpp"
+#include "renderer/opengl/opengl.hpp"
 #include "renderer/shader.hpp"
 
 //// TODO:

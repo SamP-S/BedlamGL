@@ -1,5 +1,5 @@
 #include "renderer/context.hpp"
-#include "platform/opengl/opengl_context.hpp"
+#include "renderer/opengl/opengl_context.hpp"
 
 std::shared_ptr<Context> Context::Create() {
     switch (RendererAPI::GetAPI()) {

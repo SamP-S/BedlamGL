@@ -11,9 +11,9 @@
 #include <memory>
 
 #include "renderer/renderer.hpp"
-#include "platform/opengl/opengl.hpp"
-#include "platform/opengl/opengl_shader.hpp"
-#include "platform/opengl/opengl_mesh.hpp"
+#include "renderer/opengl/opengl.hpp"
+#include "renderer/opengl/opengl_shader.hpp"
+#include "renderer/opengl/opengl_mesh.hpp"
 
 //// TODO:
 // no method for glViewport(0, 0, width, height);

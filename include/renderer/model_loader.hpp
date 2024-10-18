@@ -14,7 +14,7 @@
 #include "la_extended.h"
 using namespace LA;
 
-#include "platform/opengl/opengl_mesh.hpp"
+#include "renderer/opengl/opengl_mesh.hpp"
 
 #define TINYGLTF_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION

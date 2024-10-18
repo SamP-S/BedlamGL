@@ -1,4 +1,4 @@
-#include "platform/opengl/opengl_renderer.hpp"
+#include "renderer/opengl/opengl_renderer.hpp"
 
 void OpenGLRenderer::Boot() {
     std::cout << "DEBUG (OpenGLRenderer): Boot." << std::endl;

@@ -13,7 +13,6 @@
 #include <functional>
 
 #include "core/module.hpp"
-#include "input/input.hpp"
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600

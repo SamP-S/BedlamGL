@@ -1,4 +1,4 @@
-#include "platform/opengl/opengl_shader.hpp"
+#include "renderer/opengl/opengl_shader.hpp"
 
 OpenGLShader::OpenGLShader(std::string name, std::shared_ptr<ShaderSource> vs, std::shared_ptr<ShaderSource> fs)
     : Shader(name, vs, fs) {

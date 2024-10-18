@@ -9,8 +9,8 @@
 #include <vector>
 
 #include "ecs/asset.hpp"
-#include "platform/opengl/opengl_shader.hpp"
-#include "platform/opengl/opengl_shader_source.hpp"
+#include "renderer/opengl/opengl_shader.hpp"
+#include "renderer/opengl/opengl_shader_source.hpp"
 
 //  GLSL standard shader file extensions
 // .vert - a vertex shader

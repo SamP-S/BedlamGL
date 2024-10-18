@@ -1,7 +1,7 @@
 #pragma once
 
 #include "renderer/frame_buffer.hpp"
-#include "platform/opengl/opengl.hpp"
+#include "renderer/opengl/opengl.hpp"
 
 class OpenGLFrameBuffer : public FrameBuffer {
 private:

@@ -7,7 +7,7 @@
 #include <map>
 
 #include "renderer/shader_source.hpp"
-#include "platform/opengl/opengl.hpp"
+#include "renderer/opengl/opengl.hpp"
 
 class OpenGLShaderSource : public ShaderSource {
     static const std::map<ShaderStage, GLenum> _stageToGL;

@@ -1,4 +1,4 @@
-#include "platform/opengl/opengl_frame_buffer.hpp"
+#include "renderer/opengl/opengl_frame_buffer.hpp"
 
 /// TODO: Use glTexImage2DMultisample with a sample count for antialiasing affects
 /// implement more openly to allow multiple colour attachments

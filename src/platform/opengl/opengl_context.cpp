@@ -1,4 +1,4 @@
-#include "platform/opengl/opengl_context.hpp"
+#include "renderer/opengl/opengl_context.hpp"
 
 OpenGLContext::OpenGLContext()  {
     SetPointSize(_pointSize);

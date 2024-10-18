@@ -1,5 +1,5 @@
 #include "renderer/material.hpp"
-#include "platform/opengl/opengl_material.hpp"
+#include "renderer/opengl/opengl_material.hpp"
 
 std::shared_ptr<Material> Material::Create(const std::string& name) {
     switch (RendererAPI::GetAPI()) {

@@ -1,4 +1,4 @@
-#include "platform/opengl/opengl_shader_source.hpp"
+#include "renderer/opengl/opengl_shader_source.hpp"
 
 const std::map<ShaderStage, GLenum> OpenGLShaderSource::_stageToGL = {
     {ShaderStage::INVALID, 0},

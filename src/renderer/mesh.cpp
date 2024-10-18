@@ -1,5 +1,5 @@
 #include "renderer/mesh.hpp"
-#include "platform/opengl/opengl_mesh.hpp"
+#include "renderer/opengl/opengl_mesh.hpp"
 
 std::shared_ptr<Mesh> Mesh::Create(std::string name) {
     switch (RendererAPI::GetAPI()) {

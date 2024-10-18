@@ -1,7 +1,7 @@
 #pragma once
 
 #include "renderer/context.hpp"
-#include "platform/opengl/opengl.hpp"
+#include "renderer/opengl/opengl.hpp"
 
 class OpenGLContext : public Context {
 public:

@@ -1,4 +1,4 @@
-#include "platform/opengl/opengl_material.hpp"   
+#include "renderer/opengl/opengl_material.hpp"   
 
 OpenGLMaterial::OpenGLMaterial(std::string name)
     : Material(name) {}

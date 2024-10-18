@@ -1,5 +1,5 @@
 #include "renderer/renderer.hpp"
-#include "platform/opengl/opengl_renderer.hpp"
+#include "renderer/opengl/opengl_renderer.hpp"
 
 Renderer& Renderer::Instance() {
     switch (RendererAPI::GetAPI()) {

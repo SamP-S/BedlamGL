@@ -1,5 +1,5 @@
 #include "renderer/shader.hpp"
-#include "platform/opengl/opengl_shader.hpp"
+#include "renderer/opengl/opengl_shader.hpp"
 
 std::shared_ptr<Shader> Shader::Create(const std::string& name, std::shared_ptr<ShaderSource> vs, std::shared_ptr<ShaderSource> fs) {
     switch (RendererAPI::GetAPI()) {
