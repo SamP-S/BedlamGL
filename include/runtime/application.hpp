@@ -25,15 +25,15 @@ struct ApplicationConfig {
     std::string name = "Example Project";
     std::filesystem::path cwd = ".";
     std::filesystem::path editor = "..";
-    OpenGLConfig openglConfig = OpenGLConfig();
-    WindowConfig windowConfig = WindowConfig();
+    window::OpenGLConfig openglConfig = window::OpenGLConfig();
+    window::WindowConfig windowConfig = window::WindowConfig();
 };
 
 class Application {
 public:
 
-    Window& Window = Window::Instance();
-    Renderer& Renderer = Renderer::Instance();
+    window::Window& Window = window::Window::Instance();
+    renderer::Renderer& Renderer = renderer::Renderer::Instance();
 
     static Application* Create(ApplicationConfig cfg) {
         assert(_instance == nullptr && "Attempting to create application twice. Only 1 allowed.");

@@ -8,16 +8,16 @@ int main(int argc, char *argv[]) {
     std::cout << "start of program" << std::endl;
 
     // instance app cfg
-    ApplicationConfig appCfg;
+    marathon::ApplicationConfig appCfg;
     appCfg.name = "Bedlam";
     appCfg.cwd = "~/source/Marathon/test/bedlam";
-    appCfg.editor = "~/source/Marathon"
+    appCfg.editor = "~/source/Marathon";
     // write more application pre-launch configuration
     // appCfg.####
 
     // create app & run
-    Application* app = Application::Create(appCfg);
-    app->SetInteractive(new Runtime());
+    marathon::Application* app = marathon::Application::Create(appCfg);
+    app->SetInteractive(new marathon::Runtime());
     app->Run();
     delete app;
     

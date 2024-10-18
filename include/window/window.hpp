@@ -16,6 +16,10 @@
 #include "core/module.hpp"
 #include "input/input.hpp"
 
+namespace marathon {
+
+namespace window {
+
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 
@@ -103,3 +107,7 @@ public:
     void SetCursorCapture(bool capture);
     bool GetCursorCapture();
 };
+
+} // window
+
+} // marathon
