@@ -1,5 +1,11 @@
 #include "renderer/opengl/opengl_context.hpp"
 
+namespace marathon {
+
+namespace renderer {
+
+namespace opengl {
+
 OpenGLContext::OpenGLContext()  {
     SetPointSize(_pointSize);
     SetLineWidth(_lineWidth);
@@ -85,3 +91,9 @@ void OpenGLContext::SetDepthTesting(bool enabled) {
 bool OpenGLContext::IsDepthTesting() {
     return _depthTesting;
 }
+
+} // opengl
+
+} // renderer
+
+} // marathon

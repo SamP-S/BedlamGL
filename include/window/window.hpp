@@ -11,8 +11,10 @@
 #include <stdlib.h>
 #include <map>
 #include <functional>
+#include <iostream>
 
 #include "core/module.hpp"
+#include "input/input.hpp"
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
@@ -54,7 +56,7 @@ struct OpenGLConfig {
     int stencil = 8;
 };
 
-class Window : public Module {
+class Window : public marathon::Module {
 private:
     OpenGLConfig _openglConfig;
     WindowConfig _windowConfig;
@@ -77,7 +79,7 @@ public:
     void Boot() override;
     void Shutdown() override;
     std::string GetName() override;
-    ModuleType GetType() override;
+    marathon::ModuleType GetType() override;
 
     // common
     void* GetGLContext();

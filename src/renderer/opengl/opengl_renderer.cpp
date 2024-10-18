@@ -1,5 +1,11 @@
 #include "renderer/opengl/opengl_renderer.hpp"
 
+namespace marathon {
+
+namespace renderer {
+
+namespace opengl {
+
 void OpenGLRenderer::Boot() {
     std::cout << "DEBUG (OpenGLRenderer): Boot." << std::endl;
     std::cout << "DEBUG (OpenGLRenderer): OpenGL version: " << glGetString(GL_VERSION) << std::endl;
@@ -67,3 +73,9 @@ Renderer& OpenGLRenderer::Instance() {
         instance = new OpenGLRenderer();
     return *instance;
 }
+
+} // opengl
+
+} // renderer
+
+} // marathon

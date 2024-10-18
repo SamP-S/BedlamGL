@@ -7,6 +7,12 @@
 #include "renderer/opengl/opengl.hpp"
 #include "renderer/mesh.hpp"
 
+namespace marathon {
+
+namespace renderer {
+
+namespace opengl {
+
 //// TODO:
 // think about renaming position to "vertex" or "fragment" for coordinate space to be inherant in the name
 // modify to use an array of buffers instead of having 8 fixed buffers, glGenBuffers(n, &buffers)
@@ -49,3 +55,9 @@ private:
 
     void Generate();
 };
+
+} // opengl
+
+} // renderer
+
+} // marathon

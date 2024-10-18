@@ -21,6 +21,9 @@
 #include "renderer/material.hpp"
 #include "renderer/context.hpp"
 
+namespace marathon {
+
+namespace renderer {
 
 class Renderer : public Module {
 protected:
@@ -64,3 +67,7 @@ protected:
     ~Renderer() = default;
 
 };
+
+} // renderer
+
+} // marathon

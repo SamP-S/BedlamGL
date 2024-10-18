@@ -1,5 +1,9 @@
 #pragma once
 
+namespace marathon {
+
+namespace renderer {
+
 class RendererAPI {
 public:
     enum class API {
@@ -19,3 +23,6 @@ private:
     static inline API _api = API::OPENGL;
 };
 
+} // renderer
+
+} // marathon

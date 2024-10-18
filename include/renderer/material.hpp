@@ -6,10 +6,14 @@
 #include <variant>
 #include <type_traits>
 
-#include "ecs/asset.hpp"
+#include "core/asset.hpp"
 #include "la_extended.h"
 #include "renderer/renderer_api.hpp"
 #include "renderer/shader.hpp"
+
+namespace marathon {
+
+namespace renderer {
 
 //// TODO:
 // Integrate more thoroughly with shader
@@ -47,6 +51,7 @@ public:
 
     Material(std::string name="Material")
         : Asset(name) {}
+    ~Material() = default;
 
     virtual bool IsUsable() const = 0;
     virtual void Bind() = 0;
@@ -80,3 +85,7 @@ public:
     static std::shared_ptr<Material> Create(const std::string& name);
 
 };
+
+} // renderer
+
+} // marathon

@@ -4,14 +4,16 @@
 #include <map>
 
 //// TODO:
-// Should probably keep modules in a registry together
+// Should probably keep modules in a registry together so all modules can access one another on the backend
+
+namespace marathon {
 
 // as enum for implicit int conversion
 enum class ModuleType {
     WINDOW,
     INPUT,
     MATHS,
-    RENDER,
+    RENDERER,
     AUDIO,
     MAX_ENUM
 };
@@ -24,4 +26,8 @@ public:
     
     virtual std::string GetName() = 0;
     virtual ModuleType GetType() = 0;
+
+
 };
+
+} // marathon

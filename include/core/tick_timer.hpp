@@ -3,6 +3,8 @@
 #include <chrono>
 #include <cstdint>
 
+namespace marathon {
+
 class TickTimer {
     private:
         std::chrono::time_point<std::chrono::system_clock> _startTime;
@@ -60,3 +62,5 @@ class TickTimer {
             return isMilli ? dt : dt / 1000;
         }
 };
+
+} // marathon

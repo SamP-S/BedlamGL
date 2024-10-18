@@ -1,5 +1,11 @@
 #include "renderer/opengl/opengl_frame_buffer.hpp"
 
+namespace marathon {
+
+namespace renderer {
+
+namespace opengl {
+
 /// TODO: Use glTexImage2DMultisample with a sample count for antialiasing affects
 /// implement more openly to allow multiple colour attachments
 
@@ -75,3 +81,9 @@ void OpenGLFrameBuffer::Clear() {
     glBindFramebuffer(GL_FRAMEBUFFER, _fbo);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
+
+} // opengl
+
+} // renderer
+
+} // marathon

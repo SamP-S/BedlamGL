@@ -1,5 +1,11 @@
 #include "renderer/opengl/opengl_shader.hpp"
 
+namespace marathon {
+
+namespace renderer {
+
+namespace opengl {
+
 OpenGLShader::OpenGLShader(std::string name, std::shared_ptr<ShaderSource> vs, std::shared_ptr<ShaderSource> fs)
     : Shader(name, vs, fs) {
     Compile();
@@ -152,3 +158,9 @@ void OpenGLShader::SetMat4(const std::string& name, const LA::mat4& m) const {
 void OpenGLShader::SetMat4(const std::string& name, float* mPtr) const {
     glUniformMatrix4fv(glGetUniformLocation(_programId, name.c_str()), 1, GL_FALSE, mPtr);
 }
+
+} // opengl
+
+} // renderer
+
+} // marathon

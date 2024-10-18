@@ -8,9 +8,13 @@
 #include <unordered_map>
 #include <vector>
 
-#include "ecs/asset.hpp"
+#include "core/asset.hpp"
 #include "renderer/opengl/opengl_shader.hpp"
 #include "renderer/opengl/opengl_shader_source.hpp"
+
+namespace marathon {
+
+namespace renderer {
 
 //  GLSL standard shader file extensions
 // .vert - a vertex shader
@@ -97,3 +101,7 @@ public:
 	};
 
 };
+
+} // renderer
+
+} // marathon

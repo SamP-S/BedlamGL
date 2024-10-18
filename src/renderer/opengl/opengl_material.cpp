@@ -1,5 +1,11 @@
 #include "renderer/opengl/opengl_material.hpp"   
 
+namespace marathon {
+
+namespace renderer {
+
+namespace opengl {
+
 OpenGLMaterial::OpenGLMaterial(std::string name)
     : Material(name) {}
 
@@ -44,3 +50,9 @@ void OpenGLMaterial::Bind() {
 void OpenGLMaterial::Unbind() {
     shader->Unbind();
 }
+
+} // opengl
+
+} // renderer
+
+} // marathon

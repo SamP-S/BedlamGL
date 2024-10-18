@@ -5,11 +5,16 @@
 #include <fstream>
 #include <sstream>
 
+
 #include "la_extended.h"
 
-#include "ecs/asset.hpp"
+#include "core/asset.hpp"
 #include "renderer/renderer_api.hpp"
 #include "renderer/shader_source.hpp"
+
+namespace marathon {
+
+namespace renderer {
 
 class Shader : public Asset {
 public:
@@ -46,3 +51,7 @@ public:
     static std::shared_ptr<Shader> Create(const std::string& name, std::shared_ptr<ShaderSource> vs, std::shared_ptr<ShaderSource> fs);
 
 };
+
+} // renderer
+
+} // marathon

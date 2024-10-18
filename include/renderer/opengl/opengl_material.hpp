@@ -8,6 +8,12 @@
 
 #include "renderer/material.hpp"
 
+namespace marathon {
+
+namespace renderer {
+
+namespace opengl {
+
 class OpenGLMaterial : public Material {
 public:
     OpenGLMaterial(std::string name = "Material");
@@ -16,3 +22,9 @@ public:
     void Bind();
     void Unbind();
 };
+
+} // opengl
+
+} // renderer
+
+} // marathon

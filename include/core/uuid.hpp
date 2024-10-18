@@ -4,6 +4,8 @@
 #include <random>
 #include <cmath>
 
+namespace marathon {
+
 //// TODO:
 // Add validation to ensure no possible reusage or UUID
 // Remove copying UUID, feels bad
@@ -44,3 +46,5 @@ public:
     operator int64_t() const { return (int64_t)_uuid; }
 
 };
+
+} // marathon

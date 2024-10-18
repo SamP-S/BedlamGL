@@ -3,6 +3,12 @@
 #include "renderer/context.hpp"
 #include "renderer/opengl/opengl.hpp"
 
+namespace marathon {
+
+namespace renderer {
+
+namespace opengl {
+
 class OpenGLContext : public Context {
 public:
     OpenGLContext();
@@ -28,3 +34,9 @@ public:
     OpenGLContext& operator=(const OpenGLContext&) = delete;
     
 };
+
+} // opengl
+
+} // renderer
+
+} // marathon

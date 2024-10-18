@@ -1,5 +1,9 @@
 #include "window/window.hpp"
 
+namespace marathon {
+
+namespace window {
+
 // renderer is singleton
 Window& Window::Instance() {
     static Window* instance;
@@ -98,19 +102,19 @@ void Window::PollEvents() {
                 Close();
                 return;
             case SDL_KEYUP:
-                Input::KeyEvent(event.key.keysym.scancode, KEY_UP);
+                input::Input::KeyEvent(event.key.keysym.scancode, KEY_UP);
                 break;
             case SDL_KEYDOWN:
-                Input::KeyEvent(event.key.keysym.scancode, KEY_DOWN);
+                input::Input::KeyEvent(event.key.keysym.scancode, KEY_DOWN);
                 break;
             case SDL_MOUSEMOTION:
-                Input::MouseMoved(event.motion.x, event.motion.y);
+                input::Input::MouseMoved(event.motion.x, event.motion.y);
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                Input::MouseButtonEvent(event.button.button, BUTTON_DOWN);
+                input::Input::MouseButtonEvent(event.button.button, BUTTON_DOWN);
                 break;
             case SDL_MOUSEBUTTONUP:
-                Input::MouseButtonEvent(event.button.button, BUTTON_UP);
+                input::Input::MouseButtonEvent(event.button.button, BUTTON_UP);
                 break;
             case SDL_WINDOWEVENT:
                 {
@@ -185,3 +189,7 @@ void Window::SetCursorCapture(bool capture) {
 bool Window::GetCursorCapture() {
     return (bool)SDL_GetRelativeMouseMode();
 }
+
+} // window
+
+} // marathon

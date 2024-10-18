@@ -14,6 +14,10 @@
 #include "la_extended.h"
 #include "renderer/renderer_api.hpp"
 
+namespace marathon {
+
+namespace renderer {
+
 //// TODO:
 // Add depth test function
 
@@ -72,3 +76,7 @@ public:
     static std::shared_ptr<Context> Create();
 
 };
+
+} // renderer
+
+} // marathon

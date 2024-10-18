@@ -5,8 +5,12 @@
 #include <fstream>
 #include <sstream>
 
-#include "ecs/asset.hpp"
+#include "core/asset.hpp"
 #include "renderer/renderer_api.hpp"
+
+namespace marathon {
+
+namespace renderer {
 
 enum class ShaderStage {
     INVALID = 0,
@@ -31,3 +35,7 @@ public:
     static std::shared_ptr<ShaderSource> Create(const std::string& name, const std::string& source="", const ShaderStage& stage=ShaderStage::INVALID);
 
 };
+
+} // renderer
+
+} // marathon

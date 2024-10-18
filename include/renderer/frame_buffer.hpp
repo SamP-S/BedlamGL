@@ -1,7 +1,11 @@
 #pragma once
 
-#include "ecs/asset.hpp"
+#include "core/asset.hpp"
 #include "renderer/renderer_api.hpp"
+
+namespace marathon {
+
+namespace renderer {
 
 class FrameBuffer : public Asset {
 protected:
@@ -28,3 +32,7 @@ public:
     static std::shared_ptr<FrameBuffer> Create(const std::string& name="Frame", int width=800, int height=600);
         
 };
+
+} // renderer
+
+} // marathon

@@ -1,5 +1,11 @@
 #include "renderer/opengl/opengl.hpp"
 
+namespace marathon {
+
+namespace renderer {
+
+namespace opengl {
+
 bool OpenGLErrorCheck() {
     uint32_t error = glGetError();
     if (error == GL_NO_ERROR) {
@@ -35,3 +41,9 @@ bool OpenGLErrorCheck() {
     }
     return false;
 }
+
+} // opengl
+
+} // renderer
+
+} // marathon

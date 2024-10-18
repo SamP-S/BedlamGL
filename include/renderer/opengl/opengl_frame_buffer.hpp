@@ -3,6 +3,12 @@
 #include "renderer/frame_buffer.hpp"
 #include "renderer/opengl/opengl.hpp"
 
+namespace marathon {
+
+namespace renderer {
+
+namespace opengl {
+
 class OpenGLFrameBuffer : public FrameBuffer {
 private:
     uint32_t _fbo = 0;
@@ -22,3 +28,9 @@ public:
     uint32_t GetDepthStencilAttachment() override;
     void Clear() override;
 };
+
+} // opengl
+
+} // renderer
+
+} // marathon

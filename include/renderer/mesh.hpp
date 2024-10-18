@@ -4,9 +4,13 @@
 #include <iostream>
 #include <string>
 
-#include "ecs/asset.hpp"
+#include "core/asset.hpp"
 #include "la_extended.h"
 #include "renderer/renderer_api.hpp"
+
+namespace marathon {
+
+namespace renderer {
 
 //// TODO:
 // add sub mesh support for future more complex meshes
@@ -35,3 +39,7 @@ public:
 
     static std::shared_ptr<Mesh> Create(std::string name);
 };
+
+} // renderer
+
+} // marathon

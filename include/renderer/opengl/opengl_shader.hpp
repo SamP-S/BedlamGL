@@ -8,6 +8,12 @@
 #include "renderer/opengl/opengl.hpp"
 #include "renderer/shader.hpp"
 
+namespace marathon {
+
+namespace renderer {
+
+namespace opengl {
+
 //// TODO:
 // unfix binding fragment data output location to "oColour"
 
@@ -43,3 +49,9 @@ class OpenGLShader : public Shader {
         void SetMat4(const std::string& name, const LA::mat4& m) const override;
         void SetMat4(const std::string& name, float* mPtr) const override;
 };
+
+} // opengl
+
+} // renderer
+
+} // marathon

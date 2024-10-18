@@ -15,6 +15,12 @@
 #include "renderer/opengl/opengl_shader.hpp"
 #include "renderer/opengl/opengl_mesh.hpp"
 
+namespace marathon {
+
+namespace renderer {
+
+namespace opengl {
+
 //// TODO:
 // no method for glViewport(0, 0, width, height);
 
@@ -44,3 +50,9 @@ protected:
     OpenGLRenderer() = default;
     ~OpenGLRenderer() = default;
 };
+
+} // opengl
+
+} // renderer
+
+} // marathon

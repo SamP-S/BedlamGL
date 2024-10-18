@@ -8,7 +8,7 @@
 #include <map>
 #include <vector>
 
-#include "ecs/asset.hpp"
+#include "core/asset.hpp"
 #include "renderer/mesh.hpp"
 #include "renderer/material.hpp"
 #include "la_extended.h"
@@ -21,6 +21,10 @@ using namespace LA;
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 // #define TINYGLTF_NOEXCEPTION // optional. disable exception handling.
 #include "tiny_gltf.h"
+
+namespace marathon {
+
+namespace renderer {
 
 //// TODO:
 // remove opengl dependancy
@@ -142,3 +146,7 @@ public:
 	};
 
 };
+
+} // renderer
+
+} // marathon

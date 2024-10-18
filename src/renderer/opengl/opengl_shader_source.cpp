@@ -1,5 +1,11 @@
 #include "renderer/opengl/opengl_shader_source.hpp"
 
+namespace marathon {
+
+namespace renderer {
+
+namespace opengl {
+
 const std::map<ShaderStage, GLenum> OpenGLShaderSource::_stageToGL = {
     {ShaderStage::INVALID, 0},
     {ShaderStage::VERTEX, GL_VERTEX_SHADER},
@@ -30,3 +36,9 @@ uint32_t OpenGLShaderSource::Compile() {
     }
     return shader;
 }
+
+} // opengl
+
+} // renderer
+
+} // marathon

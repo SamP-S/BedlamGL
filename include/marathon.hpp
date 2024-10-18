@@ -1,12 +1,25 @@
 #pragma once
 
-#include "ecs/ngine.hpp"
-#include "runtime/interactive.hpp"
-#include "renderer/renderer.hpp"
+#include <iostream>
+#include <string>
+#include <memory>
+#include <cassert>
+
+// include core modules
+#include "core/module.hpp"
 #include "core/tick_timer.hpp"
-#include "serializer/scene_serializer.hpp"
-#include "input/input.hpp"
-#include "renderer/opengl/opengl_material.hpp"
-#include "renderer/opengl/opengl_renderer.hpp"
-#include "renderer/shader_loader.hpp"
-#include "renderer/model_loader.hpp"
+#include "core/uuid.hpp"
+#include "core/asset.hpp"
+
+#include "window/window.hpp"
+#include "renderer/renderer.hpp"
+#include "input/input.hpp" 
+// add audio
+
+
+namespace marathon {
+
+    bool Boot();
+    bool Shutdown();
+
+} // marathon

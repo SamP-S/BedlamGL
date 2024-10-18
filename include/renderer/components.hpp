@@ -11,6 +11,10 @@
 #include "renderer/mesh.hpp"
 #include "renderer/material.hpp"
 
+namespace marathon {
+
+namespace renderer {
+
 struct CameraComponent {
     float fov = 45.0f;
     float near = 0.1f;
@@ -65,3 +69,7 @@ struct MeshRendererComponent {
     MeshRendererComponent() = default;
     MeshRendererComponent(const MeshRendererComponent&) = default;
 };
+
+} // renderer
+
+} // marathon

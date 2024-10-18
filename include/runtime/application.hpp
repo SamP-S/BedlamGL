@@ -10,6 +10,7 @@
 #include "window/window.hpp"
 #include "renderer/renderer.hpp"
 
+namespace marathon {
 
 //// TODO:
 // Implement events wrapping/parsing at the highest level before propogating
@@ -96,3 +97,5 @@ private:
     Interactive* _interactive = nullptr;
     static inline Application* _instance = nullptr;
 };
+
+} // marathon

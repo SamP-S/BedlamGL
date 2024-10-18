@@ -1,5 +1,11 @@
 #include "renderer/opengl/opengl_mesh.hpp"
 
+namespace marathon {
+
+namespace renderer {
+
+namespace opengl {
+
 OpenGLMesh::OpenGLMesh(std::string name)
     : Mesh(name) {}
 
@@ -114,3 +120,9 @@ void OpenGLMesh::Generate() {
 
     glBindVertexArray(0);
 }
+
+} // opengl
+
+} // renderer
+
+} // marathon
