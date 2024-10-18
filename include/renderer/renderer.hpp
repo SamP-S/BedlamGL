@@ -37,7 +37,7 @@ public:
         return "Renderer";
     }
     ModuleType GetType() override {
-        return ModuleType::RENDER;
+        return ModuleType::RENDERER;
     }
 
     std::shared_ptr<Context> context = nullptr;
