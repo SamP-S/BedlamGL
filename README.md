@@ -12,6 +12,8 @@
     export VK_ICD_FILENAMES="" # disable vulkan cause its breaking stuff on WSL
 ```
 
+NOTE: Default assets should be baked into code, as removes need for pathing
+
 ## Summary
 A simple core game engine supporting:
 - [ ] Window/Context Manager (powered by SDL2)

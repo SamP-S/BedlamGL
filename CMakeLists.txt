@@ -56,14 +56,10 @@ message(STATUS "GLEW included at ${GLEW_INCLUDE_DIRS}")
 message(STATUS "GLEW libraries are ${GLEW_LIBRARIES}")
 
 # runtime
-add_executable(live_test "test/live_test/src/main.cpp")
-target_include_directories(live_test PUBLIC "test/live_test/include")
-target_link_libraries(live_test PUBLIC marathon)
+add_executable(bedlam "test/bedlam/src/main.cpp")
+target_include_directories(bedlam PUBLIC "test/bedlam/include")
+target_link_libraries(bedlam PUBLIC marathon)
 
-# test scripts
-add_executable(ecs_test "test/ecs_test.cpp")
-target_include_directories(ecs_test PUBLIC ${INCLUDE_DIRS})
-target_link_libraries(ecs_test PUBLIC la)
 
 add_executable(la_test "test/la_test.cpp")
 target_link_libraries(la_test PUBLIC la)
