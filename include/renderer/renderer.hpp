@@ -33,13 +33,6 @@ protected:
     LA::mat4 _view = LA::mat4();
 
 public:
-    std::string GetName() override {
-        return "Renderer";
-    }
-    ModuleType GetType() override {
-        return ModuleType::RENDERER;
-    }
-
     std::shared_ptr<Context> context = nullptr;
 
     // set null to draw directly to screen
