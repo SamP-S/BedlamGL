@@ -29,8 +29,8 @@ public:
     virtual void Boot() = 0;
     virtual void Shutdown() = 0;
     
-    std::string GetName();
-    ModuleType GetType();
+    std::string GetName() const;
+    ModuleType GetType() const;
 
 private:
     std::string _name;
