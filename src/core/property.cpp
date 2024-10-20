@@ -2,6 +2,11 @@
 
 namespace marathon {
 
+// default constructor needed for maps/dictionaries
+// created invalid property marked by type
+Property::Property()
+    : type(PropertyType::INVALID), data({.i = 0}) {}
+
 // property allows for copying
 Property::Property(const Property& other)
     : type(other.type), data(other.data) {}

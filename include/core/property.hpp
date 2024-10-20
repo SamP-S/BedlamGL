@@ -15,7 +15,8 @@ enum class PropertyType {
     FLOAT,
     DOUBLE,
     BOOL,
-    MAX_ENUM
+    MAX_ENUM,
+    INVALID
 };
 
 // funky data type to hold any singular piece of data
@@ -29,6 +30,7 @@ public:
         bool b;
     };
 
+    Property();
     Property(const Property& other);
     Property& operator=(const Property& other);
 
