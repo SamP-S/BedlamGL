@@ -56,7 +56,8 @@ public:
     static Renderer& Instance();
         
 protected:
-    Renderer() = default;
+    Renderer(const std::string& name)
+        : Module(ModuleType::RENDERER, name) {}
     ~Renderer() = default;
 
 };

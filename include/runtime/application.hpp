@@ -25,7 +25,6 @@ struct ApplicationConfig {
     std::string name = "Example Project";
     std::filesystem::path cwd = ".";
     std::filesystem::path editor = "..";
-    window::OpenGLConfig openglConfig = window::OpenGLConfig();
     window::WindowConfig windowConfig = window::WindowConfig();
 };
 
@@ -55,7 +54,8 @@ public:
     void Run() {
         while (!Window.IsOpen()) {
             // poll events
-            Window.PollEvents();
+            // MUST MIGRATE TO EVENT SYSTEM
+            //Window.PollEvents();
 
             // get time delta
             _tickTimer->Tick();
