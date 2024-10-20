@@ -1,6 +1,9 @@
 #pragma once
 
 #include "marathon.hpp"
+#include "renderer/shader_source.hpp"
+#include "renderer/shader.hpp"
+
 
 //// TODO:
 // consolidate naming such that Tick is every frame/on timer
@@ -15,9 +18,16 @@ struct MyObject {
 class Runtime : public Interactive {
 private:
     MyObject _obj;
-    double time = 0.0;
+    double _time = 0.0;
+    std::shared_ptr<renderer::ShaderSource> _vs;
+    std::shared_ptr<renderer::ShaderSource> _fs;
+    std::shared_ptr<renderer::Shader> _shader;
+    std::shared_ptr<renderer::Mesh> _mesh;
 
 public:
+    renderer::Renderer& Renderer = renderer::Renderer::Instance();
+    window::Window& Window = window::Window::Instance();
+
     Runtime() {}
     ~Runtime() {}
 
@@ -27,14 +37,29 @@ public:
         _obj.color = {1.0f, 0.2f, 0.2f, 1.0f};
 
         // load shaders
-        
+        _vs = renderer::ShaderSource::Create("default_vs", renderer::defaultVertexShader, renderer::ShaderStage::VERTEX);
+        _fs = renderer::ShaderSource::Create("default_fs", renderer::defaultFragmentShader, renderer::ShaderStage::FRAGMENT);
+        _shader = renderer::Shader::Create("default_shader", _vs, _fs);
+
+        // create mesh
+        _mesh = renderer::Mesh::Create("default_mesh");
+        _mesh->vertices = {
+            {-0.5f, -0.5f, 0.0f},
+            {0.5f, -0.5f, 0.0f},
+            {0.0f,  0.5f, 0.0f}
+        };
+
     }
 
     void Update(double dt) override {
-        time += dt;
-        _obj.position.x = 0.5f * sin(time);
+        _time += dt;
+        _obj.position.x = 0.5f * sin(_time);
 
         // make draw call of obj at position
+        Renderer.Clear();
+        _shader->Bind();
+        _mesh->Draw();
+
     }
 
     void End() override {
