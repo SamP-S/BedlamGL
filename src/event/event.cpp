@@ -21,12 +21,12 @@ Event& Event::Instance() {
 }
 
 // Common iterative access
-int Event::Poll(std::shared_ptr<Signal>& event) {
+bool Event::Poll(std::shared_ptr<Signal>& event) {
     if (_queue.empty())
-        return 0;
+        return false;
     event = _queue.front();
     _queue.pop();
-    return _queue.size();
+    return true;
 }
     
 void Event::Push(std::shared_ptr<Signal> event) {

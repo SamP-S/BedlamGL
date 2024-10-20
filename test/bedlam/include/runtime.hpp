@@ -1,8 +1,11 @@
 #pragma once
 
+#include <iostream>
+
 #include "marathon.hpp"
 #include "renderer/shader_source.hpp"
 #include "renderer/shader.hpp"
+#include "event/event.hpp"
 
 
 //// TODO:
@@ -27,6 +30,7 @@ private:
 public:
     renderer::Renderer& Renderer = renderer::Renderer::Instance();
     window::Window& Window = window::Window::Instance();
+    event::Event& Event = event::Event::Instance();
 
     Runtime() {}
     ~Runtime() {}
@@ -52,7 +56,13 @@ public:
     }
 
     void Update(double dt) override {
-        _time += dt;
+        // poll events
+        std::shared_ptr<event::Signal> s;
+        while (Event.Poll(s)) {
+            std::cout << "runtime.hpp: event " << s->name << std::endl;
+        }
+
+        _time += dt;    // should be deleted and moved to Time system
         _obj.position.x = 0.5f * sin(_time);
 
         // make draw call of obj at position

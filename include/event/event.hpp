@@ -47,7 +47,7 @@ public:
     virtual void Shutdown() = 0;
 
     // common
-    int Poll(std::shared_ptr<Signal>& event);   // pass as reference to accept signal assignment
+    bool Poll(std::shared_ptr<Signal>& event);   // pass as reference to accept signal assignment
     void Push(std::shared_ptr<Signal> event);   // pass by value to copy event to event queue
     void Clear();
     // add wait system for reduced CPU usage
