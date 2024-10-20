@@ -52,7 +52,7 @@ public:
     
     // Application loop, independant of game/sim loop
     void Run() {
-        while (!Window.IsOpen()) {
+        while (Window.IsOpen()) {
             // poll events
             // MUST MIGRATE TO EVENT SYSTEM
             //Window.PollEvents();

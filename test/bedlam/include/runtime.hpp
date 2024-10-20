@@ -22,10 +22,12 @@ public:
     ~Runtime() {}
 
     void Start() override {
+        // create object
         _obj = MyObject();
         _obj.color = {1.0f, 0.2f, 0.2f, 1.0f};
 
         // load shaders
+        
     }
 
     void Update(double dt) override {

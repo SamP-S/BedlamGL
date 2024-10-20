@@ -44,10 +44,12 @@ public:
 
     void Clear() override;
     void RenderMesh(std::shared_ptr<Shader> shader, std::shared_ptr<Mesh> mesh, const LA::mat4& transform) override;
+    
     static Renderer& Instance();
 
 protected:
-    OpenGLRenderer() = default;
+    OpenGLRenderer()
+        : Renderer("marathon.renderer.opengl.OpenGLRenderer") {}
     ~OpenGLRenderer() = default;
 };
 
