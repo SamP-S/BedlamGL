@@ -15,7 +15,7 @@ Window::~Window() {}
 void Window::Boot() {
 
     // Initialise SDL subsystems
-    SDL_Init(SDL_INIT_EVENTS | SDL_INIT_VIDEO);
+    SDL_Init(SDL_INIT_VIDEO);
 
     // OpenGL version
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
@@ -62,7 +62,7 @@ void Window::Boot() {
 // destroy context
 void Window::Shutdown() {
     Close();
-    SDL_Quit();
+    SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }
 
 

@@ -33,6 +33,7 @@ public:
 
     window::Window& Window = window::Window::Instance();
     renderer::Renderer& Renderer = renderer::Renderer::Instance();
+    event::Event& Event = event::Event::Instance();
 
     static Application* Create(ApplicationConfig cfg) {
         assert(_instance == nullptr && "Attempting to create application twice. Only 1 allowed.");
@@ -75,6 +76,7 @@ public:
         _interactive->End();
         delete _interactive;
         Renderer.Shutdown();
+        Event.Shutdown();
         Window.Shutdown();
     }
 
@@ -85,6 +87,7 @@ private:
         : _cfg(cfg) {
         Window.Boot();
         Renderer.Boot();
+        Event.Boot();
         // start timer
         _tickTimer->Start();
         // set single app instance
