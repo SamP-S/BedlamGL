@@ -29,10 +29,7 @@ class Event : public marathon::Module {
 protected:
     Event(const std::string& name);
 
-    // interal event queueing
-    virtual void PollInternal() = 0;
-    virtual void ClearInternal() = 0;
-
+    // internal event queue
     std::queue<std::shared_ptr<Signal>> _queue;
 
 public:
