@@ -41,7 +41,6 @@ private:
     WindowConfig _windowConfig;
     SDL_GLContext _openglContext;
     SDL_Window* _window;
-
     bool _isOpen;
    
 public:
@@ -66,7 +65,7 @@ public:
     void SetCursorCapture(bool capture) override;
     bool GetCursorCapture() override;
     bool IsOpen() override;
-    bool Close() override;
+    void Close() override;
 };
 
 } // sdl2

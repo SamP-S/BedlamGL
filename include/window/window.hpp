@@ -48,7 +48,7 @@ public:
     virtual void SetCursorCapture(bool capture) = 0;
     virtual bool GetCursorCapture() = 0;
     virtual bool IsOpen() = 0;
-    virtual bool Close() = 0;
+    virtual void Close() = 0;
 };
 
 } // window

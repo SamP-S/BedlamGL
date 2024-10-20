@@ -59,7 +59,12 @@ public:
         // poll events
         std::shared_ptr<event::Signal> s;
         while (Event.Poll(s)) {
-            std::cout << "runtime.hpp: event " << s->name << std::endl;
+            std::cout << "bedlam/include/runtime.hpp: event " << s->name << std::endl;
+            if (s->name == "quit") {
+                Window.Close();
+                std::cout << "bye bye window" << std::endl;
+                return;
+            }
         }
 
         _time += dt;    // should be deleted and moved to Time system

@@ -82,19 +82,20 @@ bool Window::IsOpen() {
     return _isOpen;
 }
 
-bool Window::Close() {
+void Window::Close() {
     if (_openglContext) {
         SDL_GL_DeleteContext(_openglContext);
         _openglContext = nullptr;
     }
     if (_window) {
         SDL_DestroyWindow(_window);
-        _window = nullptr;
-
         // remove any outstanding window events as window gone now
         SDL_FlushEvent(SDL_WINDOWEVENT);
+        _window = nullptr;
     }
     _isOpen = false;
+    // std::cout << "window/sdl2/window.cpp: Window closed" << std::endl;
+    // std::cout << "error check: " << SDL_GetError() << std::endl;
 }
 
 void Window::SetWindowMinSize(int minWidth, int minHeight) {

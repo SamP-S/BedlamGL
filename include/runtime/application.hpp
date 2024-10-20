@@ -9,6 +9,7 @@
 #include "runtime/interactive.hpp"
 #include "window/window.hpp"
 #include "renderer/renderer.hpp"
+#include "event/event.hpp"
 
 namespace marathon {
 
@@ -54,9 +55,8 @@ public:
     // Application loop, independant of game/sim loop
     void Run() {
         while (Window.IsOpen()) {
-            // poll events
-            // MUST MIGRATE TO EVENT SYSTEM
-            //Window.PollEvents();
+            // fetch events from backend ready for polling
+            Event.Fetch();
 
             // get time delta
             _tickTimer->Tick();
