@@ -27,6 +27,8 @@ public:
     virtual ~Module() = default;
 
     // standard methods for safe start/end/rebooting modules
+    /// TODO:
+    // Should be removed and all boot/shutdown should be migrated to constructor/destructor
     virtual void Boot() = 0;
     virtual void Shutdown() = 0;
     

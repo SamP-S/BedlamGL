@@ -30,8 +30,8 @@ protected:
     Event(const std::string& name);
 
     // interal event queueing
-    virtual int PollInternal(void* event) = 0;
-    virtual int ClearInternal() = 0;
+    virtual void PollInternal() = 0;
+    virtual void ClearInternal() = 0;
 
     std::queue<std::shared_ptr<Signal>> _queue;
 
@@ -47,9 +47,11 @@ public:
     virtual void Shutdown() = 0;
 
     // common
+    virtual void Fetch() = 0;   // collect all events from backend into our system
+    virtual void Clear();   // dump all events from queue, backend should use its own clear method and this
     bool Poll(std::shared_ptr<Signal>& event);   // pass as reference to accept signal assignment
     void Push(std::shared_ptr<Signal> event);   // pass by value to copy event to event queue
-    void Clear();
+    
     // add wait system for reduced CPU usage
 };
 
