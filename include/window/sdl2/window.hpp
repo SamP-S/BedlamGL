@@ -41,10 +41,12 @@ private:
     WindowConfig _windowConfig;
     SDL_GLContext _openglContext;
     SDL_Window* _window;
+
+    bool _isOpen;
    
 public:
     Window();
-    ~Window();
+    ~Window() override;
 
     // module interface
     void Boot() override;

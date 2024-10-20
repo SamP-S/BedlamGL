@@ -23,7 +23,7 @@ enum class ModuleType {
 class Module {
 public:
     Module(ModuleType mType, const std::string& name);
-    virtual ~Module();
+    virtual ~Module() = default;
 
     // standard methods for safe start/end/rebooting modules
     virtual void Boot() = 0;

@@ -7,9 +7,9 @@ namespace window {
 namespace sdl2 {
 
 Window::Window()
-    : marathon::window::Window("marathon.window.sdl2") {
-
-    }
+    : marathon::window::Window("marathon.window.sdl2"),
+    _isOpen(false) {}
+Window::~Window() {}
 
 // setup context
 void Window::Boot() {
@@ -42,9 +42,10 @@ void Window::Boot() {
         _windowConfig.width, _windowConfig.height, 
         window_flags);
     _openglContext = SDL_GL_CreateContext(_window);
+    _isOpen = true;
 
     SDL_GL_MakeCurrent(_window, _openglContext);
-    SDL_GL_SetSwapInterval(_openglConfig.vsync);
+    SDL_GL_SetSwapInterval(1);
     
     SetWindowMinSize(_windowConfig.minWidth, _windowConfig.minHeight);
     SetWindowSize(_windowConfig.width, _windowConfig.height);
@@ -55,9 +56,6 @@ void Window::Boot() {
     if (err != GLEW_OK) {
         std::cerr << "Window.cpp: Failed to initialize GLEW" << std::endl;
         std::cerr << "GLEW init failed: " << glewGetErrorString(err) << std::endl;
-        _isOk = false;
-    } else {
-        _isOk = true;
     }
 }
 
@@ -80,6 +78,10 @@ void Window::SwapFrame() {
     SDL_GL_SwapWindow(_window);
 }
 
+bool Window::IsOpen() {
+    return _isOpen;
+}
+
 bool Window::Close() {
     if (_openglContext) {
         SDL_GL_DeleteContext(_openglContext);
@@ -94,17 +96,6 @@ bool Window::Close() {
     }
     _isOpen = false;
 }
-bool Window::IsOk() {
-    return _isOk;
-}
-bool Window::IsOpen() {
-    return _isOpen;
-}
-
-OpenGLConfig Window::GetOpenGLConfig() {
-    return _openglConfig;
-}
-
 
 void Window::SetWindowMinSize(int minWidth, int minHeight) {
     SDL_SetWindowMinimumSize(_window, minWidth, minHeight);

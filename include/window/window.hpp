@@ -29,26 +29,26 @@ protected:
     Window(const std::string& name);
     
 public:
-    virtual ~Window();
+    virtual ~Window() = default;
 
     static Window& Instance();
     
     // module interface
-    // void Boot() override;
-    // void Shutdown() override;
+    virtual void Boot() = 0;
+    virtual void Shutdown() = 0;
 
     // common
-    virtual void SwapFrame();
+    virtual void SwapFrame() = 0;
     
     // properties
-    virtual void SetWindowMinSize(int minWidth, int minHeight);
-    virtual void GetWindowMinSize(int& minWidth, int& minHeight);
-    virtual void SetWindowSize(int width, int height);
-    virtual void GetWindowSize(int& width, int& height);
-    virtual void SetCursorCapture(bool capture);
-    virtual bool GetCursorCapture();
-    virtual bool IsOpen();
-    virtual bool Close();
+    virtual void SetWindowMinSize(int minWidth, int minHeight) = 0;
+    virtual void GetWindowMinSize(int& minWidth, int& minHeight) = 0;
+    virtual void SetWindowSize(int width, int height) = 0;
+    virtual void GetWindowSize(int& width, int& height) = 0;
+    virtual void SetCursorCapture(bool capture) = 0;
+    virtual bool GetCursorCapture() = 0;
+    virtual bool IsOpen() = 0;
+    virtual bool Close() = 0;
 };
 
 } // window

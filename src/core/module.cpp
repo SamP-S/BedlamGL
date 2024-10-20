@@ -6,9 +6,6 @@ namespace marathon {
 Module::Module(ModuleType mType, const std::string& name)
     : _name(name), _mType(mType) {}
 
-// Destructor
-Module::~Module() {}
-
 // Get the name of the module
 std::string Module::GetName() const {
     return _name;
