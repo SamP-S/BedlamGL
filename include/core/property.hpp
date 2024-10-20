@@ -29,6 +29,9 @@ public:
         bool b;
     };
 
+    Property(const Property& other);
+    Property& operator=(const Property& other);
+
     Property(const int data);
     Property(const uint data);
     Property(const float data);
