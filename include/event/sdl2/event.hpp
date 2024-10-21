@@ -11,10 +11,10 @@ namespace event {
 
 namespace sdl2 {
 
-class Event : public marathon::event::Event {
+class Events : public marathon::event::Events {
 public:
-    Event();
-    ~Event() override;
+    Events();
+    ~Events() override;
 
     void Boot() override;
     void Shutdown() override;

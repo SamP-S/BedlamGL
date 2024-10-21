@@ -25,19 +25,19 @@ public:
     const std::unordered_map<std::string, Property> data;
 };
 
-class Event : public marathon::Module {
+class Events : public marathon::Module {
 protected:
-    Event(const std::string& name);
+    Events(const std::string& name);
 
     // internal event queue
     std::queue<std::shared_ptr<Signal>> _queue;
 
 public:
     // virtual destructor to prevent event from being instantiated
-    virtual ~Event() = default;
+    virtual ~Events() = default;
     
     // singleton instance accessor
-    static Event& Instance();
+    static Events& Instance();
 
     // module interface
     virtual void Boot() = 0;

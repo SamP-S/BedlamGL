@@ -9,19 +9,19 @@ Signal::Signal(const std::string& name, const std::unordered_map<std::string, Pr
     : name(name), data(data) {}
 
 // Constructor
-Event::Event(const std::string& name)
+Events::Events(const std::string& name)
     : marathon::Module(marathon::ModuleType::EVENT, name) {}
 
 // Singleton instance accessor
-Event& Event::Instance() {
-    static Event* instance;
+Events& Events::Instance() {
+    static Events* instance;
     if (!instance)
-        instance = new marathon::event::sdl2::Event();
+        instance = new marathon::event::sdl2::Events();
     return *instance;
 }
 
 // Common iterative access
-bool Event::Poll(std::shared_ptr<Signal>& event) {
+bool Events::Poll(std::shared_ptr<Signal>& event) {
     if (_queue.empty())
         return false;
     event = _queue.front();
@@ -29,11 +29,11 @@ bool Event::Poll(std::shared_ptr<Signal>& event) {
     return true;
 }
     
-void Event::Push(std::shared_ptr<Signal> event) {
+void Events::Push(std::shared_ptr<Signal> event) {
     _queue.push(event);
 }
 
-void Event::Clear() {
+void Events::Clear() {
     while (!_queue.empty()) {
         _queue.pop();
     }

@@ -12,33 +12,33 @@ namespace event {
 namespace sdl2 {
 
 
-Event::Event()
-    : marathon::event::Event("marathon.event.sdl2") {}
+Events::Events()
+    : marathon::event::Events("marathon.event.sdl2") {}
 
-Event::~Event() {}
+Events::~Events() {}
 
-void Event::Boot() {
+void Events::Boot() {
     if (SDL_Init(SDL_INIT_EVENTS) != 0) {
         std::cerr << "event/sdl2/event.cpp: SDL_Init Error = " << SDL_GetError() << std::endl;
     }
 }
-void Event::Shutdown() {
+void Events::Shutdown() {
     SDL_QuitSubSystem(SDL_INIT_EVENTS);
 }
 
-void Event::Fetch() {
+void Events::Fetch() {
     SDL_Event e;
     while (SDL_PollEvent(&e)) {
         std::shared_ptr<Signal> s = Convert(e);
         if (s != nullptr) {
-            Event::Push(s);
+            Events::Push(s);
         }
     }
 }
-void Event::Clear() {
+void Events::Clear() {
     SDL_Event e;
 	while (SDL_PollEvent(&e)) {}
-    Event::Clear();
+    Events::Clear();
 }
 
 /// TODO:
@@ -46,7 +46,7 @@ void Event::Clear() {
 // more rigorously parse events rather than current dummy/generic stuff
 
 
-std::shared_ptr<Signal> Event::Convert(const SDL_Event& e) {
+std::shared_ptr<Signal> Events::Convert(const SDL_Event& e) {
     switch (e.type) {
         case SDL_QUIT:
             return std::make_shared<Signal>("quit", std::unordered_map<std::string, Property>());
@@ -65,7 +65,7 @@ std::shared_ptr<Signal> Event::Convert(const SDL_Event& e) {
     }
 }
 
-std::shared_ptr<Signal> Event::ConvertWindowEvent(const SDL_Event& e) {
+std::shared_ptr<Signal> Events::ConvertWindowEvent(const SDL_Event& e) {
     std::unordered_map<std::string, Property> data;
     switch (e.window.event) {
         case SDL_WINDOWEVENT_CLOSE:
@@ -96,7 +96,7 @@ std::shared_ptr<Signal> Event::ConvertWindowEvent(const SDL_Event& e) {
             return nullptr;
     }
 }
-std::shared_ptr<Signal> Event::ConvertMouseEvent(const SDL_Event& e) {
+std::shared_ptr<Signal> Events::ConvertMouseEvent(const SDL_Event& e) {
     std::unordered_map<std::string, Property> data;
     switch (e.type) {
         case SDL_MOUSEMOTION:
@@ -123,7 +123,7 @@ std::shared_ptr<Signal> Event::ConvertMouseEvent(const SDL_Event& e) {
             return nullptr;
     }
 }
-std::shared_ptr<Signal> Event::ConvertKeyboardEvent(const SDL_Event& e) {
+std::shared_ptr<Signal> Events::ConvertKeyboardEvent(const SDL_Event& e) {
     std::unordered_map<std::string, Property> data;
     switch (e.type) {
         case SDL_KEYDOWN:

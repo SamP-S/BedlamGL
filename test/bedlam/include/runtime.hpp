@@ -30,7 +30,7 @@ private:
 public:
     renderer::Renderer& Renderer = renderer::Renderer::Instance();
     window::Window& Window = window::Window::Instance();
-    event::Event& Event = event::Event::Instance();
+    event::Events& Events = event::Events::Instance();
 
     Runtime() {}
     ~Runtime() {}
@@ -58,7 +58,7 @@ public:
     void Update(double dt) override {
         // poll events
         std::shared_ptr<event::Signal> s;
-        while (Event.Poll(s)) {
+        while (Events.Poll(s)) {
             std::cout << "bedlam/include/runtime.hpp: event " << s->name << std::endl;
             if (s->name == "quit") {
                 Window.Close();

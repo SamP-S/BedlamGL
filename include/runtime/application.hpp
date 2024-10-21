@@ -34,7 +34,7 @@ public:
 
     window::Window& Window = window::Window::Instance();
     renderer::Renderer& Renderer = renderer::Renderer::Instance();
-    event::Event& Event = event::Event::Instance();
+    event::Events& Events = event::Events::Instance();
 
     static Application* Create(ApplicationConfig cfg) {
         assert(_instance == nullptr && "Attempting to create application twice. Only 1 allowed.");
@@ -56,7 +56,7 @@ public:
     void Run() {
         while (Window.IsOpen()) {
             // fetch events from backend ready for polling
-            Event.Fetch();
+            Events.Fetch();
 
             // get time delta
             _tickTimer->Tick();
@@ -76,7 +76,7 @@ public:
         _interactive->End();
         delete _interactive;
         Renderer.Shutdown();
-        Event.Shutdown();
+        Events.Shutdown();
         Window.Shutdown();
     }
 
@@ -87,7 +87,7 @@ private:
         : _cfg(cfg) {
         Window.Boot();
         Renderer.Boot();
-        Event.Boot();
+        Events.Boot();
         // start timer
         _tickTimer->Start();
         // set single app instance
