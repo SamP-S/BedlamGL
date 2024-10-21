@@ -61,6 +61,10 @@ public:
             // get time delta
             _tickTimer->Tick();
             double dt = _tickTimer->GetTickElapsed();
+
+            /// TODO:
+            // implement time module
+            dt = 0.01f;
             
             // interactive tick
             _interactive->Update(dt);

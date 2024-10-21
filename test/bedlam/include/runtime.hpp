@@ -60,7 +60,7 @@ public:
         // poll events
         std::shared_ptr<event::Signal> s;
         while (Events.Poll(s)) {
-            std::cout << "bedlam/include/runtime.hpp: event " << s->name << std::endl;
+            // std::cout << "bedlam/include/runtime.hpp: event " << s->name << std::endl;
             if (s->name == "quit") {
                 Window.Close();
                 std::cout << "bye bye window" << std::endl;
