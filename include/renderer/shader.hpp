@@ -30,8 +30,8 @@ public:
 
     // Renderer Impl calls
     virtual void Compile() = 0;
-    virtual void Bind() const;
-    virtual void Unbind() const;
+    virtual void Bind();
+    virtual void Unbind();
     virtual void SetBool(const std::string& name, bool value) const = 0;
     virtual void SetInt(const std::string& name, int value) const = 0;
     virtual void SetUint(const std::string& name, uint32_t value) const = 0;

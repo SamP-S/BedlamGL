@@ -5,11 +5,11 @@ namespace marathon {
 
 namespace renderer {
 
-void Shader::Bind() const {
+void Shader::Bind() {
     active = std::static_pointer_cast<Shader>(shared_from_this());
 }
 
-void Shader::Unbind() const {
+void Shader::Unbind() {
     active = nullptr;
 }
 

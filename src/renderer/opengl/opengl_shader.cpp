@@ -83,7 +83,7 @@ void OpenGLShader::Compile() {
     _validShader = true;
 }
 
-void OpenGLShader::Bind() const {
+void OpenGLShader::Bind() {
     if (!IsUsable()) {
         std::cout << "WARNING (OpenGLShader): Cannot bind invalid shader." << std::endl;
         return;
@@ -92,7 +92,7 @@ void OpenGLShader::Bind() const {
     Shader::Bind();
 }
 
-void OpenGLShader::Unbind() const {
+void OpenGLShader::Unbind() {
     glUseProgram(0);
     Shader::Unbind();
 }

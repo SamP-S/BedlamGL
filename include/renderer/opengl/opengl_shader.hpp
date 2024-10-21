@@ -29,8 +29,8 @@ class OpenGLShader : public Shader {
         bool IsUsable() const override;
 
         void Compile() override;
-        void Bind() const override;
-        void Unbind() const override;
+        void Bind() override;
+        void Unbind() override;
 
         void SetBool(const std::string& name, bool value) const override;
         void SetInt(const std::string& name, int value) const override;
