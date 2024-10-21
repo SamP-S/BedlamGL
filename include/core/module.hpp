@@ -15,6 +15,7 @@ enum class ModuleType {
     RENDERER,
     AUDIO,
     EVENT,
+    TIME,
     MAX_ENUM
 };
 

@@ -7,9 +7,9 @@ namespace marathon {
 
 class TickTimer {
     private:
-        std::chrono::time_point<std::chrono::system_clock> _startTime;
-        std::chrono::time_point<std::chrono::system_clock> _endTime;
-        std::chrono::time_point<std::chrono::system_clock> _lastFrameTime;
+        std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
+        std::chrono::time_point<std::chrono::high_resolution_clock> _endTime;
+        std::chrono::time_point<std::chrono::high_resolution_clock> _lastFrameTime;
         uint32_t _tickCount = 0;
         bool _running = true;
 
@@ -19,20 +19,20 @@ class TickTimer {
         }
 
         void Start() {
-            _startTime = std::chrono::system_clock::now();
+            _startTime = std::chrono::high_resolution_clock::now();
             _lastFrameTime = _startTime;
             _running = true;
         }
 
         void Stop() {
-            _endTime = std::chrono::system_clock::now();
+            _endTime = std::chrono::high_resolution_clock::now();
             _running = false;
         }
         
         void Tick() {
             _tickCount += 1;
             if (_running) {
-                _lastFrameTime = std::chrono::system_clock::now();
+                _lastFrameTime = std::chrono::high_resolution_clock::now();
             }
         }
 
@@ -41,9 +41,9 @@ class TickTimer {
         }
 
         double GetTickElapsed(bool isMilli = false) {
-            std::chrono::time_point<std::chrono::system_clock> endTime;
+            std::chrono::time_point<std::chrono::high_resolution_clock> endTime;
             if(_running) {
-                endTime = std::chrono::system_clock::now();
+                endTime = std::chrono::high_resolution_clock::now();
             } else {
                 endTime = _endTime;
             }
@@ -52,9 +52,9 @@ class TickTimer {
         }
     
         double GetTotalElapsed(bool isMilli = false) {
-            std::chrono::time_point<std::chrono::system_clock> endTime;
+            std::chrono::time_point<std::chrono::high_resolution_clock> endTime;
             if(_running) {
-                endTime = std::chrono::system_clock::now();
+                endTime = std::chrono::high_resolution_clock::now();
             } else {
                 endTime = _endTime;
             }
