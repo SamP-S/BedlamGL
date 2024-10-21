@@ -5,11 +5,11 @@
 #include <cassert>
 #include <filesystem>
 
-#include "core/tick_timer.hpp"
 #include "runtime/interactive.hpp"
 #include "window/window.hpp"
 #include "renderer/renderer.hpp"
 #include "event/event.hpp"
+#include "time/time.hpp"
 
 namespace marathon {
 
@@ -32,6 +32,7 @@ struct ApplicationConfig {
 class Application {
 public:
 
+    time::Time& Time = time::Time::Instance();
     window::Window& Window = window::Window::Instance();
     renderer::Renderer& Renderer = renderer::Renderer::Instance();
     event::Events& Events = event::Events::Instance();
@@ -58,14 +59,8 @@ public:
             // fetch events from backend ready for polling
             Events.Fetch();
 
-            // get time delta
-            _tickTimer->Tick();
-            double dt = _tickTimer->GetTickElapsed();
+            double dt = Time.Tick();
 
-            /// TODO:
-            // implement time module
-            dt = 0.01f;
-            
             // interactive tick
             _interactive->Update(dt);
             
@@ -82,25 +77,25 @@ public:
         Renderer.Shutdown();
         Events.Shutdown();
         Window.Shutdown();
+        Time.Shutdown();
     }
 
 private:
     // Construct application using cfg
-    // Initialise context and start tick timer
+    // Initialise context and boot modules
     Application(ApplicationConfig cfg)
         : _cfg(cfg) {
+        Time.Boot();
         Window.Boot();
         Renderer.Boot();
         Events.Boot();
-        // start timer
-        _tickTimer->Start();
+
         // set single app instance
         _instance = this;
     }
     
 
     ApplicationConfig _cfg;
-    std::unique_ptr<TickTimer> _tickTimer = std::make_unique<TickTimer>();
     Interactive* _interactive = nullptr;
     static inline Application* _instance = nullptr;
 };

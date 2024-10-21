@@ -7,13 +7,15 @@
 
 // include core modules
 #include "core/module.hpp"
-#include "core/tick_timer.hpp"
 #include "core/uuid.hpp"
+#include "core/property.hpp"
 #include "core/resource.hpp"
 
 #include "window/window.hpp"
 #include "renderer/renderer.hpp"
-#include "input/input.hpp" 
+#include "input/input.hpp"
+#include "event/event.hpp"
+#include "time/time.hpp"
 // add audio
 
 
