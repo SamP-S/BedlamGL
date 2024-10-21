@@ -9,7 +9,7 @@
 #include "core/module.hpp"
 #include "core/tick_timer.hpp"
 #include "core/uuid.hpp"
-#include "core/asset.hpp"
+#include "core/resource.hpp"
 
 #include "window/window.hpp"
 #include "renderer/renderer.hpp"

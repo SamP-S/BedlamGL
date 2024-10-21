@@ -6,7 +6,7 @@
 #include <variant>
 #include <type_traits>
 
-#include "core/asset.hpp"
+#include "core/resource.hpp"
 #include "la_extended.h"
 #include "renderer/renderer_api.hpp"
 #include "renderer/shader.hpp"
@@ -44,13 +44,13 @@ struct is_in_variant<T, std::variant<Ts...>> : std::disjunction<std::is_same<T, 
 template <class T, class... Ts>
 inline constexpr bool is_in_variant_v = is_in_variant<T, Ts...>::value;
 
-class Material : public Asset {
+class Material : public Resource {
 public:
     std::map<std::string, GLSLType> properties;
     std::shared_ptr<Shader> shader = nullptr;
 
     Material(std::string name="Material")
-        : Asset(name) {}
+        : Resource(name) {}
     ~Material() = default;
 
     virtual bool IsUsable() const = 0;

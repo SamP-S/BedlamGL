@@ -5,7 +5,7 @@
 #include <fstream>
 #include <sstream>
 
-#include "core/asset.hpp"
+#include "core/resource.hpp"
 #include "renderer/renderer_api.hpp"
 
 namespace marathon {
@@ -87,13 +87,13 @@ enum class ShaderStage {
     TESSELLATION_EVALUATION = 6
 };
 
-class ShaderSource : public Asset {
+class ShaderSource : public Resource {
 public:
     std::string source = "";
     ShaderStage stage = ShaderStage::INVALID;
 
     ShaderSource(const std::string& name="Default Shader Stage", const std::string& source="", const ShaderStage& stage=ShaderStage::INVALID)
-        : Asset(name), source(source), stage(stage) {}
+        : Resource(name), source(source), stage(stage) {}
 
     virtual uint32_t Compile() = 0;
 

@@ -1,19 +1,19 @@
 #pragma once
 
-#include "core/asset.hpp"
+#include "core/resource.hpp"
 #include "renderer/renderer_api.hpp"
 
 namespace marathon {
 
 namespace renderer {
 
-class FrameBuffer : public Asset {
+class FrameBuffer : public Resource {
 protected:
     int _width = 0;
     int _height = 0;
     
     FrameBuffer(const std::string& name="FrameBuffer", int width=800, int height=600)
-        : Asset(name), _width(width), _height(height) {}
+        : Resource(name), _width(width), _height(height) {}
 
 public:
     

@@ -8,7 +8,7 @@
 
 #include "la_extended.h"
 
-#include "core/asset.hpp"
+#include "core/resource.hpp"
 #include "renderer/renderer_api.hpp"
 #include "renderer/shader_source.hpp"
 
@@ -16,13 +16,13 @@ namespace marathon {
 
 namespace renderer {
 
-class Shader : public Asset {
+class Shader : public Resource {
 public:
     std::shared_ptr<ShaderSource> vs = nullptr;
     std::shared_ptr<ShaderSource> fs = nullptr;
 
     Shader(const std::string& name, std::shared_ptr<ShaderSource> vs=nullptr, std::shared_ptr<ShaderSource> fs=nullptr)
-        : Asset(name), vs(vs), fs(fs) {}
+        : Resource(name), vs(vs), fs(fs) {}
     
     // check shader validity
     virtual bool IsUsable() const = 0;

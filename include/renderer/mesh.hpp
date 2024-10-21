@@ -4,7 +4,7 @@
 #include <iostream>
 #include <string>
 
-#include "core/asset.hpp"
+#include "core/resource.hpp"
 #include "la_extended.h"
 #include "renderer/renderer_api.hpp"
 
@@ -19,7 +19,7 @@ namespace renderer {
 // support more texture channels
 // add internal state to ensure recompilation if vertices changed
 
-class Mesh : public Asset {
+class Mesh : public Resource {
 public:
     std::vector<LA::vec3> vertices;
     std::vector<LA::vec3> normals;
@@ -32,7 +32,7 @@ public:
     std::vector<LA::vec2> uv3;
 
     Mesh(std::string name)
-        : Asset(name) {}
+        : Resource(name) {}
 
     virtual bool IsUsable() = 0;
     virtual void Draw() = 0;
