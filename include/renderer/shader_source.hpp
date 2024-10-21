@@ -44,8 +44,7 @@ uniform mat4	uTransform;
 void main()
 {
     vColour = aPosition;
-	//gl_Position = uTransform * vec4(aPosition, 1.0f);
-    gl_Position = vec4(aPosition, 1.0f);
+	gl_Position = uTransform * vec4(aPosition, 1.0f);
 }
 )";
 

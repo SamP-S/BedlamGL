@@ -89,10 +89,12 @@ void OpenGLShader::Bind() const {
         return;
     }
     glUseProgram(_programId);
+    Shader::Bind();
 }
 
 void OpenGLShader::Unbind() const {
     glUseProgram(0);
+    Shader::Unbind();
 }
 
 void OpenGLShader::SetBool(const std::string& name, bool value) const {

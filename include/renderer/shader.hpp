@@ -4,7 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
+#include <memory>
 
 #include "la_extended.h"
 
@@ -16,10 +16,11 @@ namespace marathon {
 
 namespace renderer {
 
-class Shader : public Resource {
+class Shader : public Resource, public std::enable_shared_from_this<Shader> {
 public:
     std::shared_ptr<ShaderSource> vs = nullptr;
     std::shared_ptr<ShaderSource> fs = nullptr;
+    static std::shared_ptr<Shader> active;
 
     Shader(const std::string& name, std::shared_ptr<ShaderSource> vs=nullptr, std::shared_ptr<ShaderSource> fs=nullptr)
         : Resource(name), vs(vs), fs(fs) {}
@@ -29,8 +30,8 @@ public:
 
     // Renderer Impl calls
     virtual void Compile() = 0;
-    virtual void Bind() const = 0;
-    virtual void Unbind() const = 0;
+    virtual void Bind() const;
+    virtual void Unbind() const;
     virtual void SetBool(const std::string& name, bool value) const = 0;
     virtual void SetInt(const std::string& name, int value) const = 0;
     virtual void SetUint(const std::string& name, uint32_t value) const = 0;

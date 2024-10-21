@@ -5,6 +5,14 @@ namespace marathon {
 
 namespace renderer {
 
+void Shader::Bind() const {
+    active = std::static_pointer_cast<Shader>(shared_from_this());
+}
+
+void Shader::Unbind() const {
+    active = nullptr;
+}
+
 std::shared_ptr<Shader> Shader::Create(const std::string& name, std::shared_ptr<ShaderSource> vs, std::shared_ptr<ShaderSource> fs) {
     switch (RendererAPI::GetAPI()) {
         case RendererAPI::API::NONE:
