@@ -14,7 +14,6 @@
 #include <iostream>
 
 #include "core/module.hpp"
-#include "input/input.hpp"
 #include "window/window.hpp"
 
 namespace marathon {
