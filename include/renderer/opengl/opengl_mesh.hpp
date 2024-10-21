@@ -40,7 +40,7 @@ public:
 
     bool IsUsable() override;
     
-    void Draw() override;
+    void Draw(Renderer& renderer, const LA::mat4& m) override;
 
 private:
     bool _isGenerated = false;

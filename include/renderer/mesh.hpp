@@ -4,13 +4,15 @@
 #include <iostream>
 #include <string>
 
-#include "core/resource.hpp"
 #include "la_extended.h"
+#include "renderer/drawable.hpp"
 #include "renderer/renderer_api.hpp"
 
 namespace marathon {
 
 namespace renderer {
+
+class Renderer;
 
 //// TODO:
 // add sub mesh support for future more complex meshes
@@ -19,7 +21,7 @@ namespace renderer {
 // support more texture channels
 // add internal state to ensure recompilation if vertices changed
 
-class Mesh : public Resource {
+class Mesh : public Drawable {
 public:
     std::vector<LA::vec3> vertices;
     std::vector<LA::vec3> normals;
@@ -31,11 +33,11 @@ public:
     std::vector<LA::vec2> uv2;
     std::vector<LA::vec2> uv3;
 
-    Mesh(std::string name)
-        : Resource(name) {}
+    Mesh(const std::string name)
+        : Drawable(name) {}
 
     virtual bool IsUsable() = 0;
-    virtual void Draw() = 0;
+    virtual void Draw(Renderer& renderer, const LA::mat4& m) = 0;
 
     static std::shared_ptr<Mesh> Create(std::string name);
 };

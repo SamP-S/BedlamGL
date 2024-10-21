@@ -5,7 +5,7 @@ namespace marathon {
 
 namespace renderer {
 
-std::shared_ptr<Mesh> Mesh::Create(std::string name) {
+std::shared_ptr<Mesh> Mesh::Create(const std::string name) {
     switch (RendererAPI::GetAPI()) {
         case RendererAPI::API::NONE:   
             return nullptr;

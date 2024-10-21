@@ -42,8 +42,9 @@ public:
     void SetView(const LA::mat4& view) override;
     LA::mat4 GetView() override;
 
+    void Draw(std::shared_ptr<Drawable> shader, const LA::mat4& transform) override;
+
     void Clear() override;
-    void RenderMesh(std::shared_ptr<Shader> shader, std::shared_ptr<Mesh> mesh, const LA::mat4& transform) override;
     
     static Renderer& Instance();
 

@@ -1,4 +1,5 @@
 #include "renderer/opengl/opengl_mesh.hpp"
+#include "renderer/renderer.hpp"
 
 namespace marathon {
 
@@ -26,7 +27,8 @@ bool OpenGLMesh::IsUsable() {
     return _isGenerated;
 }
 
-void OpenGLMesh::Draw() {
+void OpenGLMesh::Draw(Renderer& renderer, const LA::mat4& m) {
+    // validate mesh
     if (!_isGenerated) {
         Generate();
         if (!_isGenerated) {
@@ -34,6 +36,13 @@ void OpenGLMesh::Draw() {
         }
     }
 
+    /// TODO:
+    /// all should be generalised into DrawCommand or similar
+
+    // update default uniforms
+    Shader::active->SetMat4("uTransform", m);
+
+    // actual draw command
     glBindVertexArray(_vaBuffer);
     if (_isIndexed) {
         glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, nullptr);

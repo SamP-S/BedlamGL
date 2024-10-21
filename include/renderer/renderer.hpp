@@ -15,11 +15,10 @@
 
 #include "la_extended.h"
 #include "renderer/renderer_api.hpp"
-#include "renderer/components.hpp"
 #include "renderer/shader.hpp"
 #include "renderer/frame_buffer.hpp"
-#include "renderer/material.hpp"
 #include "renderer/context.hpp"
+#include "renderer/drawable.hpp"
 
 namespace marathon {
 
@@ -47,7 +46,7 @@ public:
 
     virtual void Clear() = 0;
     
-    virtual void RenderMesh(std::shared_ptr<Shader> shader, std::shared_ptr<Mesh> mesh, const LA::mat4& transform) = 0;
+    virtual void Draw(std::shared_ptr<Drawable> shader, const LA::mat4& transform) = 0;
 
     // delete copy and assign operators should always get instance from class::instance func
     Renderer(const Renderer&) = delete;

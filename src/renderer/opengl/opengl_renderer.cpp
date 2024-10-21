@@ -48,23 +48,15 @@ LA::mat4 OpenGLRenderer::GetView() {
     return _view;
 }
 
+void OpenGLRenderer::Draw(std::shared_ptr<Drawable> drawable, const LA::mat4& transform) {
+    drawable->Draw(*this, transform);
+}
+
 void OpenGLRenderer::Clear() {
     if (_frameBuffer)
         _frameBuffer->Clear();
     else
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-}
-
-void OpenGLRenderer::RenderMesh(std::shared_ptr<Shader> shader, std::shared_ptr<Mesh> mesh, const LA::mat4& transform) {
-    if (!shader || !mesh) {
-        std::cout << "ERROR (OpenGLRenderer): Attempting to render with null shader or mesh" << std::endl;
-        return;
-    }
-    shader->Bind();
-    shader->SetMat4("uView", _view);
-    shader->SetMat4("uProjection", _projection);
-    shader->SetMat4("uModel", transform);
-    mesh->Draw();
 }
 
 Renderer& OpenGLRenderer::Instance() {
