@@ -6,6 +6,7 @@
 #include "renderer/shader_source.hpp"
 #include "renderer/shader.hpp"
 #include "event/event.hpp"
+#include "renderer/mesh.hpp"
 
 
 //// TODO:
@@ -72,8 +73,8 @@ public:
 
         // make draw call of obj at position
         Renderer.Clear();
-        _shader->Bind();
-        _mesh->Draw();
+        _shader->Bind();    /// TODO: move to renderer
+        Renderer.Draw(_mesh, LA::Translate(_obj.position));
 
     }
 

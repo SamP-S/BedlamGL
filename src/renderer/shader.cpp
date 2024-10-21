@@ -5,6 +5,9 @@ namespace marathon {
 
 namespace renderer {
 
+// set default active shader to null
+std::shared_ptr<Shader> Shader::active = nullptr;
+
 void Shader::Bind() {
     active = std::static_pointer_cast<Shader>(shared_from_this());
 }
