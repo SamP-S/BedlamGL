@@ -52,6 +52,10 @@ void OpenGLRenderer::Draw(std::shared_ptr<Drawable> drawable, const LA::mat4& tr
     drawable->Draw(*this, transform);
 }
 
+void OpenGLRenderer::BindShader(std::shared_ptr<Shader> shader) {
+    shader->Bind();
+}
+
 void OpenGLRenderer::Clear() {
     if (_frameBuffer)
         _frameBuffer->Clear();

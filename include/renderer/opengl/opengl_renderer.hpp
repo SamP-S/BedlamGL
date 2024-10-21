@@ -42,7 +42,8 @@ public:
     void SetView(const LA::mat4& view) override;
     LA::mat4 GetView() override;
 
-    void Draw(std::shared_ptr<Drawable> shader, const LA::mat4& transform) override;
+    void Draw(std::shared_ptr<Drawable> drawable, const LA::mat4& transform) override;
+    void BindShader(std::shared_ptr<Shader> shader) override;
 
     void Clear() override;
     
