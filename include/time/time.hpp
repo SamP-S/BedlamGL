@@ -12,6 +12,9 @@ namespace time {
 class Time : public marathon::Module {
 protected:
     Time(const std::string& name);
+    std::chrono::time_point<std::chrono::high_resolution_clock> _start;
+    std::chrono::time_point<std::chrono::high_resolution_clock> _lastTick;
+    double _dt;
 
 public:
     ~Time() = default;
