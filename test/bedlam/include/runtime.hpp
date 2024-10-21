@@ -9,9 +9,6 @@
 #include "renderer/mesh.hpp"
 
 
-//// TODO:
-// consolidate naming such that Tick is every frame/on timer
-
 namespace marathon {
 
 struct MyObject {
@@ -22,7 +19,6 @@ struct MyObject {
 class Runtime : public Interactive {
 private:
     MyObject _obj;
-    double _time = 0.0;
     std::shared_ptr<renderer::ShaderSource> _vs;
     std::shared_ptr<renderer::ShaderSource> _fs;
     std::shared_ptr<renderer::Shader> _shader;
@@ -32,6 +28,7 @@ public:
     renderer::Renderer& Renderer = renderer::Renderer::Instance();
     window::Window& Window = window::Window::Instance();
     event::Events& Events = event::Events::Instance();
+    time::Time& Time = time::Time::Instance();
 
     Runtime() {}
     ~Runtime() {}
@@ -68,8 +65,9 @@ public:
             }
         }
 
-        _time += dt;    // should be deleted and moved to Time system
-        _obj.position.x = 0.5f * sin(_time);
+        double time = Time.GetTime();
+        _obj.position.x = 0.5f * sin(time);
+        std::cout << "bedlam/include/runtime.hpp: time = " << time << " :: sin = " << sin(time) << std::endl;
 
         // make draw call of obj at position
         Renderer.Clear();
