@@ -2,7 +2,7 @@
 
 #include "renderer/renderer.hpp"
 #include "window/window.hpp"
-#include "event/event.hpp"
+#include "events/events.hpp"
 #include "time/time.hpp"
 
 namespace marathon {
