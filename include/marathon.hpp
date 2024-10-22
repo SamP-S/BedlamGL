@@ -13,7 +13,7 @@
 
 #include "window/window.hpp"
 #include "renderer/renderer.hpp"
-#include "event/event.hpp"
+#include "events/events.hpp"
 #include "time/time.hpp"
 // add audio
 // add input

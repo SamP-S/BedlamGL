@@ -5,7 +5,7 @@
 #include "marathon.hpp"
 #include "renderer/shader_source.hpp"
 #include "renderer/shader.hpp"
-#include "event/event.hpp"
+#include "events/events.hpp"
 #include "renderer/mesh.hpp"
 
 
