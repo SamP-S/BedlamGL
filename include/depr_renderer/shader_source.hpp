@@ -87,16 +87,21 @@ enum class ShaderStage {
 };
 
 class ShaderSource : public Resource {
-public:
-    std::string source = "";
-    ShaderStage stage = ShaderStage::INVALID;
+protected:
+    friend class Shader;
+    friend class Renderer;
+
+    std::string _source;
+    ShaderStage _stage;
 
     ShaderSource(const std::string& name="Default Shader Stage", const std::string& source="", const ShaderStage& stage=ShaderStage::INVALID)
-        : Resource(name), source(source), stage(stage) {}
+        : Resource(name), _source(source), _stage(stage) {}
+
+public:
+    const std::string& GetSource() const { return _source; }
+    ShaderStage GetStage() const { return _stage; }
 
     virtual uint32_t Compile() = 0;
-
-    static std::shared_ptr<ShaderSource> Create(const std::string& name, const std::string& source="", const ShaderStage& stage=ShaderStage::INVALID);
 
 };
 

@@ -15,11 +15,12 @@ namespace renderer {
 
 namespace opengl {
 
-class OpenGLShaderSource : public ShaderSource {
+class ShaderSource : public renderer::ShaderSource {
+private:
     static const std::map<ShaderStage, GLenum> _stageToGL;
 
 public:
-    OpenGLShaderSource(const std::string& name="Default Shader Stage", const std::string& source="", ShaderStage stage=ShaderStage::INVALID);
+    ShaderSource(const std::string& name="Default Shader Stage", const std::string& source="", ShaderStage stage=ShaderStage::INVALID);
 
     uint32_t Compile();
 };

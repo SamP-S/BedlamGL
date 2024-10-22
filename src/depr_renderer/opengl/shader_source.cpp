@@ -6,7 +6,7 @@ namespace renderer {
 
 namespace opengl {
 
-const std::map<ShaderStage, GLenum> OpenGLShaderSource::_stageToGL = {
+const std::map<ShaderStage, GLenum> ShaderSource::_stageToGL = {
     {ShaderStage::INVALID, 0},
     {ShaderStage::VERTEX, GL_VERTEX_SHADER},
     {ShaderStage::FRAGMENT, GL_FRAGMENT_SHADER},
@@ -16,13 +16,13 @@ const std::map<ShaderStage, GLenum> OpenGLShaderSource::_stageToGL = {
     {ShaderStage::TESSELLATION_EVALUATION, GL_TESS_EVALUATION_SHADER}
 };
 
-OpenGLShaderSource::OpenGLShaderSource(const std::string& name, const std::string& source, ShaderStage stage)
+ShaderSource::ShaderSource(const std::string& name, const std::string& source, ShaderStage stage)
     : ShaderSource(name, source, stage) {}
 
-uint32_t OpenGLShaderSource::Compile() {
+uint32_t ShaderSource::Compile() {
     // create and attempt to compile shader from source
-    uint32_t shader = glCreateShader(_stageToGL.at(stage));
-    const GLchar* sourceCStr = source.c_str();
+    uint32_t shader = glCreateShader(_stageToGL.at(_stage));
+    const GLchar* sourceCStr = _source.c_str();
     glShaderSource(shader, 1, &sourceCStr, NULL);
     glCompileShader(shader);
 
