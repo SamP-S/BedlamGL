@@ -2,7 +2,7 @@
 
 #include "SDL2/SDL_events.h"
 
-#include "event/event.hpp"
+#include "events/events.hpp"
 
 
 namespace marathon {

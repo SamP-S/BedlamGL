@@ -1,5 +1,5 @@
-#include "event/event.hpp"
-#include "event/sdl2/event.hpp"
+#include "events/events.hpp"
+#include "event/sdl2/events.hpp"
 
 namespace marathon {
 
