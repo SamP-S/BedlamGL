@@ -1,5 +1,7 @@
 #pragma once
 
+// PUBLIC HEADER
+
 #include <string>
 #include <iostream>
 #include <fstream>

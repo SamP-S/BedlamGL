@@ -1,5 +1,7 @@
 #pragma once
 
+// PUBLIC HEADER
+
 // std lib
 #include <string>
 #include <iostream>

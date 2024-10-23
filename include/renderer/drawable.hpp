@@ -1,5 +1,7 @@
 #pragma once
 
+// PRIVATE HEADER
+
 #include "la_extended.h"
 #include "core/resource.hpp"
 

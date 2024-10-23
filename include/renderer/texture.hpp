@@ -1,7 +1,8 @@
 #pragma once
 
-#include "la_extended.h"
+// PUBLIC HEADER
 
+#include "la_extended.h"
 #include "renderer/drawable.hpp"
 
 namespace marathon {
