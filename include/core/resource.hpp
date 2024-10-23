@@ -8,14 +8,19 @@
 namespace marathon {
 
 struct Resource {
-    public:
-        UUID uuid;
-        std::string name;
+private:
+    UUID _uuid;
+    std::string _name;
 
-        Resource() = default;
-        Resource(const Resource&) = default;
-        Resource(const std::string& name="Resource");
-        ~Resource() = default;
+public:
+    Resource() = default;
+    Resource(const Resource&) = default;
+    Resource(const std::string& name="Resource");
+    ~Resource() = default;
+
+    UUID GetUUID() const;
+    std::string GetName() const;
+
 };
 
 } // marathon
