@@ -63,8 +63,8 @@ struct RenderStats {
 
 class Renderer : public Module {
 protected:
-    Renderer(const std::string& name)
-        : Module(ModuleType::RENDERER, name);
+    Renderer(const std::string& name);
+    
 
 public:
     virtual ~Renderer() = default;
@@ -76,14 +76,15 @@ public:
     virtual void Shutdown() = 0;
 
     /// --- Factories ---
-    virtual std::shared_ptr<Shader> CreateShader() = 0;
-    virtual std::shared_ptr<Canvas> CreateCanvas() = 0;
-    virtual std::shared_ptr<Texture> CreateTexture() = 0;
-    virtual std::shared_ptr<CubeTexture> CreateCubeTexture() = 0;
     virtual std::shared_ptr<Mesh> CreateMesh() = 0;
-
+    virtual std::shared_ptr<Shader> CreateShader() = 0;
+    virtual std::shared_ptr<Texture> CreateTexture1D() = 0;
+    virtual std::shared_ptr<Texture> CreateTexture2D() = 0;
+    virtual std::shared_ptr<Texture> CreateTexture3D() = 0;
+    virtual std::shared_ptr<Texture> CreateTextureCube() = 0;
+    
     // validation
-    virtual bool CheckShader(const std::string code, ShaderStage stage, std::string& err) = 0;
+    virtual bool ValidateShaderCode(const std::string code, ShaderStage stage, std::string& err) = 0;
     
 
     /// --- Drawing ---

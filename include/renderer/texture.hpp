@@ -2,6 +2,8 @@
 
 #include "la_extended.h"
 
+#include "renderer/drawable.hpp"
+
 namespace marathon {
 
 namespace renderer {
@@ -10,6 +12,7 @@ namespace renderer {
 // mipmaps
 // support changing texture parameters
 // support compressed texture data formats
+// depth sampling?
 
 enum class TexType {
     TYPE_1D,
@@ -54,8 +57,10 @@ enum class TexPixelFormat {
     STENCIL_8u
 };
 
+// forward delcare
+class Renderer;
 
-class Texture {
+class Texture : public Drawable {
 protected:
     Texture();
     ~Texture();
@@ -69,21 +74,28 @@ protected:
     TexWrap _wrap;
     TexPixelFormat _pixelFormat;
 
+    // drawable
+    void Draw(Renderer& Renderer, const LA::mat4& transform) override;
+
 public:
-    // Get Properties
+    // Fixed Properties
     int GetWidth();
     int GetHeight();
     int GetChannels();
     LA::vec3 GetDimensions();
     int GetMipmapCount();
+    TexPixelFormat GetPixelFormat();
+
+    // Dynamic Properties
     TexFilter GetFilter();
     TexFilter GetMipmapFilter();
     TexWrap GetWrap();
-    TexPixelFormat GetPixelFormat();
+    void SetFilter(TexFilter filter);
+    void SetMipmapFilter(TexFilter filter);
+    void SetWrap(TexWrap wrap);
 
     // // Operations
     // void ReloadMipmaps();
-
 };
 
 } // renderer
