@@ -25,6 +25,7 @@ namespace renderer {
 // Add lib dependant maximums e.g. file formats etc.
 // Add get gpu info?
 // Add WAY MORE RENDER STATISTICS
+// Implement batch drawing for performance
 
 enum class CullFace {
     FRONT,
@@ -47,6 +48,12 @@ enum class DepthFunc {
     GREATER_EQUAL
 };
 
+enum class DrawMode {
+    POINTS,
+    LINES,
+    FILL
+};
+
 // per frame
 struct RenderStats {
     int drawCalls = 0;
@@ -57,7 +64,7 @@ struct RenderStats {
 class Renderer : public Module {
 protected:
     Renderer(const std::string& name)
-        : Module(ModuleType::RENDERER, name) {}
+        : Module(ModuleType::RENDERER, name);
 
 public:
     virtual ~Renderer() = default;
@@ -68,7 +75,7 @@ public:
     virtual void Boot() = 0;
     virtual void Shutdown() = 0;
 
-    // factories   
+    /// --- Factories ---
     virtual std::shared_ptr<Shader> CreateShader() = 0;
     virtual std::shared_ptr<Canvas> CreateCanvas() = 0;
     virtual std::shared_ptr<Texture> CreateTexture() = 0;
@@ -77,9 +84,30 @@ public:
 
     // validation
     virtual bool CheckShader(const std::string code, ShaderStage stage, std::string& err) = 0;
-    virtual void ResetState() = 0;
+    
+
+    /// --- Drawing ---
+    // clear active canvas/screen of all color, depth, and stencil buffers
+    virtual void Clear() = 0;
+    // clear active canvas/screen according to bools args
+    virtual void Clear(bool clearColor, bool clearStencil, bool clearDepth) = 0;
+    virtual void Flush() = 0;
+    // Draw2D
+    virtual void Draw2D() = 0;
+    virtual void Draw2DCircle() = 0;
+    virtual void Draw2DTriangle() = 0;
+    virtual void Draw2DLine() = 0;
+    virtual void Draw2DRectangle() = 0;
+    virtual void Draw2DPoint() = 0;
+    // Draw3D
+    virtual void Draw() = 0;
+    virtual void DrawLine() = 0;
+    virtual void DrawPoint() = 0;
+    virtual void DrawCube() = 0;
+    virtual void DrawSphere() = 0;
 
     /// --- State Management ---
+    virtual void ResetState() = 0;
     virtual bool IsUsable() = 0;
     // colour
     virtual LA::vec4 GetColor() = 0;
