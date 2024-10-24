@@ -12,18 +12,12 @@ namespace opengl {
 class Buffer : public renderer::Buffer {
 protected:
     friend class Renderer;
+    friend class Mesh;
+
     GLuint _id = 0;
 
-    std::unordered_map<BufferTarget, GLenum> _targetMap = {
-        {BufferTarget::VERTEX, GL_ARRAY_BUFFER},
-        {BufferTarget::INDEX, GL_ELEMENT_ARRAY_BUFFER}
-    };
-
-    std::unordered_map<BufferUsage, GLenum> _usageMap = {
-        {BufferUsage::STATIC, GL_STATIC_DRAW},
-        {BufferUsage::DYNAMIC, GL_DYNAMIC_DRAW},
-        {BufferUsage::STREAM, GL_STREAM_DRAW}
-    };
+    static const std::unordered_map<BufferTarget, GLenum> s_targetMap;
+    static const std::unordered_map<BufferUsage, GLenum> s_usageMap;
 
 
     Buffer(void* data, size_t size, BufferTarget target, BufferUsage usage=BufferUsage::STATIC);

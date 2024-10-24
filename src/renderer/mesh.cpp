@@ -8,9 +8,6 @@ namespace renderer {
 // Add validation on data being input, accepts absolute shit atm, throw errors for the factor to catch
 
 // constructor/destructor
-Mesh::Mesh(const std::string& name, int vCount, size_t vSize, PrimitiveType primitive)
-    : Drawable(name),
-    _vertexCount(vCount), _vertexSize(vSize), _primitive(primitive) {}
 Mesh::Mesh(const std::string& name, int vCount, size_t vSize, std::shared_ptr<Buffer> vBuf, std::vector<VertexAttribute> vAttrs, PrimitiveType primitive)
     : Drawable(name),
     _vertexCount(vCount), _vertexSize(vSize), _primitive(primitive),

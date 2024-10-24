@@ -7,6 +7,7 @@
 #include <utility>
 #include <memory>
 #include <cstdlib>
+#include <unordered_map>
 
 #include "renderer/buffer.hpp"
 #include "renderer/drawable.hpp"
@@ -89,7 +90,7 @@ struct VertexAttribute {
     AttributeType type;
     int stride = 0;
     int offset = 0;
-    bool _normalised = false;
+    bool normalised = false;
 };
 
 /// TODO:
@@ -111,17 +112,18 @@ struct VertexAttribute {
 //       mesh index map data can be resized/changed
 class Mesh : public Drawable {
 protected:
+    friend class Renderer;
+    
     int _vertexCount = 0;
     size_t _vertexSize = 0;
     PrimitiveType _primitive = PrimitiveType::TRIANGLES;
+
 
     std::shared_ptr<Buffer> _vBuffer = nullptr;
     std::vector<VertexAttribute> _vAttrs = {};
     std::shared_ptr<Buffer> _iBuffer = nullptr;
     IndexType _indexType = IndexType::NONE;
 
-    // creates mesh with 0'ed vertex data
-    Mesh(const std::string& name, int vCount, size_t vSize, PrimitiveType primitive=PrimitiveType::TRIANGLES);
     // create mesh with vertex data
     Mesh(const std::string& name, int vCount, size_t vSize, std::shared_ptr<Buffer> vBuf, std::vector<VertexAttribute> vAttrs, 
         PrimitiveType primitive=PrimitiveType::TRIANGLES);
@@ -144,9 +146,9 @@ public:
 
     /// --- Index Data ---
     // unsets index buffer
-    void SetIndexMap();
+    virtual void SetIndexMap();
     // set index buffer
-    void SetIndexMap(std::shared_ptr<Buffer> buf, IndexType type=IndexType::UINT32);
+    virtual void SetIndexMap(std::shared_ptr<Buffer> buf, IndexType type=IndexType::UINT32);
     // get index buffer
     // returns true if index buffer is set and fills args
     // returns false if no index buffer set, args are set nullptr

@@ -39,6 +39,8 @@ enum class BufferUsage {
 class Buffer : public Resource {
 protected:
     friend class Renderer;
+    friend class Mesh;
+
     size_t _size;
     BufferTarget _target;
     BufferUsage _usage;
