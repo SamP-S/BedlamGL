@@ -9,6 +9,7 @@
 #include <memory>
 
 // includes
+#include "la_extended.h"
 #include "core/module.hpp"
 
 namespace marathon {
@@ -16,6 +17,7 @@ namespace marathon {
 namespace renderer {
 
 /// TODO:
+// Add TEXTURES, muy importante
 /// Add fonts
 /// Add Per-Sample Processing:
 // - Scissor Test
@@ -62,6 +64,28 @@ struct RenderStats {
     int trianglesRenderer = 0;
 };
 
+struct RendererState {
+    LA::vec4 clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
+    LA::vec<4, bool> colorMask = {true, true, true, true};
+    bool cullTest = false;
+    CullFace cullFace = CullFace::BACK;
+    CullWinding cullWinding = CullWinding::COUNTER_CLOCKWISE;
+    bool depthTest = true;
+    DepthFunc depthFunction = DepthFunc::LESS;
+    bool depthMask = true;
+    float lineWidth = 1.0f;
+    float pointSize = 1.0f;
+    bool isWireframe = false;
+    LA::mat4 projection = LA::mat4();
+    LA::mat4 view = LA::mat4();
+    std::vector<LA::mat4> transforms = {LA::mat4()};
+};
+
+// forward declarations
+class Buffer;
+class Mesh;
+class Shader;
+enum class ShaderType;
 
 class Renderer : public Module {
 protected:
@@ -78,15 +102,16 @@ public:
     virtual void Shutdown() = 0;
 
     /// --- Factories ---
+    virtual std::shared_ptr<Buffer> CreateBuffer() = 0;
     virtual std::shared_ptr<Mesh> CreateMesh() = 0;
     virtual std::shared_ptr<Shader> CreateShader() = 0;
-    virtual std::shared_ptr<Texture> CreateTexture1D() = 0;
-    virtual std::shared_ptr<Texture> CreateTexture2D() = 0;
-    virtual std::shared_ptr<Texture> CreateTexture3D() = 0;
-    virtual std::shared_ptr<Texture> CreateTextureCube() = 0;
+    // virtual std::shared_ptr<Texture> CreateTexture1D() = 0;
+    // virtual std::shared_ptr<Texture> CreateTexture2D() = 0;
+    // virtual std::shared_ptr<Texture> CreateTexture3D() = 0;
+    // virtual std::shared_ptr<Texture> CreateTextureCube() = 0;
     
     // validation
-    virtual bool ValidateShaderCode(const std::string code, ShaderStage stage, std::string& err) = 0;
+    virtual bool ValidateShaderCode(const std::string code, ShaderType stageType, std::string& err) = 0;
     
 
     /// --- Drawing ---
@@ -113,10 +138,8 @@ public:
     virtual void ResetState() = 0;
     virtual bool IsUsable() = 0;
     // colour
-    virtual LA::vec4 GetColor() = 0;
     virtual LA::vec4 GetClearColor() = 0;
     virtual LA::vec4 GetColorMask() = 0;
-    virtual void SetColor(const LA::vec4& colour) = 0;
     virtual void SetClearColor(const LA::vec4& colour) = 0;
     virtual void SetColorMask(const LA::vec4& mask) = 0;
     // culling
@@ -141,23 +164,26 @@ public:
     virtual void SetPointSize(float size) = 0;
     virtual void SetIsWireframe(bool enabled) = 0;
     // bound objects
-    virtual std::shared_ptr<Canvas> GetCanvas() = 0;
+    // virtual std::shared_ptr<Canvas> GetCanvas() = 0;
     virtual std::shared_ptr<Shader> GetShader() = 0;
-    virtual void SetCanvas(std::shared_ptr<Canvas> canvas) = 0;
+    // virtual void SetCanvas(std::shared_ptr<Canvas> canvas) = 0;
     virtual void SetShader(std::shared_ptr<Shader> shader) = 0;
 
     /// --- Coordinate System Transformations ---
     // camera and screen transformations
     virtual LA::mat4 GetProjection() = 0;
-    virtual LA::mat4 GetView() = 0
+    virtual LA::mat4 GetView() = 0;
     virtual void SetProjection(const LA::mat4& proj) = 0;
     virtual void SetView(const LA::mat4& view) = 0;
     // coordinate space transformations
     virtual LA::mat4 PopTransform() = 0;
     virtual void PushTransform(const LA::mat4& transform) = 0;
     virtual void PushTranslate(float x, float y, float z) = 0;
+    virtual void PushTranslate(LA::vec3 translate) = 0;
     virtual void PushRotate(float x, float y, float z) = 0;
+    virtual void PushRotate(LA::vec3 rotate) = 0;
     virtual void PushScale(float x, float y, float z) = 0;
+    virtual void PushScale(LA::vec3 scale) = 0;
     // virtual LA::vec3 ScreenToGlobal(const LA::vec2& point) = 0;
     // virtual LA::vec2 GlobalToScreen(const LA::vec3& point) = 0;
     
