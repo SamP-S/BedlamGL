@@ -15,9 +15,22 @@ namespace marathon {
 
 namespace renderer {
 
+/// TODO:
+// add support for seperated shader stages utilising defaults
+// support a general default data layout for vertex attributes
+// support a wider range of uniform sends
+
+enum class ShaderType {
+    VERTEX,
+    FRAGMENT
+};
+
 class Shader : public Resource {
 protected:
-    Shader(const std::string& name);
+    std::string _vSrc;
+    std::string _fSrc;
+
+    Shader(const std::string& name, const std::string& vSrc, const std::string& fSrc);
     virtual ~Shader();
 
     virtual void Bind() = 0;
@@ -42,12 +55,8 @@ public:
     virtual void SetUniform(const std::string& key, float x, float y, float z, float w) const = 0;
     // matrix uniforms
     virtual void SetUniform(const std::string& key, const LA::mat2& m) const = 0;
-    virtual void SetUniform(const std::string& key, float* mPtr) const = 0;
     virtual void SetUniform(const std::string& key, const LA::mat3& m) const = 0;
-    virtual void SetUniform(const std::string& key, float* mPtr) const = 0;
     virtual void SetUniform(const std::string& key, const LA::mat4& m) const = 0;
-    virtual void SetUniform(const std::string& key, float* mPtr) const = 0;
-    virtual void SetUniform(const std::string& key, float* mPtr) const = 0;
 };
 
 }
