@@ -16,7 +16,7 @@ namespace marathon {
 namespace renderer {
 
 class Shader : public Resource {
-private:
+protected:
     Shader(const std::string& name);
     virtual ~Shader();
 
