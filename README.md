@@ -1,6 +1,9 @@
 # Marathon Engine - Sam Pearson-Smith
 ### *Powered By: C++ | SDL2 | OpenGL*
 
+## License
+This project is licensed under the [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
 ## Requirements
 - CMake
 - OpenGL 3.3+
@@ -12,24 +15,57 @@
     export VK_ICD_FILENAMES="" # disable vulkan cause its breaking stuff on WSL
 ```
 
-NOTE: Default assets should be baked into code, as removes need for pathing
+Run compile script:
+``` bash
+./compile.sh clean
+```
+
+Or use CMake/Make directly:
+``` bash
+cmake -S . -B build
+cmake --build build
+```
+
+Run executable:
+``` bash
+./build/graphics
+```
 
 ## Summary
-A simple core game engine supporting:
-- [ ] Window/Context Manager (powered by SDL2)
-- [ ] Rendering (powered by OpenGL)
-- [ ] Physics
-- [ ] Entity Component System (powered by Entt)
-- [ ] Audio
-- [ ] Scripting
-- [ ] Resource Management
-- [ ] File Loading/Saving
-- [ ] Scene Tree
-- [ ] Serialization
-- [ ] Maths
-- [ ] Input
+A simple 2D/3D game library using a module based system inspired by pygame/love2d featuring:
+- [ ] Rendering 3D models
+- [ ] Coordinate space transformation stack
+- [ ] Orthoganol and Perspective camera types
+- [ ] Default and custom shader support
+- [ ] Default and custom vertex data
 
-Goals:
+## Modules
+The library consists of a set of fundamental modules that empower the user to create a wide variety off engine level applications:
+- Window (SDL2)
+- Renderer (OpenGL/Vulkan)
+- Time
+- Events (SDL2)
+
+To-Do:
+- Math (LA)
+- Audio (SDL2)
+- Input (SDL2)
+- Filesystem
+
+## Future Feature List
+- Multiple cameras, quick switch abilities
+- Camera preview
+- 2D/3D Physics
+- Entity component system
+- Scene tree
+- Custom canvases to draw to with variable attachments
+- Baked in runtime layer
+- Asset loading
+- Automatic game state management
+- Automatic serialization
+- Scripting engine inside C++ Game Engine (Lua/Squirrel) OR Python Game Engine + Scripting
+
+
 
 ### Tasks
 
@@ -66,28 +102,6 @@ Goals:
 - [ ] Show camera preview
 - [ ] Show camera depth preview
 - [ ] Show camera stencil preview
-
-### Physics
-- [ ] Implement AABB collision detection
-- [ ] Implement Sphere collision detection
-- [ ] Implement RigidBody
-- [ ] Implement collision reponse/fixing
-- [ ] Implement raycasting support
-- [ ] Draw physics
-
-### Entity/Components
-- [x] Implement entities
-- [x] Implement components
-- [x] Implement entity-component engine
-- [ ] Implement scene tree
-- [x] Support empty enities
-- [x] Pass as references not pointers
-- [x] Support build pattern creation
-- [x] Children in JSON
-- [x] Ensure all components follow single responsibility
-- [x] Implement using entt
-- [x] Use smart pointers
-- [ ] Implement 2d gizmos per component
 
 ### Asset Manager
 - [x] Implement asset manager
@@ -153,24 +167,5 @@ This means you should handle it, not that you should avoid having state with com
 - [ ] Implement radiosity lighting
 
 
-## Compilation
-Run compile script:
-```
-./compile.sh clean
-```
 
-Or use CMake/Make directly:
-```
-cmake -S . -B build
-cmake --build build
-```
-
-## Usage
-Run executable:
-```
-./build/graphics
-```
-
-## License
-This project is licensed under the [Apache-2.0](https://www.apache.org/licenses/LICENSE-2.0).
 

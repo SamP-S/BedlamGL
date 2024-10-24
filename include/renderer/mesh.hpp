@@ -15,6 +15,7 @@ namespace marathon {
 
 namespace renderer {
 
+// NOTE: Default assets should be baked into code, as removes need for pathing and loading from external files
 static const std::vector<LA::vec3> defaultTriangleVertices = {
     {  0.0f,  1.0f, 0.0f },
     { -1.0f, -1.0f, 0.0f },
