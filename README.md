@@ -38,6 +38,8 @@ A simple 2D/3D game library using a module based system inspired by pygame/love2
 - [ ] Orthoganol and Perspective camera types
 - [ ] Default and custom shader support
 - [ ] Default and custom vertex data
+- [ ] Multi Threading
+- [ ] Filesystem management
 
 ## Modules
 The library consists of a set of fundamental modules that empower the user to create a wide variety off engine level applications:
