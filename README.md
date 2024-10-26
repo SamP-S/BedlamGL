@@ -66,6 +66,16 @@ To-Do:
 - Automatic game state management
 - Automatic serialization
 - Scripting engine inside C++ Game Engine (Lua/Squirrel) OR Python Game Engine + Scripting
+- Real Time lighting:
+    - do directional lights as orthoganol projections
+    - (use cascade shadow maps for increasing scale i.e. like mipmaps but calculating the shadows over increasingly large areas as the resolution gets worse covering larger areas, they are further from the main rendering camera so its not as noticable)
+    - spot lights as projections to 2d texture
+    - point lights as projection over 6 directions to a cubemap
+    - fixed lighting limit PER MESH e.g. 8 lights of each type can affect the mesh (shader limitations)
+    - baked lighting to support higher lighting maximums?
+- Physics
+    - custom sphere/AABB/box
+    - PhysX
 
 
 
