@@ -31,7 +31,7 @@ const std::unordered_map<IndexType, GLenum> Mesh::s_indexTypeMap = {
 };
 
 Mesh::Mesh(int vCount, size_t vSize, std::shared_ptr<Buffer> vBuf, std::vector<VertexAttribute> vAttrs, 
-    PrimitiveType primitive=PrimitiveType::TRIANGLES)
+    PrimitiveType primitive)
     : Mesh::Mesh(vCount, vSize, vBuf, vAttrs, nullptr, IndexType::NONE, primitive) {
     assert(vBuf != nullptr && "Vertex buffer must not be null");
     assert(vCount > 0 && "Vertex count must be greater than 0");
@@ -39,7 +39,7 @@ Mesh::Mesh(int vCount, size_t vSize, std::shared_ptr<Buffer> vBuf, std::vector<V
 }
 
 Mesh::Mesh(int vCount, size_t vSize, std::shared_ptr<Buffer> vBuf, std::vector<VertexAttribute> vAttrs, 
-    std::shared_ptr<Buffer> iBuf, IndexType iType, PrimitiveType primitive=PrimitiveType::TRIANGLES)
+    std::shared_ptr<Buffer> iBuf, IndexType iType, PrimitiveType primitive)
     : renderer::Mesh("marathon.renderer.opengl.mesh", vCount, vSize, vBuf, vAttrs, iBuf, iType, primitive) {
     assert(vBuf != nullptr && "Vertex buffer must not be null");
     assert(vCount > 0 && "Vertex count must be greater than 0");
