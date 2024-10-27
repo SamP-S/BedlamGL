@@ -27,8 +27,8 @@ enum class ShaderType {
 
 class Shader : public Resource {
 protected:
-    std::string _vSrc;
-    std::string _fSrc;
+    std::string _vSrc = "";
+    std::string _fSrc = "";
 
     Shader(const std::string& name, const std::string& vSrc, const std::string& fSrc);
     virtual ~Shader();

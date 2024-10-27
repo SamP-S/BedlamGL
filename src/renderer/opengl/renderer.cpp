@@ -1,5 +1,5 @@
 #include "renderer/opengl/renderer.hpp"
-
+#include "renderer/shader.hpp"
 
 namespace marathon {
 
@@ -7,17 +7,12 @@ namespace renderer {
 
 namespace opengl {
 
-Renderer::Renderer() {
-    
-}
-Renderer::~Renderer() {
-
-}
+Renderer::Renderer() 
+    : renderer::Renderer("marathon.renderer.opengl.Renderer") {}
+Renderer::~Renderer() {}
 
 // module interface
-void Renderer::Boot() {
-
-}
+void Renderer::Boot() {}
 void Renderer::Shutdown() {}
 
 /// --- Factories ---
