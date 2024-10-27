@@ -4,7 +4,7 @@ namespace marathon {
 
 namespace renderer {
 
-Buffer::Buffer(const std::string& name, void* data, size_t size, BufferTarget target, BufferUsage usage=BufferUsage::STATIC)
+Buffer::Buffer(const std::string& name, void* data, size_t size, BufferTarget target, BufferUsage usage)
     : Resource(name), _size(size), _target(target), _usage(usage) {}
 
 Buffer::~Buffer() {}

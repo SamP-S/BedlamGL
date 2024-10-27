@@ -40,6 +40,7 @@ class Buffer : public Resource {
 protected:
     friend class Renderer;
     friend class Mesh;
+    friend class Buffer;
 
     size_t _size;
     BufferTarget _target;

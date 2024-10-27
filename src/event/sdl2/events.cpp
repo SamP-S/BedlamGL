@@ -1,7 +1,7 @@
 #include "SDL2/SDL_events.h"
 #include "SDL2/SDL.h"
 
-#include "event/sdl2/events.hpp"
+#include "events/sdl2/events.hpp"
 
 
 
@@ -19,7 +19,7 @@ Events::~Events() {}
 
 void Events::Boot() {
     if (SDL_Init(SDL_INIT_EVENTS) != 0) {
-        std::cerr << "event/sdl2/events.cpp: SDL_Init Error = " << SDL_GetError() << std::endl;
+        std::cerr << "events/sdl2/events.cpp: SDL_Init Error = " << SDL_GetError() << std::endl;
     }
 }
 void Events::Shutdown() {

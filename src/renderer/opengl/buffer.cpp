@@ -18,7 +18,7 @@ const std::unordered_map<BufferUsage, GLenum> Buffer::s_usageMap = {
 };
 
 Buffer::Buffer(void* data, size_t size, BufferTarget target, BufferUsage usage)
-    : Buffer(data, size, target, usage) {
+    : renderer::Buffer("marathon.renderer.opengl.Buffer", data, size, target, usage) {
     glGenBuffers(1, &_id);
     Bind();
     glBufferData(s_targetMap.at(_target), size, data, s_usageMap.at(_usage));
@@ -42,7 +42,7 @@ void Buffer::SetData(void* data, size_t byteSize) {
 }
 void Buffer::SetData(void* data, size_t byteSize, BufferUsage usage) {
     _usage = usage;
-    SetData(data, byteSize)
+    SetData(data, byteSize);
 }
 void Buffer::SetDataSubset(void* data, size_t size, size_t offset) {
     Bind();
