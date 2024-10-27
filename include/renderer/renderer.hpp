@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include <memory>
+#include <stack>
 
 // includes
 #include "la_extended.h"
@@ -61,24 +62,28 @@ enum class DrawMode {
 // per frame
 struct RenderStats {
     int drawCalls = 0;
-    int trianglesRenderer = 0;
+    int trianglesRendered = 0;
 };
 
 struct RendererState {
-    LA::vec4 clearColor = {0.0f, 0.0f, 0.0f, 1.0f};
-    LA::vec<4, bool> colorMask = {true, true, true, true};
+    LA::vec4 clearColor = {0.0f, 0.0f, 0.0f, 0.0f};
+    LA::vec4 colorMask = {1.0f, 1.0f, 1.0f, 1.0f};
     bool cullTest = false;
     CullFace cullFace = CullFace::BACK;
     CullWinding cullWinding = CullWinding::COUNTER_CLOCKWISE;
-    bool depthTest = true;
-    DepthFunc depthFunction = DepthFunc::LESS;
+    bool depthTest = false;
+    DepthFunc depthFunc = DepthFunc::LESS;
     bool depthMask = true;
     float lineWidth = 1.0f;
     float pointSize = 1.0f;
     bool isWireframe = false;
+};
+
+struct TransformState {
     LA::mat4 projection = LA::mat4();
     LA::mat4 view = LA::mat4();
-    std::vector<LA::mat4> transforms = {LA::mat4()};
+    std::stack<LA::mat4> transforms = std::stack<LA::mat4>({LA::mat4()});
+    
 };
 
 // forward declarations
@@ -89,9 +94,13 @@ enum class ShaderType;
 
 class Renderer : public Module {
 protected:
+    RendererState _state = RendererState();
+    RenderStats _stats = RenderStats();
+    TransformState _transforms = TransformState();
+    std::shared_ptr<Shader> _shader = nullptr;
+
     Renderer(const std::string& name);
     
-
 public:
     virtual ~Renderer() = default;
 
@@ -119,22 +128,23 @@ public:
     virtual void Clear() = 0;
     // clear active canvas/screen according to bools args
     virtual void Clear(bool clearColor, bool clearStencil, bool clearDepth) = 0;
-    virtual void Flush() = 0;
-    // Draw2D
-    virtual void Draw2D() = 0;
-    virtual void Draw2DCircle() = 0;
-    virtual void Draw2DTriangle() = 0;
-    virtual void Draw2DLine() = 0;
-    virtual void Draw2DRectangle() = 0;
-    virtual void Draw2DPoint() = 0;
-    // Draw3D
-    virtual void Draw() = 0;
-    virtual void DrawLine() = 0;
-    virtual void DrawPoint() = 0;
-    virtual void DrawCube() = 0;
-    virtual void DrawSphere() = 0;
+
+    // // Draw2D
+    // virtual void Draw2D() = 0;
+    // virtual void Draw2DCircle() = 0;
+    // virtual void Draw2DTriangle() = 0;
+    // virtual void Draw2DLine() = 0;
+    // virtual void Draw2DRectangle() = 0;
+    // virtual void Draw2DPoint() = 0;
+    // // Draw3D
+    // virtual void Draw() = 0;
+    // virtual void DrawLine() = 0;
+    // virtual void DrawPoint() = 0;
+    // virtual void DrawCube() = 0;
+    // virtual void DrawSphere() = 0;
 
     /// --- State Management ---
+    virtual void SetState(RendererState state) = 0;
     virtual void ResetState() = 0;
     virtual bool IsUsable() = 0;
     // colour
@@ -171,24 +181,25 @@ public:
 
     /// --- Coordinate System Transformations ---
     // camera and screen transformations
-    virtual LA::mat4 GetProjection() = 0;
-    virtual LA::mat4 GetView() = 0;
-    virtual void SetProjection(const LA::mat4& proj) = 0;
-    virtual void SetView(const LA::mat4& view) = 0;
+    virtual LA::mat4 GetProjection();
+    virtual LA::mat4 GetView();
+    virtual LA::mat4 GetModel();
+    virtual void SetProjection(const LA::mat4& proj);
+    virtual void SetView(const LA::mat4& view);
     // coordinate space transformations
-    virtual LA::mat4 PopTransform() = 0;
-    virtual void PushTransform(const LA::mat4& transform) = 0;
-    virtual void PushTranslate(float x, float y, float z) = 0;
-    virtual void PushTranslate(LA::vec3 translate) = 0;
-    virtual void PushRotate(float x, float y, float z) = 0;
-    virtual void PushRotate(LA::vec3 rotate) = 0;
-    virtual void PushScale(float x, float y, float z) = 0;
-    virtual void PushScale(LA::vec3 scale) = 0;
-    // virtual LA::vec3 ScreenToGlobal(const LA::vec2& point) = 0;
-    // virtual LA::vec2 GlobalToScreen(const LA::vec3& point) = 0;
+    virtual LA::mat4 PopTransform();
+    virtual void PushTransform(const LA::mat4& transform);
+    virtual void PushTranslate(float x, float y, float z);
+    virtual void PushTranslate(LA::vec3 translate);
+    virtual void PushRotate(float x, float y, float z);
+    virtual void PushRotate(LA::vec3 rotate);
+    virtual void PushScale(float x, float y, float z);
+    virtual void PushScale(LA::vec3 scale);
+    // virtual LA::vec3 ScreenToGlobal(const LA::vec2& point);
+    // virtual LA::vec2 GlobalToScreen(const LA::vec3& point);
     
     /// --- Debug Info ---
-    virtual RenderStats GetRenderStats() = 0;
+    virtual RenderStats GetRenderStats();
 
 };
 
