@@ -43,7 +43,7 @@ Mesh::Mesh(int vCount, size_t vSize, std::shared_ptr<renderer::Buffer> vBuf, std
     assert(vBuf != nullptr && "Vertex buffer must not be null");
     assert(vCount > 0 && "Vertex count must be greater than 0");
     assert(vAttrs.size() > 0 && "Vertex attributes must not be empty");
-    assert(iBuf != nullptr && iType != IndexType::NONE && "Index type must not be NONE if index buffer is set");
+    assert(iBuf == nullptr && iType == IndexType::NONE && "Index type must not be NONE if index buffer is set");
 
     glGenVertexArrays(1, &_vao);
     Bind();
