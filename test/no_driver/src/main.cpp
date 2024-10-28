@@ -7,11 +7,6 @@
 
 using namespace marathon;
 
-time::Time& Time = time::Time::Instance();
-window::Window& Window = window::Window::Instance();
-renderer::Renderer& Renderer = renderer::Renderer::Instance();
-events::Events& Events = events::Events::Instance();
-
 struct MyObject {
     LA::vec3 position = LA::vec3();
     LA::vec4 color = LA::vec4({1.0f, 1.0f, 1.0f, 1.0f});

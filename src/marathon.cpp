@@ -1,30 +1,32 @@
+#include <vector>
+
 #include "marathon.hpp"
 
 namespace marathon {
 
+    /// TODO: ensure the boot/shutdown orders are correct
+    // ensure each module ensures their required modules have already booted successfully
+    // e.g. renderer checks window has booted
+
     int Init() {
+        // maintain specific module order for booting correctly
+        std::vector<Module*> modules = {&Time, &Window, &Renderer, &Events};
         int moduleBootFail = 0;
-        if (!time::Time::Instance().Boot())
-            moduleBootFail++;
-        if (!window::Window::Instance().Boot())
-            moduleBootFail++;
-        if (!renderer::Renderer::Instance().Boot())
-            moduleBootFail++;
-        if (!events::Events::Instance().Boot())
-            moduleBootFail++;
+        for (auto module : modules) {
+            if (module != nullptr && !module->Boot())
+                moduleBootFail++;
+        }
         return moduleBootFail;
     }
 
     int Quit() {
+        // maintain specific module order for shutting down correctly
+        std::vector<Module*> modules = {&Time, &Window, &Renderer, &Events};
         int moduleShutdownFails = 0;
-        if (!time::Time::Instance().Shutdown())
-            moduleShutdownFails++;
-        if (!window::Window::Instance().Shutdown())
-            moduleShutdownFails++;
-        if (!renderer::Renderer::Instance().Shutdown())
-            moduleShutdownFails++;
-        if (!events::Events::Instance().Shutdown())
-            moduleShutdownFails++;
+        for (auto module : modules) {
+            if (module != nullptr && !module->Shutdown())
+                moduleShutdownFails++;
+        }
         return moduleShutdownFails;
     }
 
