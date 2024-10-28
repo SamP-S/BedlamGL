@@ -1,5 +1,7 @@
 #include "renderer/opengl/renderer.hpp"
-#include "renderer/shader.hpp"
+#include "renderer/opengl/shader.hpp"
+#include "renderer/opengl/buffer.hpp"
+#include "renderer/opengl/mesh.hpp"
 
 namespace marathon {
 
@@ -16,9 +18,15 @@ void Renderer::Boot() {}
 void Renderer::Shutdown() {}
 
 /// --- Factories ---
-std::shared_ptr<Buffer> Renderer::CreateBuffer() {}
-std::shared_ptr<Mesh> Renderer::CreateMesh() {}
-std::shared_ptr<Shader> Renderer::CreateShader() {}
+std::shared_ptr<renderer::Buffer> Renderer::CreateBuffer(void* data, size_t size, BufferTarget target, BufferUsage usage) {
+    return std::make_shared<opengl::Buffer>(data, size, target, usage);
+}
+std::shared_ptr<renderer::Mesh> Renderer::CreateMesh(int vCount, size_t vSize, std::shared_ptr<renderer::Buffer> vBuf, std::vector<VertexAttribute> vAttrs, PrimitiveType primitive) {
+    return std::make_shared<opengl::Mesh>(vCount, vSize, vBuf, vAttrs, primitive);
+}
+std::shared_ptr<renderer::Shader> Renderer::CreateShader(const std::string& vSrc, const std::string& fSrc) {
+    return std::make_shared<opengl::Shader>(vSrc, fSrc);
+}
 
 // validation
 bool Renderer::ValidateShaderCode(const std::string code, ShaderType stageType, std::string& err) {}
@@ -134,24 +142,34 @@ void Renderer::SetIsWireframe(bool enabled) {
     else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 // bound objects
-std::shared_ptr<Shader> Renderer::GetShader() {
+std::shared_ptr<renderer::Shader> Renderer::GetShader() {
     return _shader;
 }
 /// TODO:
 // set nullptr as shader should mean use a default not just shit the bed 
-void Renderer::SetShader(std::shared_ptr<Shader> shader) {
+void Renderer::SetShader(std::shared_ptr<renderer::Shader> shader) {
     // skip if same
     if (_shader == shader)
         return;
 
     // unbind previous shader, if any
-    if (_shader != nullptr)
+    if (_shader != nullptr) {
         _shader->Unbind();
+        // auto openglShader = std::dynamic_pointer_cast<opengl::Shader>(_shader);
+        // if (openglShader != nullptr) {
+        //     openglShader->Unbind();
+        // }
+    }
 
     // set and bind new shader
     _shader = shader;
-    if (_shader != nullptr)
-        _shader->Bind();
+    if (_shader != nullptr) {
+        _shader->Unbind();
+        // auto openglShader = std::dynamic_pointer_cast<opengl::Shader>(_shader);
+        // if (openglShader != nullptr) {
+        //     openglShader->Bind();
+        // }
+    }
 }
 
 } // namespace opengl

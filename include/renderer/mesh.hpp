@@ -130,6 +130,9 @@ protected:
     // create mesh with vertex data and index map
     Mesh(const std::string& name, int vCount, size_t vSize, std::shared_ptr<Buffer> vBuf, std::vector<VertexAttribute> vAttrs, 
         std::shared_ptr<Buffer> iBuf, IndexType iType, PrimitiveType primitive=PrimitiveType::TRIANGLES);
+    
+
+public:
     virtual ~Mesh();
 
     /// --- Backend Impl ---
@@ -138,7 +141,7 @@ protected:
     // drawable
     virtual void Draw(Renderer& renderer, const LA::mat4& m) = 0;
 
-public:
+
     /// --- Properties ---
     PrimitiveType GetPrimitiveType() const;
     void SetPrimitiveType(PrimitiveType primitive);
@@ -148,7 +151,7 @@ public:
     // unsets index buffer
     virtual void SetIndexMap();
     // set index buffer
-    virtual void SetIndexMap(std::shared_ptr<Buffer> buf, IndexType type=IndexType::UINT32);
+    virtual void SetIndexMap(std::shared_ptr<Buffer> iBuffer, IndexType iType=IndexType::UINT32);
     // get index buffer
     // returns true if index buffer is set and fills args
     // returns false if no index buffer set, args are set nullptr

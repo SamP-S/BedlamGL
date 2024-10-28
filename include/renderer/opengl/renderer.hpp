@@ -50,9 +50,9 @@ public:
     void Shutdown() override;
 
     /// --- Factories ---
-    std::shared_ptr<Buffer> CreateBuffer() override;
-    std::shared_ptr<Mesh> CreateMesh() override;
-    std::shared_ptr<Shader> CreateShader() override;
+    std::shared_ptr<renderer::Buffer> CreateBuffer(void* data, size_t size, BufferTarget target, BufferUsage usage) override;
+    std::shared_ptr<renderer::Mesh> CreateMesh(int vCount, size_t vSize, std::shared_ptr<renderer::Buffer> vBuf, std::vector<VertexAttribute> vAttrs, PrimitiveType primitive) override;
+    std::shared_ptr<renderer::Shader> CreateShader(const std::string& vSrc, const std::string& fSrc) override;
     
     // validation
     bool ValidateShaderCode(const std::string code, ShaderType stageType, std::string& err) override;
@@ -94,8 +94,8 @@ public:
     void SetPointSize(float size) override;
     void SetIsWireframe(bool enabled) override;
     // bound objects
-    std::shared_ptr<Shader> GetShader() override;
-    void SetShader(std::shared_ptr<Shader> shader) override;
+    std::shared_ptr<renderer::Shader> GetShader() override;
+    void SetShader(std::shared_ptr<renderer::Shader> shader) override;
 
     /// --- Coordinate System Transformations ---
     // camera and screen transformations

@@ -22,19 +22,19 @@ protected:
     static const std::unordered_map<PrimitiveType, GLenum> s_primitiveMap;
     static const std::unordered_map<IndexType, GLenum> s_indexTypeMap;
 
-    Mesh(int vCount, size_t vSize, std::shared_ptr<Buffer> vBuf, std::vector<VertexAttribute> vAttrs, 
-        PrimitiveType primitive=PrimitiveType::TRIANGLES);
-    Mesh(int vCount, size_t vSize, std::shared_ptr<Buffer> vBuf, std::vector<VertexAttribute> vAttrs, 
-        std::shared_ptr<Buffer> iBuf, IndexType iType, PrimitiveType primitive=PrimitiveType::TRIANGLES);
-    ~Mesh() = default;
+    Mesh(int vCount, size_t vSize, std::shared_ptr<renderer::Buffer> vBuf, std::vector<VertexAttribute> vAttrs, PrimitiveType primitive=PrimitiveType::TRIANGLES);
+    Mesh(int vCount, size_t vSize, std::shared_ptr<renderer::Buffer> vBuf, std::vector<VertexAttribute> vAttrs, std::shared_ptr<renderer::Buffer> iBuf, IndexType iType, PrimitiveType primitive=PrimitiveType::TRIANGLES);
+
+
+public:
+    ~Mesh();
 
     void Bind() override;
     void Unbind() override;
-    void Draw(Renderer& renderer, const LA::mat4& m) override;
-
-public:
+    void Draw(renderer::Renderer& renderer, const LA::mat4& m) override;
+    
     void SetIndexMap() override;
-    void SetIndexMap(std::shared_ptr<Buffer> iBuffer, IndexType iType=IndexType::UINT32) override;
+    void SetIndexMap(std::shared_ptr<renderer::Buffer> iBuffer, IndexType iType) override;
 
 };
 

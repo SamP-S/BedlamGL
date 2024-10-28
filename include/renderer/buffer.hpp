@@ -47,12 +47,14 @@ protected:
     BufferUsage _usage;
 
     Buffer(const std::string& name, void* data, size_t size, BufferTarget target, BufferUsage usage=BufferUsage::STATIC);
+
+public:
     virtual ~Buffer();
 
+    /// TODO: bind/unbind should not be public
     virtual void Bind() = 0;
     virtual void Unbind() = 0;
 
-public:
     // set data by reallocating buffer
     virtual void SetData(void* data, size_t byteSize) = 0;
     virtual void SetData(void* data, size_t byteSize, BufferUsage usage) = 0;

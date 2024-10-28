@@ -11,8 +11,8 @@ const std::unordered_map<ShaderType, GLenum> Shader::s_shaderTypeMap = {
     { ShaderType::FRAGMENT, GL_FRAGMENT_SHADER }
 };
 
-Shader::Shader(const std::string& name, const std::string& vSrc, const std::string& fSrc) 
-    : renderer::Shader(name, vSrc, fSrc) {
+Shader::Shader(const std::string& vSrc, const std::string& fSrc) 
+    : renderer::Shader("marathon.renderer.opengl.Shader", vSrc, fSrc) {
     _program = glCreateProgram();
     GLuint vShader = glCreateShader(GL_VERTEX_SHADER);
     GLuint fShader = glCreateShader(GL_FRAGMENT_SHADER);

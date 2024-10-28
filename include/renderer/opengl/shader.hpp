@@ -19,13 +19,14 @@ protected:
 
     static const std::unordered_map<ShaderType, GLenum> s_shaderTypeMap;
 
-    Shader(const std::string& name, const std::string& vSrc, const std::string& fSrc);
+    Shader(const std::string& vSrc, const std::string& fSrc);
+    
+public:
     ~Shader() override;
 
     void Bind() override;
     void Unbind() override;
 
-public:
     std::string GetWarnings() const override;
     bool HasUniform(const std::string& key) const override;
 

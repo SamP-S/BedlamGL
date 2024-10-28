@@ -31,12 +31,14 @@ protected:
     std::string _fSrc = "";
 
     Shader(const std::string& name, const std::string& vSrc, const std::string& fSrc);
+    
+public:
     virtual ~Shader();
 
+    /// TODO: bind/unbind should not be public
     virtual void Bind() = 0;
     virtual void Unbind() = 0;
 
-public:
     virtual std::string GetWarnings() const = 0;
     virtual bool HasUniform(const std::string& key) const = 0;
 

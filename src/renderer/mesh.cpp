@@ -28,9 +28,9 @@ void Mesh::SetIndexMap() {
     _iBuffer = nullptr;
     _indexType = IndexType::NONE;
 }
-void Mesh::SetIndexMap(std::shared_ptr<Buffer> buf, IndexType type) {
-    _iBuffer = buf;
-    _indexType = type;
+void Mesh::SetIndexMap(std::shared_ptr<Buffer> iBuffer, IndexType iType) {
+    _iBuffer = iBuffer;
+    _indexType = iType;
 }
 
 } // namespace renderer
