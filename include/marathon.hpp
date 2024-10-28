@@ -21,7 +21,7 @@
 
 namespace marathon {
 
-    bool Boot();
-    bool Shutdown();
+    bool Init();
+    bool Quit();
 
 } // marathon

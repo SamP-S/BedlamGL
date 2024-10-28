@@ -12,7 +12,7 @@ Window::Window()
 Window::~Window() {}
 
 // setup context
-void Window::Boot() {
+bool Window::Boot() {
 
     // Initialise SDL subsystems
     SDL_Init(SDL_INIT_VIDEO);
@@ -45,14 +45,14 @@ void Window::Boot() {
     if (!_window) {
         std::cerr << "window/sdl2/window.cpp: Failed to create window" << std::endl;
         std::cerr << "SDL error: " << SDL_GetError() << std::endl;
-        return;
+        return false;
     }
 
     _openglContext = SDL_GL_CreateContext(_window);
         if (!_window) {
         std::cerr << "window/sdl2/window.cpp: Failed to create opengl context" << std::endl;
         std::cerr << "SDL error: " << SDL_GetError() << std::endl;
-        return;
+        return false;
     }
     _isOpen = true;
 
@@ -68,13 +68,17 @@ void Window::Boot() {
     if (err != GLEW_OK) {
         std::cerr << "Window.cpp: Failed to initialize GLEW" << std::endl;
         std::cerr << "GLEW init failed: " << glewGetErrorString(err) << std::endl;
+        return false;
     }
+    return true;
 }
 
 // destroy context
-void Window::Shutdown() {
+bool Window::Shutdown() {
     Close();
     SDL_QuitSubSystem(SDL_INIT_VIDEO);
+    // TODO: validate properly
+    return true;
 }
 
 

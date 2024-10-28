@@ -34,8 +34,8 @@ public:
     static Window& Instance();
     
     // module interface
-    virtual void Boot() = 0;
-    virtual void Shutdown() = 0;
+    virtual bool Boot() = 0;
+    virtual bool Shutdown() = 0;
 
     // common
     virtual void SwapFrame() = 0;

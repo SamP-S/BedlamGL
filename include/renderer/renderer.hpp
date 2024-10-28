@@ -110,8 +110,8 @@ public:
     static Renderer& Instance();
 
     // module interface
-    virtual void Boot() = 0;
-    virtual void Shutdown() = 0;
+    virtual bool Boot() = 0;
+    virtual bool Shutdown() = 0;
 
     /// --- Factories ---
     virtual std::shared_ptr<Buffer> CreateBuffer(void* data, size_t size, BufferTarget target, BufferUsage usage) = 0;

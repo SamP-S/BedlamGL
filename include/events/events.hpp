@@ -12,7 +12,7 @@
 
 namespace marathon {
 
-namespace event {
+namespace events {
 
 // A signal consists of const data so it cannot be modified.
 // Signals should be handled as is and discarded after use.
@@ -40,8 +40,8 @@ public:
     static Events& Instance();
 
     // module interface
-    virtual void Boot() = 0;
-    virtual void Shutdown() = 0;
+    virtual bool Boot() = 0;
+    virtual bool Shutdown() = 0;
 
     // common
     virtual void Fetch() = 0;   // collect all events from backend into our system
@@ -52,6 +52,6 @@ public:
     // add wait system for reduced CPU usage
 };
 
-} // event
+} // events
     
 } //  marathon

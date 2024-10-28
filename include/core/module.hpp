@@ -14,7 +14,7 @@ enum class ModuleType {
     MATHS,
     RENDERER,
     AUDIO,
-    EVENT,
+    EVENTS,
     TIME,
     MAX_ENUM
 };
@@ -30,8 +30,8 @@ public:
     // standard methods for safe start/end/rebooting modules
     /// TODO:
     // Should be removed and all boot/shutdown should be migrated to constructor/destructor
-    virtual void Boot() = 0;
-    virtual void Shutdown() = 0;
+    virtual bool Boot() = 0;
+    virtual bool Shutdown() = 0;
     
     std::string GetName() const;
     ModuleType GetType() const;

@@ -26,7 +26,6 @@ struct ApplicationConfig {
     std::string name = "Example Project";
     std::filesystem::path cwd = ".";
     std::filesystem::path editor = "..";
-    window::WindowConfig windowConfig = window::WindowConfig();
 };
 
 class Application {
@@ -35,7 +34,7 @@ public:
     time::Time& Time = time::Time::Instance();
     window::Window& Window = window::Window::Instance();
     renderer::Renderer& Renderer = renderer::Renderer::Instance();
-    event::Events& Events = event::Events::Instance();
+    events::Events& Events = events::Events::Instance();
 
     static Application* Create(ApplicationConfig cfg) {
         assert(_instance == nullptr && "Attempting to create application twice. Only 1 allowed.");

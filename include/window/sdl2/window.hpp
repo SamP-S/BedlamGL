@@ -47,8 +47,8 @@ public:
     ~Window() override;
 
     // module interface
-    void Boot() override;
-    void Shutdown() override;
+    bool Boot() override;
+    bool Shutdown() override;
 
     // common
     void* GetGLContext();

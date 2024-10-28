@@ -27,8 +27,8 @@ public:
     static Time& Instance();
 
     // module interface
-    void Boot() override;
-    void Shutdown() override;
+    bool Boot() override;
+    bool Shutdown() override;
 
     /// TODO: 
     // implement averages rather than just the last frame/tick

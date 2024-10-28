@@ -46,8 +46,8 @@ public:
     ~Renderer();
 
     // module interface
-    void Boot() override;
-    void Shutdown() override;
+    bool Boot() override;
+    bool Shutdown() override;
 
     /// --- Factories ---
     std::shared_ptr<renderer::Buffer> CreateBuffer(void* data, size_t size, BufferTarget target, BufferUsage usage) override;

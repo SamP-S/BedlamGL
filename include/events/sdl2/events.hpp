@@ -7,17 +7,17 @@
 
 namespace marathon {
 
-namespace event {
+namespace events {
 
 namespace sdl2 {
 
-class Events : public marathon::event::Events {
+class Events : public marathon::events::Events {
 public:
     Events();
     ~Events() override;
 
-    void Boot() override;
-    void Shutdown() override;
+    bool Boot() override;
+    bool Shutdown() override;
 
     void Fetch() override;
     void Clear();
@@ -31,6 +31,6 @@ private:
 
 } // sdl2
 
-} // event
+} // events
 
 } // marathon

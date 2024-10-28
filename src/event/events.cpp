@@ -3,20 +3,20 @@
 
 namespace marathon {
 
-namespace event {
+namespace events {
 
 Signal::Signal(const std::string& name, const std::unordered_map<std::string, Property>& data)
     : name(name), data(data) {}
 
 // Constructor
 Events::Events(const std::string& name)
-    : marathon::Module(marathon::ModuleType::EVENT, name) {}
+    : marathon::Module(marathon::ModuleType::EVENTS, name) {}
 
 // Singleton instance accessor
 Events& Events::Instance() {
     static Events* instance;
     if (!instance)
-        instance = new marathon::event::sdl2::Events();
+        instance = new marathon::events::sdl2::Events();
     return *instance;
 }
 
@@ -39,6 +39,6 @@ void Events::Clear() {
     }
 }
 
-} // event
+} // events
     
 } // marathon
