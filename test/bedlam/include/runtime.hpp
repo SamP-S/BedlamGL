@@ -72,8 +72,11 @@ public:
         Renderer.Clear();
         Renderer.SetShader(_shader);
         if (_obj.mesh != nullptr) {
+            Renderer.PushScale({0.5f, 0.5f, 0.5f});
             Renderer.PushTranslate(_obj.position);
+            Renderer.GetShader()->SetUniform("uTransform", Renderer.GetModel());
             Renderer.Draw(*_obj.mesh.get());
+            Renderer.PopTransform();
             Renderer.PopTransform();
         } else {
             std::cout << "bedlam/include/runtime.hpp: test obj mesh is null" << std::endl;

@@ -160,20 +160,12 @@ void Renderer::SetShader(std::shared_ptr<renderer::Shader> shader) {
     // unbind previous shader, if any
     if (_shader != nullptr) {
         _shader->Unbind();
-        // auto openglShader = std::dynamic_pointer_cast<opengl::Shader>(_shader);
-        // if (openglShader != nullptr) {
-        //     openglShader->Unbind();
-        // }
     }
 
     // set and bind new shader
     _shader = shader;
     if (_shader != nullptr) {
-        _shader->Unbind();
-        // auto openglShader = std::dynamic_pointer_cast<opengl::Shader>(_shader);
-        // if (openglShader != nullptr) {
-        //     openglShader->Bind();
-        // }
+        _shader->Bind();
     }
 }
 
