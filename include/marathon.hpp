@@ -21,7 +21,7 @@
 
 namespace marathon {
 
-    bool Init();
-    bool Quit();
+    int Init();
+    int Quit();
 
 } // marathon

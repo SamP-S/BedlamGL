@@ -58,6 +58,10 @@ add_executable(bedlam "test/bedlam/src/main.cpp")
 target_include_directories(bedlam PUBLIC "test/bedlam/include")
 target_link_libraries(bedlam PUBLIC marathon)
 
+add_executable(no_driver "test/no_driver/src/main.cpp")
+target_include_directories(no_driver PUBLIC "test/no_driver/include")
+target_link_libraries(no_driver PUBLIC marathon)
+
 
 add_executable(la_test "test/la_test.cpp")
 target_link_libraries(la_test PUBLIC la)

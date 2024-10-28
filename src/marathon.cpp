@@ -2,21 +2,30 @@
 
 namespace marathon {
 
-    bool Init() {
+    int Init() {
         int moduleBootFail = 0;
-        time::Time::Instance().Boot();
-        window::Window::Instance().Boot();
-        renderer::Renderer::Instance().Boot();
-        events::Events::Instance().Boot();
-        return true;
+        if (!time::Time::Instance().Boot())
+            moduleBootFail++;
+        if (!window::Window::Instance().Boot())
+            moduleBootFail++;
+        if (!renderer::Renderer::Instance().Boot())
+            moduleBootFail++;
+        if (!events::Events::Instance().Boot())
+            moduleBootFail++;
+        return moduleBootFail;
     }
 
-    bool Quit() {
-        Renderer.Shutdown();
-        Events.Shutdown();
-        Window.Shutdown();
-        Time.Shutdown();
-        return true;
+    int Quit() {
+        int moduleShutdownFails = 0;
+        if (!time::Time::Instance().Shutdown())
+            moduleShutdownFails++;
+        if (!window::Window::Instance().Shutdown())
+            moduleShutdownFails++;
+        if (!renderer::Renderer::Instance().Shutdown())
+            moduleShutdownFails++;
+        if (!events::Events::Instance().Shutdown())
+            moduleShutdownFails++;
+        return moduleShutdownFails;
     }
 
 } // marathon
