@@ -70,6 +70,8 @@ bool Window::Boot() {
         std::cerr << "GLEW init failed: " << glewGetErrorString(err) << std::endl;
         return false;
     }
+
+    _active = true;
     return true;
 }
 
@@ -78,6 +80,7 @@ bool Window::Shutdown() {
     Close();
     SDL_QuitSubSystem(SDL_INIT_VIDEO);
     // TODO: validate properly
+    _active = false;
     return true;
 }
 

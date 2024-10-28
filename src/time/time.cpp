@@ -21,9 +21,11 @@ Time& Time::Instance() {
 bool Time::Boot() {
     _start = std::chrono::steady_clock::now();
     _lastTick = _start;
+    _active = true;
     return true;
 }
 bool Time::Shutdown() {
+    _active = false;
     return true;
 }
 

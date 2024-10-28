@@ -22,11 +22,13 @@ bool Events::Boot() {
         std::cerr << "events/sdl2/events.cpp: SDL_Init Error = " << SDL_GetError() << std::endl;
     }
     // TODO: actually validate
+    _active = true;
     return true;
 }
 bool Events::Shutdown() {
     SDL_QuitSubSystem(SDL_INIT_EVENTS);
     // TODO: actually validate
+    _active = false;
     return true;
 }
 
