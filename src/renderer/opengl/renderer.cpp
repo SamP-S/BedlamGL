@@ -19,13 +19,13 @@ void Renderer::Shutdown() {}
 
 /// --- Factories ---
 std::shared_ptr<renderer::Buffer> Renderer::CreateBuffer(void* data, size_t size, BufferTarget target, BufferUsage usage) {
-    return std::make_shared<opengl::Buffer>(data, size, target, usage);
+    return std::shared_ptr<renderer::Buffer>(new opengl::Buffer(data, size, target, usage));
 }
 std::shared_ptr<renderer::Mesh> Renderer::CreateMesh(int vCount, size_t vSize, std::shared_ptr<renderer::Buffer> vBuf, std::vector<VertexAttribute> vAttrs, PrimitiveType primitive) {
-    return std::make_shared<opengl::Mesh>(vCount, vSize, vBuf, vAttrs, primitive);
+    return std::shared_ptr<renderer::Mesh>(new opengl::Mesh(vCount, vSize, vBuf, vAttrs, primitive));
 }
 std::shared_ptr<renderer::Shader> Renderer::CreateShader(const std::string& vSrc, const std::string& fSrc) {
-    return std::make_shared<opengl::Shader>(vSrc, fSrc);
+    return std::shared_ptr<renderer::Shader>(new opengl::Shader(vSrc, fSrc));
 }
 
 // validation

@@ -7,12 +7,20 @@ namespace marathon {
 
 namespace renderer {
 
+class Renderer;
+class Mesh;
+
 namespace opengl {
+    
+class Renderer;
+class Mesh;
 
 class Buffer : public renderer::Buffer {
 protected:
     friend class Renderer;
+    friend class renderer::Renderer;
     friend class Mesh;
+    friend class renderer::Mesh;
 
     GLuint _id = 0;
 

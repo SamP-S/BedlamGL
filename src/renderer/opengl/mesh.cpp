@@ -83,7 +83,7 @@ void Mesh::Bind() {
 void Mesh::Unbind() {
     glBindVertexArray(0);
 }
-void Mesh::Draw(Renderer& renderer, const LA::mat4& m) {
+void Mesh::Draw(renderer::Renderer& renderer, const LA::mat4& m) {
     assert(_vao != 0 && "VAO must be created before drawing");
 }
 

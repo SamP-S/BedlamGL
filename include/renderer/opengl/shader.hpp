@@ -9,11 +9,17 @@ namespace marathon {
 
 namespace renderer {
 
+class Renderer;
+
 namespace opengl {
+
+class Renderer;
 
 class Shader : public renderer::Shader {
 protected:
     friend class Renderer;
+    friend class renderer::Renderer;
+
     GLuint _program = 0;
     std::string _warnings;
 

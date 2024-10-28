@@ -15,7 +15,8 @@ namespace opengl {
 class Mesh : public renderer::Mesh {
 protected:
     friend class Renderer;
-    friend class Mesh;
+    friend class renderer::Renderer;
+
     GLuint _vao = 0;
 
     static const std::unordered_map<AttributeType, GLenum> s_attrTypeMap;
