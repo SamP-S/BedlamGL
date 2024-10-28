@@ -3,7 +3,6 @@
 #include <iostream>
 
 #include "marathon.hpp"
-#include "renderer/shader_source.hpp"
 #include "renderer/shader.hpp"
 #include "events/events.hpp"
 #include "renderer/mesh.hpp"
@@ -20,9 +19,8 @@ struct MyObject {
 class Runtime : public Interactive {
 private:
     MyObject _obj; MyObject _obj2;
-    std::shared_ptr<renderer::ShaderSource> _vs;
-    std::shared_ptr<renderer::ShaderSource> _fs;
     std::shared_ptr<renderer::Shader> _shader;
+    std::shared_ptr<renderer::Buffer> _triVBuf;
     std::shared_ptr<renderer::Mesh> _triangleMesh;
     std::shared_ptr<renderer::Mesh> _quadMesh;
 
@@ -32,27 +30,25 @@ public:
 
     void Start() override {
         // load shaders
-        _vs = renderer::ShaderSource::Create("default_vs", renderer::defaultVertexShader, renderer::ShaderStage::VERTEX);
-        _fs = renderer::ShaderSource::Create("default_fs", renderer::defaultFragmentShader, renderer::ShaderStage::FRAGMENT);
-        _shader = renderer::Shader::Create("default_shader", _vs, _fs);
+        _shader = Renderer.CreateShader(renderer::defaultVertexShader, renderer::defaultFragmentShader);
 
         // create triangle mesh
-        _triangleMesh = renderer::Mesh::Create("default_triangle_mesh");
-        _triangleMesh->vertices = renderer::defaultTriangleVertices;
+        _triVBuf = Renderer.CreateBuffer((void*)&renderer::defaultTriangleVertices[0][0], renderer::defaultTriangleVertices.size() * sizeof(LA::vec3), renderer::BufferTarget::VERTEX, renderer::BufferUsage::STATIC);
+        _triangleMesh = Renderer.CreateMesh(3, sizeof(LA::vec3), _triVBuf, {{0, 3, renderer::AttributeType::FLOAT}}, renderer::PrimitiveType::TRIANGLES);
 
-        // create quad mesh
-        _quadMesh = renderer::Mesh::Create("default_quad_mesh");
-        _quadMesh->vertices = renderer::defaultQuadVertices;
-        _quadMesh->indices = renderer::defaultQuadIndices;
+        // // create quad mesh
+        // _quadMesh = renderer::Mesh::Create("default_quad_mesh");
+        // _quadMesh->vertices = renderer::defaultQuadVertices;
+        // _quadMesh->indices = renderer::defaultQuadIndices;
         
         // create object
         _obj = MyObject();
         _obj.color = {1.0f, 0.2f, 0.2f, 1.0f};
         _obj.mesh = _triangleMesh;
 
-        _obj2 = MyObject();
-        _obj2.color = {0.2f, 1.0f, 0.2f, 1.0f};
-        _obj2.mesh = _quadMesh;
+        // _obj2 = MyObject();
+        // _obj2.color = {0.2f, 1.0f, 0.2f, 1.0f};
+        // _obj2.mesh = _quadMesh;
     }
 
     void Update(double dt) override {
@@ -74,9 +70,14 @@ public:
 
         // make draw call of obj at position
         Renderer.Clear();
-        Renderer.BindShader(_shader);
-        Renderer.Draw(_obj.mesh, LA::Transformation(_obj.position, LA::vec3(), LA::vec3(0.5f)));
-        Renderer.Draw(_obj2.mesh, LA::Transformation(_obj2.position, LA::vec3(), LA::vec3(0.25f)));
+        Renderer.SetShader(_shader);
+        if (_obj.mesh != nullptr) {
+            Renderer.PushTranslate(_obj.position);
+            Renderer.Draw(*_obj.mesh.get());
+            Renderer.PopTransform();
+        } else {
+            std::cout << "bedlam/include/runtime.hpp: test obj mesh is null" << std::endl;
+        }
     }
 
     void End() override {
