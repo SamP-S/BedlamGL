@@ -53,7 +53,7 @@ public:
 
     void Update(double dt) override {
         // poll events
-        std::shared_ptr<event::Signal> s;
+        std::shared_ptr<events::Signal> s;
         while (Events.Poll(s)) {
             // std::cout << "bedlam/include/runtime.hpp: event " << s->name << std::endl;
             if (s->name == "quit") {

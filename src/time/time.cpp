@@ -18,11 +18,14 @@ Time& Time::Instance() {
 }
 
 // module interface
-void Time::Boot() {
+bool Time::Boot() {
     _start = std::chrono::steady_clock::now();
     _lastTick = _start;
+    return true;
 }
-void Time::Shutdown() {}
+bool Time::Shutdown() {
+    return true;
+}
 
 // common
 double Time::Tick() {

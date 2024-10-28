@@ -14,8 +14,12 @@ Renderer::Renderer()
 Renderer::~Renderer() {}
 
 // module interface
-void Renderer::Boot() {}
-void Renderer::Shutdown() {}
+bool Renderer::Boot() {
+    return true;
+}
+bool Renderer::Shutdown() {
+    return true;
+}
 
 /// --- Factories ---
 std::shared_ptr<renderer::Buffer> Renderer::CreateBuffer(void* data, size_t size, BufferTarget target, BufferUsage usage) {

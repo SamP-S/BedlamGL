@@ -7,23 +7,27 @@
 
 namespace marathon {
 
-namespace event {
+namespace events {
 
 namespace sdl2 {
 
 
 Events::Events()
-    : marathon::event::Events("marathon.event.sdl2") {}
+    : marathon::events::Events("marathon.events.sdl2") {}
 
 Events::~Events() {}
 
-void Events::Boot() {
+bool Events::Boot() {
     if (SDL_Init(SDL_INIT_EVENTS) != 0) {
         std::cerr << "events/sdl2/events.cpp: SDL_Init Error = " << SDL_GetError() << std::endl;
     }
+    // TODO: actually validate
+    return true;
 }
-void Events::Shutdown() {
+bool Events::Shutdown() {
     SDL_QuitSubSystem(SDL_INIT_EVENTS);
+    // TODO: actually validate
+    return true;
 }
 
 void Events::Fetch() {
@@ -142,6 +146,6 @@ std::shared_ptr<Signal> Events::ConvertKeyboardEvent(const SDL_Event& e) {
 
 } // sdl2
 
-} // event
+} // events
 
 } // marathon

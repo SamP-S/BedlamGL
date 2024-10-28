@@ -14,7 +14,7 @@ class Interactive {
 public:
     renderer::Renderer& Renderer = renderer::Renderer::Instance();
     window::Window& Window = window::Window::Instance();
-    event::Events& Events = event::Events::Instance();
+    events::Events& Events = events::Events::Instance();
     time::Time& Time = time::Time::Instance();
 
     virtual void Start() = 0;
