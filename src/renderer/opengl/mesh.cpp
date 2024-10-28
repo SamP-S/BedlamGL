@@ -83,8 +83,14 @@ void Mesh::Bind() {
 void Mesh::Unbind() {
     glBindVertexArray(0);
 }
-void Mesh::Draw(renderer::Renderer& renderer, const LA::mat4& m) {
+void Mesh::Draw(renderer::Renderer& renderer) {
     assert(_vao != 0 && "VAO must be created before drawing");
+    glBindVertexArray(_vao);
+    if (_iBuffer != nullptr) {
+        glDrawElements(s_primitiveMap.at(_primitive), _iBuffer->GetSize(), s_indexTypeMap.at(_indexType), nullptr);
+    } else {
+        glDrawArrays(s_primitiveMap.at(_primitive), 0, _vertexCount);
+    }
 }
 
 void Mesh::SetIndexMap() {

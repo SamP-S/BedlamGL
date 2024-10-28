@@ -46,6 +46,11 @@ void Renderer::Clear(bool clearColor, bool clearStencil, bool clearDepth) {
     glClear(mask);
 }
 
+void Renderer::Draw(Drawable& d) {
+    d.Draw(*this);
+    _stats.drawCalls++;
+}
+
 /// --- State Management ---
 void Renderer::SetState(RendererState state) {
 

@@ -32,7 +32,7 @@ public:
 
     void Bind() override;
     void Unbind() override;
-    void Draw(renderer::Renderer& renderer, const LA::mat4& m) override;
+    void Draw(renderer::Renderer& renderer) override;
     
     void SetIndexMap() override;
     void SetIndexMap(std::shared_ptr<renderer::Buffer> iBuffer, IndexType iType) override;

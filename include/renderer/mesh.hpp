@@ -139,7 +139,7 @@ public:
     virtual void Bind() = 0;
     virtual void Unbind() = 0;
     // drawable
-    virtual void Draw(Renderer& renderer, const LA::mat4& m) = 0;
+    virtual void Draw(Renderer& renderer) = 0;
 
 
     /// --- Properties ---

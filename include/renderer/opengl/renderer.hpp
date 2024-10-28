@@ -63,6 +63,9 @@ public:
     // clear active canvas/screen according to bools args
     void Clear(bool clearColor, bool clearStencil, bool clearDepth) override;
 
+    /// --- Draw Calls ---
+    void Draw(Drawable& d) override;
+
     /// --- State Management ---
     void SetState(RendererState state) override;
     void ResetState() override;

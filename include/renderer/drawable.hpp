@@ -18,8 +18,7 @@ protected:
 	virtual ~Drawable() = default;
 
 public:
-	void Draw(Renderer& renderer);
-    virtual void Draw(Renderer& renderer, const LA::mat4& transform) = 0;
+	virtual void Draw(Renderer& renderer) = 0;
 };
 
 } // renderer
