@@ -100,26 +100,6 @@ public:
     std::shared_ptr<renderer::Shader> GetShader() override;
     void SetShader(std::shared_ptr<renderer::Shader> shader) override;
 
-    /// --- Coordinate System Transformations ---
-    // camera and screen transformations
-    LA::mat4 GetProjection() override;
-    LA::mat4 GetView() override;
-    LA::mat4 GetModel() override;
-    void SetProjection(const LA::mat4& proj) override;
-    void SetView(const LA::mat4& view) override;
-    // coordinate space transformations
-    LA::mat4 PopTransform() override;
-    void PushTransform(const LA::mat4& transform) override;
-    void PushTranslate(float x, float y, float z) override;
-    void PushTranslate(LA::vec3 translate) override;
-    void PushRotate(float x, float y, float z) override;
-    void PushRotate(LA::vec3 rotate) override;
-    void PushScale(float x, float y, float z) override;
-    void PushScale(LA::vec3 scale) override;
-    
-    /// --- Debug Info ---
-    RenderStats GetRenderStats() override;
-
 };
 
 } // opengl
