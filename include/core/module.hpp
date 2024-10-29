@@ -2,13 +2,13 @@
 
 #include <string>
 #include <map>
-
-
+#include <unordered_map>
 
 namespace marathon {
 
 // as enum for implicit int conversion
-enum class ModuleType {
+enum ModuleType {
+    UNKNOWN = -1,
     WINDOW,
     INPUT,
     MATHS,
@@ -16,7 +16,7 @@ enum class ModuleType {
     AUDIO,
     EVENTS,
     TIME,
-    MAX_ENUM
+    MODULE_MAX_ENUM
 };
 
 //// TODO:
@@ -25,20 +25,36 @@ enum class ModuleType {
 class Module {
 public:
     Module(ModuleType mType, const std::string& name);
-    virtual ~Module() = default;
+    virtual ~Module();
 
-    // standard methods for safe start/end/rebooting modules
-    /// TODO:
-    // Should be removed and all boot/shutdown should be migrated to constructor/destructor
+    // standard methods for safe booting and shutting down
+    // allows for modules to be instanced before booting in the correct order
     virtual bool Boot() = 0;
     virtual bool Shutdown() = 0;
     
+    bool IsActive() const;
     std::string GetName() const;
     ModuleType GetType() const;
 
+    // template <typename T>
+    // static T* GetInstance(ModuleType mType) {
+    //     if (mType == ModuleType::UNKNOWN)
+    //         return nullptr;
+    //     return nullptr;
+    // }
+
+protected:
+    // active should be set by derived classes during boot/shutdown
+    bool _active = false;
+
 private:
-    std::string _name;
-    ModuleType _mType;
+    // name and type of module are fixed on construction
+    std::string _name = "unknown";
+    ModuleType _mType = ModuleType::UNKNOWN;
+
+    // static std::shared_ptr<Module> _instances[MODULE_MAX_ENUM];
+    // static void RegisterInstance(std::shared_ptr<Module> instance);
+
 };
 
 } // marathon
