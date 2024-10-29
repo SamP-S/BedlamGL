@@ -37,6 +37,11 @@ protected:
         {DepthFunc::GREATER_EQUAL, GL_GEQUAL}
     };
 
+    /// TODO:
+    // should hold default meshes for standard draws calls
+    // e.g. circle, square, cube, sphere, etc.
+    // CONSIDER: what arguments should be used for draw calls i.e. 2D vs 3D
+
     LA::mat4 _projection = LA::mat4();
     LA::mat4 _view = LA::mat4();
     std::stack<LA::mat4> _transforms;

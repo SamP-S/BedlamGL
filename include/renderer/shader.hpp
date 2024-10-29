@@ -90,6 +90,14 @@ enum class ShaderType {
     FRAGMENT
 };
 
+/// TODO:
+// shaders should determine what vertex attributes and uniforms are available
+// shaders should use a standard layout
+// custom mesh layouts should require custom shaders
+// meshes (vertex attributes) must find the shader that matches their layout
+// materials (uniforms) must match the shader's uniforms
+// NOTE: unity uses multiple shader variances per possible missing vertex attribute and checks at runtime which to use according to mesh data available
+
 class Shader : public Resource {
 protected:
     std::string _vSrc = "";
