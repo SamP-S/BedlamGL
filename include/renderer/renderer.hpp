@@ -15,6 +15,7 @@
 #include "renderer/buffer.hpp"
 #include "renderer/mesh.hpp"
 #include "renderer/shader.hpp"
+#include "renderer/default.hpp"
 
 namespace marathon {
 
