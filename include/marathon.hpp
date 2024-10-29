@@ -20,14 +20,7 @@
 
 
 namespace marathon {
-
-    // NOTE: instancing order does not matter
-    // only boot order can break shit
-    extern time::Time& Time;
-    extern window::Window& Window;
-    extern renderer::Renderer& Renderer;
-    extern events::Events& Events;
-    
+   
     /** @brief Initialise all modules
         @return Returns the number of modules that failed to boot
     */

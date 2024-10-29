@@ -19,6 +19,11 @@ std::shared_ptr<renderer::Buffer> _triVBuf;
 std::shared_ptr<renderer::Mesh> _triangleMesh;
 std::shared_ptr<renderer::Mesh> _quadMesh;
 
+time::Time& Time = time::Time::Instance();
+window::Window& Window = window::Window::Instance();
+renderer::Renderer& Renderer = renderer::Renderer::Instance();
+events::Events& Events = events::Events::Instance();
+
 void start() {
     // create defaults
     _shader = Renderer.CreateShader(renderer::defaultVertexShader, renderer::defaultFragmentShader);

@@ -5,6 +5,8 @@
 #include <cassert>
 #include <filesystem>
 
+
+#include "marathon.hpp"
 #include "runtime/interactive.hpp"
 #include "window/window.hpp"
 #include "renderer/renderer.hpp"
@@ -31,11 +33,6 @@ struct ApplicationConfig {
 class Application {
 public:
 
-    time::Time& Time = time::Time::Instance();
-    window::Window& Window = window::Window::Instance();
-    renderer::Renderer& Renderer = renderer::Renderer::Instance();
-    events::Events& Events = events::Events::Instance();
-
     static Application* Create(ApplicationConfig cfg) {
         assert(_instance == nullptr && "Attempting to create application twice. Only 1 allowed.");
         // create new app and return ref
@@ -54,17 +51,17 @@ public:
     
     // Application loop, independant of game/sim loop
     void Run() {
-        while (Window.IsOpen()) {
+        while (window::Window::Instance().IsOpen()) {
             // fetch events from backend ready for polling
-            Events.Fetch();
+            events::Events::Instance().Fetch();
 
-            double dt = Time.Tick();
+            double dt = time::Time::Instance().Tick();
 
             // interactive tick
             _interactive->Update(dt);
             
             // swap frame shown
-            Window.SwapFrame();
+            window::Window::Instance().SwapFrame();
         }
     }
 
@@ -73,10 +70,7 @@ public:
     ~Application() {
         _interactive->End();
         delete _interactive;
-        Renderer.Shutdown();
-        Events.Shutdown();
-        Window.Shutdown();
-        Time.Shutdown();
+        Quit();
     }
 
 private:
@@ -84,10 +78,7 @@ private:
     // Initialise context and boot modules
     Application(ApplicationConfig cfg)
         : _cfg(cfg) {
-        Time.Boot();
-        Window.Boot();
-        Renderer.Boot();
-        Events.Boot();
+        Init();
 
         // set single app instance
         _instance = this;

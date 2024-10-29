@@ -9,8 +9,6 @@ Module::Module(ModuleType mType, const std::string& name)
 // Destructor
 Module::~Module() {}
 
-
-
 // Get if the module has been booted
 bool Module::IsActive() const {
     return _active;
