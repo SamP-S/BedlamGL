@@ -9,8 +9,9 @@
 #include <cstdlib>
 #include <unordered_map>
 
-#include "renderer/buffer.hpp"
+#include "la_extended.h"
 #include "renderer/drawable.hpp"
+#include "renderer/buffer.hpp"
 
 namespace marathon {
 
