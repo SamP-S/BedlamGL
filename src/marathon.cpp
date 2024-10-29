@@ -4,6 +4,12 @@
 
 namespace marathon {
 
+    time::Time& Time = time::Time::Instance();
+    window::Window& Window = window::Window::Instance();
+    renderer::Renderer& Renderer = renderer::Renderer::Instance();
+    events::Events& Events = events::Events::Instance();
+
+
     /// TODO: ensure the boot/shutdown orders are correct
     // ensure each module ensures their required modules have already booted successfully
     // e.g. renderer checks window has booted

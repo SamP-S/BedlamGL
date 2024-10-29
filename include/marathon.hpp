@@ -23,11 +23,11 @@ namespace marathon {
 
     // NOTE: instancing order does not matter
     // only boot order can break shit
-    time::Time& Time = time::Time::Instance();
-    window::Window& Window = window::Window::Instance();
-    renderer::Renderer& Renderer = renderer::Renderer::Instance();
-    events::Events& Events = events::Events::Instance();
-
+    extern time::Time& Time;
+    extern window::Window& Window;
+    extern renderer::Renderer& Renderer;
+    extern events::Events& Events;
+    
     /** @brief Initialise all modules
         @return Returns the number of modules that failed to boot
     */
