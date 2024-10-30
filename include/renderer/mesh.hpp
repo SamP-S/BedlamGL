@@ -74,6 +74,8 @@ struct VertexAttributeDescriptor {
 /// - add bound calculations for physics to use
 /// - add instancing support
 /// - add support for setting buffer usage (currently STATIC only)
+/// - add validation on data being input, accepts absolute shit atm, throw errors for the factor to catch
+/// - additionally add flags to allow for data validation checks to be skipped for performance
 
 /// CONSIDER: allow for usage to be set per stream rather than per mesh
 
@@ -93,9 +95,7 @@ public:
     // create mesh with vertex data
     ~Mesh();
 
-    // clear all vertex and index data
-    // clear counts but optionally keep layout
-    // effectively a big delete
+    // clear/deletes all vertex data, index data, data sizes, but optionally keeps attrib layout
     void ClearVertex(bool keepLayout=true);
 
     // vertices
@@ -109,8 +109,6 @@ public:
     int GetVertexAttributeStream(VertexAttribute attr) const;
     int GetVertexStreamStride(int stream) const;
     bool HasVertexAttribute(VertexAttribute attr) const;
-    /// TODO:
-    // Add validation on data being input, accepts absolute shit atm, throw errors for the factor to catch
     void SetVertexBufferParams(int vertexCount, std::vector<VertexAttributeDescriptor> attributes);
     void SetVertexBufferData(void* data, int src_start, int dest_start, int count, int stream);
 
@@ -118,9 +116,6 @@ public:
     int GetIndexCount() const;
     IndexFormat GetIndexFormat() const;
     PrimitiveType GetPrimitiveType() const;
-    /// CONSIDER: adding flags for disabling verification
-    /// TODO:
-    // Add validation on data being input, accepts absolute shit atm, throw errors for the factor to catch
     void SetIndexBufferParams(int indexCount, IndexFormat format);
     void SetIndexBufferData(void* data, int src_start, int dest_start, int count);
 };
