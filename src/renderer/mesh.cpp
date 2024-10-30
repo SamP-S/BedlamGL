@@ -9,11 +9,11 @@ namespace renderer {
 
 // constructor/destructor
 Mesh::Mesh(const std::string& name, int vCount, size_t vSize, std::shared_ptr<Buffer> vBuf, std::vector<VertexAttribute> vAttrs, PrimitiveType primitive)
-    : Drawable(name),
+    : Resource(name),
     _vertexCount(vCount), _vertexSize(vSize), _primitive(primitive),
     _vBuffer(vBuf), _vAttrs(vAttrs) {}
 Mesh::Mesh(const std::string& name, int vCount, size_t vSize, std::shared_ptr<Buffer> vBuf, std::vector<VertexAttribute> vAttrs, std::shared_ptr<Buffer> iBuf, IndexType iType, PrimitiveType primitive)
-    : Drawable(name),
+    : Resource(name),
     _vertexCount(vCount), _vertexSize(vSize), _primitive(primitive),
     _vBuffer(vBuf), _vAttrs(vAttrs),
     _iBuffer(iBuf), _indexType(iType) {}

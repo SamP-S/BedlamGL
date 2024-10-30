@@ -10,7 +10,7 @@
 #include <unordered_map>
 
 #include "la_extended.h"
-#include "renderer/drawable.hpp"
+#include "core/resource.hpp"
 #include "renderer/buffer.hpp"
 
 namespace marathon {
@@ -18,12 +18,13 @@ namespace marathon {
 namespace renderer {
 
 enum class PrimitiveType {
+    NONE,
     TRIANGLES,
     FAN,
     STRIP
 };
 
-enum class AttributeType {
+enum class VertexAttributeFormat {
     // floating
     HALF_FLOAT, // 16-bit
     FLOAT,      // 32-bit
@@ -38,20 +39,37 @@ enum class AttributeType {
     UINT32
 };
 
-enum class IndexType {
+enum class IndexFormat {
+    NONE,
     UINT8,
     UINT16,
     UINT32,
-    NONE
 };
 
-struct VertexAttribute {
+enum class VertexAttribute {
+    POSITION,
+    NORMAL,
+    TANGENT,
+    BITANGENT,
+    COLOUR,
+    TEXCOORD0,
+    TEXCOORD1,
+    TEXCOORD2,
+    TEXCOORD3,
+    TEXCOORD4,
+    TEXCOORD5,
+    TEXCOORD6,
+    TEXCOORD7
+};
+
+struct VertexAttributeDescriptor {
     int index;
     int numComponents;
-    AttributeType type;
+    VertexAttributeFormat format;
     int stride = 0;
     int offset = 0;
     bool normalised = false;
+    int stream = 0;
 };
 
 /// TODO:
@@ -71,53 +89,44 @@ struct VertexAttribute {
 
 // NOTE: mesh vertex count is fixed once created
 //       mesh index map data can be resized/changed
-class Mesh : public Drawable {
+class Mesh : public Resource {
 protected:
-    friend class Renderer;
-    
+    // vertices
     int _vertexCount = 0;
-    size_t _vertexSize = 0;
-    PrimitiveType _primitive = PrimitiveType::TRIANGLES;
-
-
-    std::shared_ptr<Buffer> _vBuffer = nullptr;
-    std::vector<VertexAttribute> _vAttrs = {};
-    std::shared_ptr<Buffer> _iBuffer = nullptr;
-    IndexType _indexType = IndexType::NONE;
-
-    // create mesh with vertex data
-    Mesh(const std::string& name, int vCount, size_t vSize, std::shared_ptr<Buffer> vBuf, std::vector<VertexAttribute> vAttrs, 
-        PrimitiveType primitive=PrimitiveType::TRIANGLES);
-    // create mesh with vertex data and index map
-    Mesh(const std::string& name, int vCount, size_t vSize, std::shared_ptr<Buffer> vBuf, std::vector<VertexAttribute> vAttrs, 
-        std::shared_ptr<Buffer> iBuf, IndexType iType, PrimitiveType primitive=PrimitiveType::TRIANGLES);
+    int _vertexAttributeCount = 0;
+    std::vector<VertexAttributeDescriptor> _vertexAttributes;
     
+    // indices
+    IndexFormat _indexFormat = IndexFormat::NONE;
+    int _indexCount = 0;
+    PrimitiveType _primitive = PrimitiveType::NONE;
 
 public:
-    virtual ~Mesh();
+    // create mesh with vertex data
+    Mesh(const std::string& name);
+    ~Mesh();
 
-    /// --- Backend Impl ---
-    virtual void Bind() = 0;
-    virtual void Unbind() = 0;
-    // drawable
-    virtual void Draw(Renderer& renderer) = 0;
-
-
-    /// --- Properties ---
-    PrimitiveType GetPrimitiveType() const;
-    void SetPrimitiveType(PrimitiveType primitive);
-
-
-    /// --- Index Data ---
-    // unsets index buffer
-    virtual void SetIndexMap();
-    // set index buffer
-    virtual void SetIndexMap(std::shared_ptr<Buffer> iBuffer, IndexType iType=IndexType::UINT32);
-    // get index buffer
-    // returns true if index buffer is set and fills args
-    // returns false if no index buffer set, args are set nullptr
-    // bool GetIndexMap(Buffer* buf, IndexType* type) const;
+    // vertices
+    int GetVertexAttributeCount() const;
+    VertexAttributeDescriptor GetVertexAttribute(int index) const;
+    std::vector<VertexAttributeDescriptor> GetVertexAttributes() const;
+    int GetVertexAttributeComponents(VertexAttribute attr) const;
+    VertexAttributeFormat GetVertexAttributeFormat(VertexAttribute attr) const;
+    int GetVertexAttributeStride(VertexAttribute attr) const;
+    int GetVertexAttributeOffset(VertexAttribute attr) const;
+    int GetVertexAttributeStream(VertexAttribute attr) const;
     
+    void SetVertexBufferParams(int vertexCount, std::vector<VertexAttributeDescriptor> attributes);
+    void SetVertexBufferData(void* data, int src_start, int dest_start, int count, int stream);
+
+
+    // indices
+    IndexFormat GetIndexFormat() const;
+    int GetIndexCount() const;
+    PrimitiveType GetPrimitiveType() const;
+    /// CONSIDER: adding flags for disabling verification
+    void SetIndexBufferParams(int indexCount, IndexFormat format);
+    void SetIndexBufferData(void* data, int src_start, int dest_start, int count);
 };
 
 } // renderer

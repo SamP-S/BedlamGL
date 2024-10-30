@@ -141,7 +141,7 @@ public:
     // virtual void Draw2DRectangle() = 0;
     // virtual void Draw2DPoint() = 0;
     // // Draw3D
-    virtual void Draw(Drawable& d) = 0;
+    virtual void Draw(Mesh& d) = 0;
     // virtual void DrawLine() = 0;
     // virtual void DrawPoint() = 0;
     // virtual void DrawCube() = 0;

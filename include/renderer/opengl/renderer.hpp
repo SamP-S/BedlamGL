@@ -2,7 +2,7 @@
 
 #include <unordered_map>
 
-
+#include "renderer/mesh.hpp"
 #include "renderer/opengl/opengl.hpp"
 #include "renderer/renderer.hpp"
 
@@ -14,6 +14,21 @@ namespace opengl {
 
 class Renderer : public renderer::Renderer {
 protected:
+
+    /// ---- Mesh Handling ---
+    struct MeshHandler {
+        GLuint vao = 0;
+        std::vector<GLuint> vbos;
+        GLuint ibo = 0;
+        GLenum primitive = GL_TRIANGLES;
+        GLenum indexType = GL_UNSIGNED_INT;
+        int indexCount = 0;
+        std::shared_ptr<Mesh> mesh = nullptr;
+    };
+
+    static const std::unordered_map<VertexAttributeFormat, GLenum> s_vertAttrFormatMap;
+    static const std::unordered_map<PrimitiveType, GLenum> s_primitiveMap;
+    static const std::unordered_map<IndexFormat, GLenum> s_indexFormatMap;
 
     std::unordered_map<CullFace, GLenum> _cullFaceMap = {
         {CullFace::FRONT, GL_FRONT},
@@ -69,7 +84,7 @@ public:
     void Clear(bool clearColor, bool clearStencil, bool clearDepth) override;
 
     /// --- Draw Calls ---
-    void Draw(Drawable& d) override;
+    void Draw(Mesh& d) override;
 
     /// --- State Management ---
     void SetState(RendererState state) override;

@@ -3,7 +3,7 @@
 // PUBLIC HEADER
 
 #include "la_extended.h"
-#include "renderer/drawable.hpp"
+#include "core/resource.hpp"
 
 namespace marathon {
 
@@ -61,7 +61,7 @@ enum class TexPixelFormat {
 // forward delcare
 class Renderer;
 
-class Texture : public Drawable {
+class Texture : public Resource {
 protected:
     Texture();
     ~Texture();
@@ -74,9 +74,6 @@ protected:
     TexFilter _mipmapFilter;
     TexWrap _wrap;
     TexPixelFormat _pixelFormat;
-
-    // drawable
-    void Draw(Renderer& Renderer, const LA::mat4& transform) override;
 
 public:
     // Fixed Properties
