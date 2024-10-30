@@ -18,7 +18,6 @@ namespace marathon {
 namespace renderer {
 
 enum class PrimitiveType {
-    NONE,
     TRIANGLES,
     FAN,
     STRIP
@@ -40,7 +39,6 @@ enum class VertexAttributeFormat {
 };
 
 enum class IndexFormat {
-    NONE,
     UINT8,
     UINT16,
     UINT32,
@@ -72,23 +70,13 @@ struct VertexAttributeDescriptor {
     int stream = 0;
 };
 
-/// TODO:
-// add support for setting a draw range (glDraw from start using count)
-// allow enable/disable attributes (glEnableVertexAttribArray/glDisableVertexAttribArray)
-// support a default data layout for default shaders
-// support changing vertex count after creation
-// fix access issues to prevent changing buffer data without updating vertex attributes
-// allow read access to vertex attributes
-// allow read access to index buffer
+/// TODO: 
+/// - add bound calculations for physics to use
+/// - add instancing support
+/// - add support for setting buffer usage (currently STATIC only)
 
-// CONSIDER: allowing vertex format class and support changing vertex attributes after creation
+/// CONSIDER: allow for usage to be set per stream rather than per mesh
 
-// HARD: add support for instanced rendering
-// HARD: add support for multiple vertex buffers for different vertex attributes
-//       probably requires the user to create buffers themsevles through the Renderer
-
-// NOTE: mesh vertex count is fixed once created
-//       mesh index map data can be resized/changed
 class Mesh : public Resource {
 protected:
     // vertices
@@ -97,34 +85,42 @@ protected:
     std::vector<VertexAttributeDescriptor> _vertexAttributes;
     
     // indices
-    IndexFormat _indexFormat = IndexFormat::NONE;
+    IndexFormat _indexFormat = IndexFormat::UINT32;
     int _indexCount = 0;
-    PrimitiveType _primitive = PrimitiveType::NONE;
+    PrimitiveType _primitive = PrimitiveType::TRIANGLES;
 
 public:
     // create mesh with vertex data
-    Mesh(const std::string& name);
     ~Mesh();
+
+    // clear all vertex and index data
+    // clear counts but optionally keep layout
+    // effectively a big delete
+    void ClearVertex(bool keepLayout=true);
 
     // vertices
     int GetVertexAttributeCount() const;
     VertexAttributeDescriptor GetVertexAttribute(int index) const;
     std::vector<VertexAttributeDescriptor> GetVertexAttributes() const;
-    int GetVertexAttributeComponents(VertexAttribute attr) const;
     VertexAttributeFormat GetVertexAttributeFormat(VertexAttribute attr) const;
+    int GetVertexAttributeComponents(VertexAttribute attr) const;
     int GetVertexAttributeStride(VertexAttribute attr) const;
     int GetVertexAttributeOffset(VertexAttribute attr) const;
     int GetVertexAttributeStream(VertexAttribute attr) const;
-    
+    int GetVertexStreamStride(int stream) const;
+    bool HasVertexAttribute(VertexAttribute attr) const;
+    /// TODO:
+    // Add validation on data being input, accepts absolute shit atm, throw errors for the factor to catch
     void SetVertexBufferParams(int vertexCount, std::vector<VertexAttributeDescriptor> attributes);
     void SetVertexBufferData(void* data, int src_start, int dest_start, int count, int stream);
 
-
     // indices
-    IndexFormat GetIndexFormat() const;
     int GetIndexCount() const;
+    IndexFormat GetIndexFormat() const;
     PrimitiveType GetPrimitiveType() const;
     /// CONSIDER: adding flags for disabling verification
+    /// TODO:
+    // Add validation on data being input, accepts absolute shit atm, throw errors for the factor to catch
     void SetIndexBufferParams(int indexCount, IndexFormat format);
     void SetIndexBufferData(void* data, int src_start, int dest_start, int count);
 };
