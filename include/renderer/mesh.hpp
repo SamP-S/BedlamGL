@@ -106,9 +106,9 @@ protected:
 
     // check/manage dirty state
     bool IsVertexBufferDirty(int vb) const;
-    bool SetVertexBufferClean(int vb);
+    void SetVertexBufferClean(int vb);
     bool IsIndexBufferDirty() const;
-    bool SetIndexBufferClean();
+    void SetIndexBufferClean();
 
     // helper functions
     int GetVertexAttributeIndex(VertexAttribute attr) const;
