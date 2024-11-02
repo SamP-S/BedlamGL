@@ -40,6 +40,10 @@ A simple 2D/3D game library using a module based system inspired by pygame/love2
 - [ ] Default and custom vertex data
 - [ ] Multi Threading
 - [ ] Filesystem management
+- [ ] Support ImGui layer
+- [ ] Allow seperate subsystem initialisation
+- [ ] Allow objects to be created before initialisation
+
 
 ## Modules
 The library consists of a set of fundamental modules that empower the user to create a wide variety off engine level applications:
