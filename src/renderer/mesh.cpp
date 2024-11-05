@@ -60,6 +60,7 @@ int Mesh::GetVertexAttributeIndex(VertexAttribute attr) const {
     auto it = _vertexAttributeIndexMap.find(attr);
     if (it != _vertexAttributeIndexMap.end())
         return it->second;
+    throw std::invalid_argument("src/renderer/mesh.cpp: Vertex attribute not defined");
     return -1;
 }
 
@@ -76,23 +77,55 @@ void Mesh::ClearVertex(bool keepLayout=true) {
 }
 
 // vertices
-int Mesh::GetVertexAttributeCount() const {}
-VertexAttributeDescriptor Mesh::GetVertexAttribute(int index) const {}
-std::vector<VertexAttributeDescriptor> Mesh::GetVertexAttributes() const {}
-VertexAttributeFormat Mesh::GetVertexAttributeFormat(VertexAttribute attr) const {}
-int Mesh::GetVertexAttributeComponents(VertexAttribute attr) const {}
-int Mesh::GetVertexAttributeStride(VertexAttribute attr) const {}
-int Mesh::GetVertexAttributeOffset(VertexAttribute attr) const {}
-int Mesh::GetVertexAttributeStream(VertexAttribute attr) const {}
-int Mesh::GetVertexBufferStride(int stream) const {}
-bool Mesh::HasVertexAttribute(VertexAttribute attr) const {}
+int Mesh::GetVertexAttributeCount() const {
+    return _vertexCount;
+}
+VertexAttributeDescriptor Mesh::GetVertexAttribute(int index) const {
+    if (index < 0 || index >= _vertexAttributes.size())
+        throw std::invalid_argument("src/renderer/mesh.cpp: Vertex attribute index out of range");
+    return _vertexAttributes[index];
+}
+std::vector<VertexAttributeDescriptor> Mesh::GetVertexAttributes() const {
+    return _vertexAttributes;
+}
+VertexAttributeFormat Mesh::GetVertexAttributeFormat(VertexAttribute attr) const {
+    return _vertexAttributes[GetVertexAttributeIndex(attr)].format;
+}
+int Mesh::GetVertexAttributeComponents(VertexAttribute attr) const {
+    return _vertexAttributes[GetVertexAttributeIndex(attr)].numComponents;
+}
+int Mesh::GetVertexAttributeStride(VertexAttribute attr) const {
+    // TODO 
+    // CONSIDER: does this and GetVertexBufferStride need to exist or just one?
+    return 0;
+}
+int Mesh::GetVertexAttributeOffset(VertexAttribute attr) const {
+    // TODO
+    return 0;
+}
+int Mesh::GetVertexAttributeStream(VertexAttribute attr) const {
+    return _vertexAttributes[GetVertexAttributeIndex(attr)].stream;
+}
+int Mesh::GetVertexBufferStride(int stream) const {
+    // TODO
+    return 0;
+}
+bool Mesh::HasVertexAttribute(VertexAttribute attr) const {
+    return _vertexAttributeIndexMap.find(attr) != _vertexAttributeIndexMap.end();
+}
 void Mesh::SetVertexBufferParams(int vertexCount, std::vector<VertexAttributeDescriptor> attributes) {}
 void Mesh::SetVertexBufferData(void* data, int src_start, int dest_start, int count, int stream) {}
 
 // indices
-int Mesh::GetIndexCount() const {}
-IndexFormat Mesh::GetIndexFormat() const {}
-PrimitiveType Mesh::GetPrimitiveType() const {}
+int Mesh::GetIndexCount() const {
+    return _indexCount;
+}
+IndexFormat Mesh::GetIndexFormat() const {
+    return _indexFormat;
+}
+PrimitiveType Mesh::GetPrimitiveType() const {
+    return _primitive;
+}
 void Mesh::SetIndexBufferParams(int indexCount, IndexFormat format) {}
 void Mesh::SetIndexBufferData(void* data, int src_start, int dest_start, int count) {}
 
