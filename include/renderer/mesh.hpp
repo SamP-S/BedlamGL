@@ -93,6 +93,8 @@ protected:
     // vertices
     int _vertexCount = 0;
     std::vector<VertexAttributeDescriptor> _vertexAttributes;
+    std::unordered_map<VertexAttribute, int> _vertexAttributeOffset;
+    std::array<int, 4> _streamStrides;
     std::unordered_map<VertexAttribute, int> _vertexAttributeIndexMap;
     std::array<void*, 4> _vertexStreams;
     std::array<bool, 4> _vertexStreamsDirty;
@@ -114,11 +116,13 @@ protected:
     int GetVertexAttributeIndex(VertexAttribute attr) const;
 
 public:
+    static int MAX_VERTEX_STREAMS;
+
     // create mesh with vertex data
     ~Mesh();
 
     // clear/deletes all vertex data, index data, data sizes, but optionally keeps attrib layout
-    void ClearVertex(bool keepLayout=true);
+    void Clear(bool keepLayout=true);
 
     // vertices
     int GetVertexAttributeCount() const;

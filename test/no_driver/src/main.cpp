@@ -28,7 +28,8 @@ void start() {
     // create defaults
     _shader = Renderer.CreateShader(renderer::defaultVertexShader, renderer::defaultFragmentShader);
     _triVBuf = Renderer.CreateBuffer((void*)&renderer::defaultTriangleVertices[0][0], renderer::defaultTriangleVertices.size() * sizeof(LA::vec3), renderer::BufferTarget::VERTEX, renderer::BufferUsage::STATIC);
-    _triangleMesh = Renderer.CreateMesh(3, sizeof(LA::vec3), _triVBuf, {{0, 3, renderer::AttributeType::FLOAT}}, renderer::PrimitiveType::TRIANGLES);
+    _triangleMesh = Renderer.CreateMesh(3, sizeof(LA::vec3), _triVBuf, {{0, 3, renderer::VertexAttributeFormat::FLOAT}}, renderer::PrimitiveType::TRIANGLES);
+    
     // create object
     _obj = MyObject();
     _obj.color = {1.0f, 0.2f, 0.2f, 1.0f};

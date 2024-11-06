@@ -64,9 +64,12 @@ int Mesh::GetVertexAttributeIndex(VertexAttribute attr) const {
     return -1;
 }
 
+// public
+int Mesh::MAX_VERTEX_STREAMS = 4;
+
 Mesh::~Mesh() {}
 
-void Mesh::ClearVertex(bool keepLayout=true) {
+void Mesh::Clear(bool keepLayout=true) {
     // _vertexCount = 0;
     // _vertexStreams.fill(nullptr);
     // _vertexStreamsDirty.fill(false);
@@ -94,26 +97,29 @@ VertexAttributeFormat Mesh::GetVertexAttributeFormat(VertexAttribute attr) const
 int Mesh::GetVertexAttributeComponents(VertexAttribute attr) const {
     return _vertexAttributes[GetVertexAttributeIndex(attr)].numComponents;
 }
-int Mesh::GetVertexAttributeStride(VertexAttribute attr) const {
-    // TODO 
-    // CONSIDER: does this and GetVertexBufferStride need to exist or just one?
-    return 0;
-}
 int Mesh::GetVertexAttributeOffset(VertexAttribute attr) const {
-    // TODO
-    return 0;
+    return _vertexAttributeOffset.find(attr)->second;
 }
 int Mesh::GetVertexAttributeStream(VertexAttribute attr) const {
     return _vertexAttributes[GetVertexAttributeIndex(attr)].stream;
 }
 int Mesh::GetVertexBufferStride(int stream) const {
-    // TODO
-    return 0;
+    if (stream < 0 || stream >= 4)
+        throw std::invalid_argument("src/renderer/mesh.cpp: Vertex buffer stream out of range");
+    return _streamStrides[stream];
 }
 bool Mesh::HasVertexAttribute(VertexAttribute attr) const {
     return _vertexAttributeIndexMap.find(attr) != _vertexAttributeIndexMap.end();
 }
-void Mesh::SetVertexBufferParams(int vertexCount, std::vector<VertexAttributeDescriptor> attributes) {}
+void Mesh::SetVertexBufferParams(int vertexCount, std::vector<VertexAttributeDescriptor> attributes) {
+    Clear(false);
+    _vertexCount = vertexCount;
+    _vertexAttributes = attributes;
+    _vertexAttributeOffset.clear();
+    _vertexAttributeIndexMap.clear();
+    
+
+}
 void Mesh::SetVertexBufferData(void* data, int src_start, int dest_start, int count, int stream) {}
 
 // indices
