@@ -38,29 +38,31 @@ enum class BufferUsage {
 
 class Buffer : public Resource {
 protected:
+    // should be removed
     friend class Renderer;
-    friend class Mesh;
-    friend class Buffer;
 
-    size_t _size;
-    BufferTarget _target;
-    BufferUsage _usage;
-
-    Buffer(const std::string& name, void* data, size_t size, BufferTarget target, BufferUsage usage=BufferUsage::STATIC);
+    size_t _size = 0;
+    BufferTarget _target = BufferTarget::VERTEX;
+    BufferUsage _usage = BufferUsage::STATIC;
+    bool _isDirty = true;
 
 public:
+    // create empty buffer
+    Buffer();
     virtual ~Buffer();
 
     /// TODO: bind/unbind should not be public
     virtual void Bind() = 0;
     virtual void Unbind() = 0;
 
-    // set data by reallocating buffer
-    virtual void SetData(void* data, size_t byteSize) = 0;
-    virtual void SetData(void* data, size_t byteSize, BufferUsage usage) = 0;
+    // set buffer params and allocate
+    virtual void SetParams(size_t size, BufferUsage usage=BufferUsage::STATIC, BufferTarget target=BufferTarget::VERTEX) = 0;
+
+    // set data and reallocate buffer
+    virtual void SetData(void* data, size_t size, BufferUsage usage=BufferUsage::STATIC) = 0;
 
     // faster than SetData, no reallocation
-    virtual void SetDataSubset(void* data, size_t size, size_t offset) = 0;
+    virtual void SetDataFast(void* data, size_t size, size_t src_start, size_t dest_start) = 0;
 
     size_t GetSize() const;
     BufferTarget GetTarget() const;
