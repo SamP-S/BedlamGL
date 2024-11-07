@@ -4,7 +4,24 @@ namespace marathon {
 
 namespace renderer {
 
+
+/// --- INTERNAL ---
+/// TODO: Implement a dictionary to cache indexes instead of linear search everytime for big speed improvement
+// find index of attribute in descriptor list or return -1 if not found
+int Mesh::GetVertexAttributeIndex(VertexAttribute attr) const {
+    for (int i = 0; i < _vertexAttributeDescriptors.size(); i++) {
+        if (_vertexAttributeDescriptors[i].attribute == attr) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+
+
+/// --- VBO ---
 const std::unordered_map<VertexAttributeFormat, size_t> Mesh::s_vertexAttributeFormatMap = {
+    {VertexAttributeFormat::INVALID, 0},
     {VertexAttributeFormat::HALF_FLOAT, 2},
     {VertexAttributeFormat::FLOAT, 4},
     {VertexAttributeFormat::DOUBLE, 8},
@@ -18,13 +35,8 @@ const std::unordered_map<VertexAttributeFormat, size_t> Mesh::s_vertexAttributeF
     {VertexAttributeFormat::UINT64, 8}
 };
 
-const std::unordered_map<IndexFormat, size_t> Mesh::s_indexFormatMap = {
-    {IndexFormat::UINT8, 1},
-    {IndexFormat::UINT16, 2},
-    {IndexFormat::UINT32, 4}
-};
-
 const std::unordered_map<VertexAttribute, int> Mesh::s_vertexAttributeLayoutMap = {
+    {VertexAttribute::INVALID, -1},
     {VertexAttribute::POSITION, 0},
     {VertexAttribute::NORMAL, 1},
     {VertexAttribute::TANGENT, 2},
@@ -39,101 +51,166 @@ const std::unordered_map<VertexAttribute, int> Mesh::s_vertexAttributeLayoutMap 
     {VertexAttribute::TEXCOORD7, 11}
 };
 
-bool Mesh::IsVertexBufferDirty(int vb) const { 
-    if (vb < 0 || vb >= 4)
-        return false;
-    return _vertexStreamsDirty[vb];
-}
-void Mesh::SetVertexBufferClean(int vb) {
-    if (vb < 0 || vb >= 4)
-        return;
-    _vertexStreamsDirty[vb] = false;
-}
-bool Mesh::IsIndexBufferDirty() const {
-    return _isIndexStreamDirty;
-}
-void Mesh::SetIndexBufferClean() {
-    _isIndexStreamDirty = false;
+void Mesh::ClearVertices() {
+    // Empty implementation
+    /// TODO: Implement
+    std::cout << "src/renderer/mesh.cpp: Mesh::ClearVertices() not implemented" << std::endl;
 }
 
-int Mesh::GetVertexAttributeIndex(VertexAttribute attr) const {
-    auto it = _vertexAttributeIndexMap.find(attr);
-    if (it != _vertexAttributeIndexMap.end())
-        return it->second;
-    throw std::invalid_argument("src/renderer/mesh.cpp: Vertex attribute not defined");
-    return -1;
+void Mesh::ClearVertexDirtyFlag() {
+    _vertexDataDirty = DataDirty::CLEAN;
 }
 
-// public
-int Mesh::MAX_VERTEX_STREAMS = 4;
-
-Mesh::~Mesh() {}
-
-void Mesh::Clear(bool keepLayout=true) {
-    // _vertexCount = 0;
-    // _vertexStreams.fill(nullptr);
-    // _vertexStreamsDirty.fill(false);
-    // _vertexAttributes.clear();
-    // _vertexAttributeIndexMap.clear();
-    // if (!keepLayout)
-    //     _vertexAttributeIndexMap.clear();
+const void* Mesh::GetVertexPtr() const {
+    return _vertexData;
 }
 
-// vertices
-int Mesh::GetVertexAttributeCount() const {
+int Mesh::GetVertexCount() const {
     return _vertexCount;
 }
-VertexAttributeDescriptor Mesh::GetVertexAttribute(int index) const {
-    if (index < 0 || index >= _vertexAttributes.size())
-        throw std::invalid_argument("src/renderer/mesh.cpp: Vertex attribute index out of range");
-    return _vertexAttributes[index];
-}
+
 std::vector<VertexAttributeDescriptor> Mesh::GetVertexAttributes() const {
-    return _vertexAttributes;
+    return _vertexAttributeDescriptors;
 }
-VertexAttributeFormat Mesh::GetVertexAttributeFormat(VertexAttribute attr) const {
-    return _vertexAttributes[GetVertexAttributeIndex(attr)].format;
+
+DataDirty Mesh::GetVertexDirtyFlag() const {
+    return _vertexDataDirty;
 }
-int Mesh::GetVertexAttributeComponents(VertexAttribute attr) const {
-    return _vertexAttributes[GetVertexAttributeIndex(attr)].numComponents;
-}
-int Mesh::GetVertexAttributeOffset(VertexAttribute attr) const {
-    return _vertexAttributeOffset.find(attr)->second;
-}
-int Mesh::GetVertexAttributeStream(VertexAttribute attr) const {
-    return _vertexAttributes[GetVertexAttributeIndex(attr)].stream;
-}
-int Mesh::GetVertexBufferStride(int stream) const {
-    if (stream < 0 || stream >= 4)
-        throw std::invalid_argument("src/renderer/mesh.cpp: Vertex buffer stream out of range");
-    return _streamStrides[stream];
-}
+
+// return false if failed to find attribute
 bool Mesh::HasVertexAttribute(VertexAttribute attr) const {
-    return _vertexAttributeIndexMap.find(attr) != _vertexAttributeIndexMap.end();
+    return GetVertexAttributeIndex(attr) != -1;
 }
-void Mesh::SetVertexBufferParams(int vertexCount, std::vector<VertexAttributeDescriptor> attributes) {
-    Clear(false);
+
+// return 0 if failed
+int Mesh::GetVertexAttributeComponents(VertexAttribute attr) const {
+    int idx = GetVertexAttributeIndex(attr);
+    if (idx == -1) 
+        return 0;
+    else
+        return _vertexAttributeDescriptors.at(idx).numComponents;
+}
+
+// return VertexAttributeFormat::INVALID if failed
+VertexAttributeFormat Mesh::GetVertexAttributeFormat(VertexAttribute attr) const {
+    int idx = GetVertexAttributeIndex(attr);
+    if (idx == -1) 
+        return VertexAttributeFormat::INVALID;
+    else
+        return _vertexAttributeDescriptors.at(idx).format;
+}
+
+// return 0 if failed
+size_t Mesh::GetVertexAttributeOffset(VertexAttribute attr) const {
+    int idx = GetVertexAttributeIndex(attr);
+    if (idx == -1) {
+        return 0;
+    }
+
+    size_t offset = 0;
+    for (int i = 0; i < idx; i++) {
+        offset += s_vertexAttributeFormatMap.at(_vertexAttributeDescriptors[i].format) * _vertexAttributeDescriptors[i].numComponents;
+    }
+    return offset;
+}
+
+size_t Mesh::GetVertexSize() const {
+    size_t size = 0;
+    for (int i = 0; i < _vertexAttributeDescriptors.size(); i++) {
+        size += s_vertexAttributeFormatMap.at(_vertexAttributeDescriptors[i].format) * _vertexAttributeDescriptors[i].numComponents;
+    }
+    return size;
+}
+
+void Mesh::SetVertexParams(int vertexCount, std::vector<VertexAttributeDescriptor> attributes) {
+    ClearVertices();
     _vertexCount = vertexCount;
-    _vertexAttributes = attributes;
-    _vertexAttributeOffset.clear();
-    _vertexAttributeIndexMap.clear();
-    
-
+    _vertexAttributeDescriptors = attributes;
+    _vertexData = malloc(GetVertexSize() * vertexCount);
+    _vertexDataDirty = DataDirty::DIRTY_REALLOC;
 }
-void Mesh::SetVertexBufferData(void* data, int src_start, int dest_start, int count, int stream) {}
 
-// indices
+void Mesh::SetVertexData(void* data, size_t size, size_t src_start, size_t dest_start) {
+    size_t vertexSize = GetVertexSize();
+    size_t dataSize = vertexSize * _vertexCount;
+    if (data == nullptr) {
+        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetVertexData() data is nullptr" << std::endl;
+        return;
+    }
+    if (_vertexData == nullptr) {
+        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetVertexData() vertex data is nullptr" << std::endl;
+        return;
+    }
+    if (size + src_start > dataSize - dest_start) {
+        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetVertexData() data range out of bounds" << std::endl;
+        return;
+    }
+    memcpy(_vertexData + dest_start, data + src_start, size);
+    // realloc takes precident over update
+    if (_vertexDataDirty != DataDirty::DIRTY_REALLOC) 
+        _vertexDataDirty = DataDirty::DIRTY_UPDATE;
+}
+
+
+
+/// --- IBO --- ///
+const std::unordered_map<IndexFormat, size_t> Mesh::s_indexFormatMap = {
+    {IndexFormat::INVALID, 0},
+    {IndexFormat::UINT8, 1},
+    {IndexFormat::UINT16, 2},
+    {IndexFormat::UINT32, 4}
+};
+
+void Mesh::ClearIndices() {
+    /// TODO: implement
+    std::cout << "src/renderer/mesh.cpp: Mesh::ClearIndices() not implemented" << std::endl;
+}
+
+void Mesh::ClearIndexDirtyFlag() {
+    _indexDataDirty = DataDirty::CLEAN;
+}
+
+const void* Mesh::GetIndexPtr() const {
+    return _indexData;
+}
+
 int Mesh::GetIndexCount() const {
     return _indexCount;
 }
+
+DataDirty Mesh::GetIndexDirtyFlag() const {
+    return _indexDataDirty;
+}
+
 IndexFormat Mesh::GetIndexFormat() const {
     return _indexFormat;
 }
+
 PrimitiveType Mesh::GetPrimitiveType() const {
     return _primitive;
 }
-void Mesh::SetIndexBufferParams(int indexCount, IndexFormat format) {}
-void Mesh::SetIndexBufferData(void* data, int src_start, int dest_start, int count) {}
+
+void Mesh::SetIndexParams(int indexCount, IndexFormat format, PrimitiveType primitive) {
+    // Empty implementation
+}
+
+void Mesh::SetIndexData(void* data, size_t size, size_t src_start, size_t dest_start) {
+    // Empty implementation
+}
+
+
+
+/// --- MESH --- ///
+
+Mesh::Mesh() 
+    : Resource("marathon.renderer.mesh") {}
+Mesh::~Mesh() {}
+
+void Mesh::Clear() {
+    ClearVertices();
+    ClearIndices();
+}
+
 
 } // namespace renderer
 
