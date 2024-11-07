@@ -133,18 +133,18 @@ void Mesh::SetVertexParams(int vertexCount, std::vector<VertexAttributeDescripto
 void Mesh::SetVertexData(void* data, size_t size, size_t src_start, size_t dest_start) {
     size_t vertexSize = GetVertexSize();
     size_t dataSize = vertexSize * _vertexCount;
+    // catch fucky wuckys
     if (data == nullptr) {
         std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetVertexData() data is nullptr" << std::endl;
         return;
-    }
-    if (_vertexData == nullptr) {
+    } else if (_vertexData == nullptr) {
         std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetVertexData() vertex data is nullptr" << std::endl;
         return;
-    }
-    if (size + src_start > dataSize - dest_start) {
+    } else if (size + src_start > dataSize - dest_start) {
         std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetVertexData() data range out of bounds" << std::endl;
         return;
     }
+    // copy data
     memcpy(_vertexData + dest_start, data + src_start, size);
     // realloc takes precident over update
     if (_vertexDataDirty != DataDirty::DIRTY_REALLOC) 
@@ -191,11 +191,32 @@ PrimitiveType Mesh::GetPrimitiveType() const {
 }
 
 void Mesh::SetIndexParams(int indexCount, IndexFormat format, PrimitiveType primitive) {
-    // Empty implementation
+    ClearIndices();
+    _indexCount = indexCount;
+    _indexFormat = format;
+    _primitive = primitive;
+    _indexData = malloc(s_indexFormatMap.at(format) * indexCount);
+    _indexDataDirty = DataDirty::DIRTY_REALLOC;
 }
 
 void Mesh::SetIndexData(void* data, size_t size, size_t src_start, size_t dest_start) {
-    // Empty implementation
+    size_t dataSize = s_indexFormatMap.at(_indexFormat) * _indexCount;
+    // catch bad args
+    if (data == nullptr) {
+        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetIndexData() data is nullptr" << std::endl;
+        return;
+    } else if (_indexData == nullptr) {
+        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetIndexData() index data is nullptr" << std::endl;
+        return;
+    } else if (size + src_start > dataSize - dest_start) {
+        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetIndexData() data range out of bounds" << std::endl;
+        return;
+    }
+    memcpy(_indexData + dest_start, data + src_start, size);
+    // realloc takes precident over update
+    if (_indexDataDirty != DataDirty::DIRTY_REALLOC) 
+        _indexDataDirty = DataDirty::DIRTY_UPDATE;
+
 }
 
 
