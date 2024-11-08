@@ -12,23 +12,45 @@ namespace opengl {
 /// --- Mesh Handling ---
 /// TODO:
 // support for a simple wireframe mode to convert to LINE versions of primitive types
-const std::unordered_map<AttributeType, GLenum> Mesh::s_attrTypeMap = {
+const std::unordered_map<AttributeType, GLenum> Renderer::s_attrTypeMap = {
     { AttributeType::FLOAT, GL_FLOAT },
     { AttributeType::UINT8, GL_UNSIGNED_BYTE },
     { AttributeType::UINT16, GL_UNSIGNED_SHORT },
     { AttributeType::UINT32, GL_UNSIGNED_INT }
 };
 
-const std::unordered_map<PrimitiveType, GLenum> Mesh::s_primitiveMap = {
+const std::unordered_map<PrimitiveType, GLenum> Renderer::s_primitiveMap = {
     { PrimitiveType::TRIANGLES, GL_TRIANGLES },
     { PrimitiveType::FAN, GL_TRIANGLE_FAN },
     { PrimitiveType::STRIP, GL_TRIANGLE_STRIP }
 };
 
-const std::unordered_map<IndexType, GLenum> Mesh::s_indexTypeMap = {
+const std::unordered_map<IndexType, GLenum> Renderer::s_indexTypeMap = {
     { IndexType::UINT8, GL_UNSIGNED_BYTE },
     { IndexType::UINT16, GL_UNSIGNED_SHORT },
     { IndexType::UINT32, GL_UNSIGNED_INT }
+};
+
+const std::unordered_map<CullFace, GLenum> Renderer::s_cullFaceMap = {
+    {CullFace::FRONT, GL_FRONT},
+    {CullFace::BACK, GL_BACK},
+    {CullFace::FRONT_AND_BACK, GL_FRONT_AND_BACK}
+};
+
+const std::unordered_map<CullWinding, GLenum> Renderer::s_cullWindingMap = {
+    {CullWinding::CLOCKWISE, GL_CW},
+    {CullWinding::COUNTER_CLOCKWISE, GL_CCW}
+};
+
+const std::unordered_map<DepthFunc, GLenum> Renderer::s_depthFuncMap = {
+    {DepthFunc::NEVER, GL_NEVER},
+    {DepthFunc::ALWAYS, GL_ALWAYS},
+    {DepthFunc::EQUAL, GL_EQUAL},
+    {DepthFunc::NOT_EQUAL, GL_NOTEQUAL},
+    {DepthFunc::LESS, GL_LESS},
+    {DepthFunc::LESS_EQUAL, GL_LEQUAL},
+    {DepthFunc::GREATER, GL_GREATER},
+    {DepthFunc::GREATER_EQUAL, GL_GEQUAL}
 };
 
 Renderer::Renderer() 
@@ -45,16 +67,16 @@ bool Renderer::Shutdown() {
     return true;
 }
 
-/// --- Factories ---
-std::shared_ptr<renderer::Buffer> Renderer::CreateBuffer(void* data, size_t size, BufferTarget target, BufferUsage usage) {
-    return std::shared_ptr<renderer::Buffer>(new opengl::Buffer(data, size, target, usage));
-}
-std::shared_ptr<renderer::Mesh> Renderer::CreateMesh(int vCount, size_t vSize, std::shared_ptr<renderer::Buffer> vBuf, std::vector<VertexAttribute> vAttrs, PrimitiveType primitive) {
-    return std::shared_ptr<renderer::Mesh>(new opengl::Mesh(vCount, vSize, vBuf, vAttrs, primitive));
-}
-std::shared_ptr<renderer::Shader> Renderer::CreateShader(const std::string& vSrc, const std::string& fSrc) {
-    return std::shared_ptr<renderer::Shader>(new opengl::Shader(vSrc, fSrc));
-}
+// /// --- Factories ---
+// std::shared_ptr<renderer::Buffer> Renderer::CreateBuffer(void* data, size_t size, BufferTarget target, BufferUsage usage) {
+//     return std::shared_ptr<renderer::Buffer>(new opengl::Buffer(data, size, target, usage));
+// }
+// std::shared_ptr<renderer::Mesh> Renderer::CreateMesh(int vCount, size_t vSize, std::shared_ptr<renderer::Buffer> vBuf, std::vector<VertexAttribute> vAttrs, PrimitiveType primitive) {
+//     return std::shared_ptr<renderer::Mesh>(new opengl::Mesh(vCount, vSize, vBuf, vAttrs, primitive));
+// }
+// std::shared_ptr<renderer::Shader> Renderer::CreateShader(const std::string& vSrc, const std::string& fSrc) {
+//     return std::shared_ptr<renderer::Shader>(new opengl::Shader(vSrc, fSrc));
+// }
 
 // validation
 bool Renderer::ValidateShaderCode(const std::string code, ShaderType stageType, std::string& err) {}

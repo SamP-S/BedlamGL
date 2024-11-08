@@ -29,28 +29,9 @@ protected:
     static const std::unordered_map<VertexAttributeFormat, GLenum> s_vertAttrFormatMap;
     static const std::unordered_map<PrimitiveType, GLenum> s_primitiveMap;
     static const std::unordered_map<IndexFormat, GLenum> s_indexFormatMap;
-
-    std::unordered_map<CullFace, GLenum> _cullFaceMap = {
-        {CullFace::FRONT, GL_FRONT},
-        {CullFace::BACK, GL_BACK},
-        {CullFace::FRONT_AND_BACK, GL_FRONT_AND_BACK}
-    };
-
-    std::unordered_map<CullWinding, GLenum> _cullWindingMap = {
-        {CullWinding::CLOCKWISE, GL_CW},
-        {CullWinding::COUNTER_CLOCKWISE, GL_CCW}
-    };
-
-    std::unordered_map<DepthFunc, GLenum> _depthFuncMap = {
-        {DepthFunc::NEVER, GL_NEVER},
-        {DepthFunc::ALWAYS, GL_ALWAYS},
-        {DepthFunc::EQUAL, GL_EQUAL},
-        {DepthFunc::NOT_EQUAL, GL_NOTEQUAL},
-        {DepthFunc::LESS, GL_LESS},
-        {DepthFunc::LESS_EQUAL, GL_LEQUAL},
-        {DepthFunc::GREATER, GL_GREATER},
-        {DepthFunc::GREATER_EQUAL, GL_GEQUAL}
-    };
+    static const std::unordered_map<CullFace, GLenum> s_cullFaceMap;
+    static const std::unordered_map<CullWinding, GLenum> s_cullWindingMap;
+    static const std::unordered_map<DepthFunc, GLenum> s_depthFuncMap;
 
     /// TODO:
     // should hold default meshes for standard draws calls
@@ -69,10 +50,10 @@ public:
     bool Boot() override;
     bool Shutdown() override;
 
-    /// --- Factories ---
-    std::shared_ptr<renderer::Buffer> CreateBuffer(void* data, size_t size, BufferTarget target, BufferUsage usage) override;
-    std::shared_ptr<renderer::Mesh> CreateMesh(int vCount, size_t vSize, std::shared_ptr<renderer::Buffer> vBuf, std::vector<VertexAttribute> vAttrs, PrimitiveType primitive) override;
-    std::shared_ptr<renderer::Shader> CreateShader(const std::string& vSrc, const std::string& fSrc) override;
+    // /// --- Factories ---
+    // std::shared_ptr<renderer::Buffer> CreateBuffer(void* data, size_t size, BufferTarget target, BufferUsage usage) override;
+    // std::shared_ptr<renderer::Mesh> CreateMesh(int vCount, size_t vSize, std::shared_ptr<renderer::Buffer> vBuf, std::vector<VertexAttribute> vAttrs, PrimitiveType primitive) override;
+    // std::shared_ptr<renderer::Shader> CreateShader(const std::string& vSrc, const std::string& fSrc) override;
     
     // validation
     bool ValidateShaderCode(const std::string code, ShaderType stageType, std::string& err) override;

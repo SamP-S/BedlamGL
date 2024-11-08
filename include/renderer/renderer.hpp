@@ -115,9 +115,9 @@ public:
     virtual bool Shutdown() = 0;
 
     /// --- Factories ---
-    virtual std::shared_ptr<Buffer> CreateBuffer(void* data, size_t size, BufferTarget target, BufferUsage usage) = 0;
-    virtual std::shared_ptr<Mesh> CreateMesh(int vCount, size_t vSize, std::shared_ptr<Buffer> vBuf, std::vector<VertexAttribute> vAttrs, PrimitiveType primitive) = 0;
-    virtual std::shared_ptr<Shader> CreateShader(const std::string& vSrc, const std::string& fSrc) = 0;
+    // virtual std::shared_ptr<Buffer> CreateBuffer(void* data, size_t size, BufferTarget target, BufferUsage usage) = 0;
+    // virtual std::shared_ptr<Mesh> CreateMesh(int vCount, size_t vSize, std::shared_ptr<Buffer> vBuf, std::vector<VertexAttribute> vAttrs, PrimitiveType primitive) = 0;
+    // virtual std::shared_ptr<Shader> CreateShader(const std::string& vSrc, const std::string& fSrc) = 0;
     // virtual std::shared_ptr<Texture> CreateTexture1D() = 0;
     // virtual std::shared_ptr<Texture> CreateTexture2D() = 0;
     // virtual std::shared_ptr<Texture> CreateTexture3D() = 0;
