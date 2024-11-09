@@ -3,6 +3,7 @@
 #include <unordered_map>
 
 #include "renderer/mesh.hpp"
+#include "renderer/shader.hpp"
 #include "renderer/opengl/opengl.hpp"
 #include "renderer/renderer.hpp"
 
@@ -15,16 +16,20 @@ namespace opengl {
 class Renderer : public renderer::Renderer {
 protected:
 
-    /// ---- Mesh Handling ---
+    /// ---- User Object Handling ---
     struct MeshHandler {
         GLuint vao = 0;
-        std::vector<GLuint> vbos;
+        GLuint vbo = 0;
         GLuint ibo = 0;
-        GLenum primitive = GL_TRIANGLES;
-        GLenum indexType = GL_UNSIGNED_INT;
-        int indexCount = 0;
         std::shared_ptr<Mesh> mesh = nullptr;
     };
+
+    struct ShaderHandler {
+        GLuint program = 0;
+        std::string warnings = "";
+        std::shared_ptr<Shader> shader = nullptr;
+    };
+    
 
     static const std::unordered_map<VertexAttributeFormat, GLenum> s_vertAttrFormatMap;
     static const std::unordered_map<PrimitiveType, GLenum> s_primitiveMap;
@@ -32,6 +37,7 @@ protected:
     static const std::unordered_map<CullFace, GLenum> s_cullFaceMap;
     static const std::unordered_map<CullWinding, GLenum> s_cullWindingMap;
     static const std::unordered_map<DepthFunc, GLenum> s_depthFuncMap;
+    static const std::unordered_map<ShaderType, GLenum> s_shaderTypeMap;
 
     /// TODO:
     // should hold default meshes for standard draws calls
@@ -42,6 +48,12 @@ protected:
     LA::mat4 _view = LA::mat4();
     std::stack<LA::mat4> _transforms;
 
+    std::vector<std::unique_ptr<MeshHandler>> _meshHandlers;
+    std::vector<std::unique_ptr<ShaderHandler>> _shaderHandlers;
+
+    std::unique_ptr<MeshHandler> CreateMeshHandler(std::shared_ptr<Mesh> mesh);
+    std::unique_ptr<ShaderHandler> CreateShaderHandler(std::shared_ptr<Shader> shader); 
+
 public:
     Renderer();
     ~Renderer();
@@ -50,14 +62,10 @@ public:
     bool Boot() override;
     bool Shutdown() override;
 
-    // /// --- Factories ---
-    // std::shared_ptr<renderer::Buffer> CreateBuffer(void* data, size_t size, BufferTarget target, BufferUsage usage) override;
-    // std::shared_ptr<renderer::Mesh> CreateMesh(int vCount, size_t vSize, std::shared_ptr<renderer::Buffer> vBuf, std::vector<VertexAttribute> vAttrs, PrimitiveType primitive) override;
-    // std::shared_ptr<renderer::Shader> CreateShader(const std::string& vSrc, const std::string& fSrc) override;
-    
-    // validation
-    bool ValidateShaderCode(const std::string code, ShaderType stageType, std::string& err) override;
-    
+    /// --- Validation ---
+    bool ValidateShader(std::shared_ptr<Shader> shader) override;
+    bool ValidateMesh(std::shared_ptr<Mesh> mesh) override;
+
     /// --- Drawing ---
     // clear active canvas/screen of all color, depth, and stencil buffers
     void Clear() override;
@@ -71,6 +79,9 @@ public:
     void SetState(RendererState state) override;
     void ResetState() override;
     bool IsUsable() override;
+    // bound active objects
+    std::shared_ptr<renderer::Shader> GetShader() override;
+    void SetShader(std::shared_ptr<renderer::Shader> shader) override;
     // colour
     LA::vec4 GetClearColor() override;
     LA::vec4 GetColorMask() override;
@@ -97,9 +108,27 @@ public:
     void SetLineWidth(float width) override;
     void SetPointSize(float size) override;
     void SetIsWireframe(bool enabled) override;
-    // bound objects
-    std::shared_ptr<renderer::Shader> GetShader() override;
-    void SetShader(std::shared_ptr<renderer::Shader> shader) override;
+
+    /// --- Shader Methods ---
+    bool HasUniform(const std::string& key) const override;
+
+    // single value uniforms
+    bool SetUniform(const std::string& key, bool value) const override;
+    bool SetUniform(const std::string& key, int value) const override;
+    bool SetUniform(const std::string& key, uint32_t value) const override;
+    bool SetUniform(const std::string& key, float value) const override;
+    bool SetUniform(const std::string& key, double value) const override;
+    // vector uniforms
+    void SetUniform(const std::string& key, const LA::vec2& v) const override;
+    void SetUniform(const std::string& key, float x, float y) const override;
+    void SetUniform(const std::string& key, const LA::vec3& v) const override;
+    void SetUniform(const std::string& key, float x, float y, float z) const override;
+    void SetUniform(const std::string& key, const LA::vec4& v) const override;
+    void SetUniform(const std::string& key, float x, float y, float z, float w) const override;
+    // matrix uniforms
+    void SetUniform(const std::string& key, const LA::mat2& m) const override;
+    void SetUniform(const std::string& key, const LA::mat3& m) const override;
+    void SetUniform(const std::string& key, const LA::mat4& m) const override;
 
 };
 

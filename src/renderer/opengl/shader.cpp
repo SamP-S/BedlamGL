@@ -6,10 +6,7 @@ namespace renderer {
 
 namespace opengl {
 
-const std::unordered_map<ShaderType, GLenum> Shader::s_shaderTypeMap = {
-    { ShaderType::VERTEX, GL_VERTEX_SHADER },
-    { ShaderType::FRAGMENT, GL_FRAGMENT_SHADER }
-};
+
 
 Shader::Shader(const std::string& vSrc, const std::string& fSrc) 
     : renderer::Shader("marathon.renderer.opengl.Shader", vSrc, fSrc) {
@@ -54,22 +51,6 @@ Shader::Shader(const std::string& vSrc, const std::string& fSrc)
 
     glDeleteShader(vShader);
     glDeleteShader(fShader);
-}
-
-Shader::~Shader() {
-    glDeleteProgram(_program);
-}
-
-void Shader::Bind() {
-    assert(_program != 0 && "Can't bind shader program that failed to compile/link");
-    glUseProgram(_program);
-}
-void Shader::Unbind() {
-    glUseProgram(0);
-}
-
-std::string Shader::GetWarnings() const {
-    return _warnings;
 }
 
 bool Shader::HasUniform(const std::string& key) const {

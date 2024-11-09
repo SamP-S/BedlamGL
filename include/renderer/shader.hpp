@@ -85,10 +85,10 @@ void main()
 // support a general default data layout for vertex attributes
 // support a wider range of uniform sends
 
-enum class ShaderType {
-    VERTEX,
-    FRAGMENT
-};
+// enum class ShaderType {
+//     VERTEX,
+//     FRAGMENT
+// };
 
 /// TODO:
 // shaders should determine what vertex attributes and uniforms are available
@@ -98,40 +98,30 @@ enum class ShaderType {
 // materials (uniforms) must match the shader's uniforms
 // NOTE: unity uses multiple shader variances per possible missing vertex attribute and checks at runtime which to use according to mesh data available
 
+enum class ShaderDirty {
+    INVALID,
+    DIRTY_RECOMPILE,
+    CLEAN
+};
+
 class Shader : public Resource {
 protected:
     std::string _vSrc = "";
     std::string _fSrc = "";
-
-    Shader(const std::string& name, const std::string& vSrc, const std::string& fSrc);
-    
+    ShaderDirty _dirty = ShaderDirty::INVALID;
+ 
 public:
-    virtual ~Shader();
+    Shader();
+    ~Shader();
 
-    /// TODO: bind/unbind should not be public
-    virtual void Bind() = 0;
-    virtual void Unbind() = 0;
+    std::string GetVertexSource() const;
+    std::string GetFragmentSource() const;
+    ShaderDirty GetDirtyFlag() const;
 
-    virtual std::string GetWarnings() const = 0;
-    virtual bool HasUniform(const std::string& key) const = 0;
+    void SetVertexSource(const std::string& vSrc);
+    void SetFragmentSource(const std::string& fSrc);
+    void SetSources(const std::string& vSrc, const std::string& fSrc);
 
-    // single value uniforms
-    virtual bool SetUniform(const std::string& key, bool value) const = 0;
-    virtual bool SetUniform(const std::string& key, int value) const = 0;
-    virtual bool SetUniform(const std::string& key, uint32_t value) const = 0;
-    virtual bool SetUniform(const std::string& key, float value) const = 0;
-    virtual bool SetUniform(const std::string& key, double value) const = 0;
-    // vector uniforms
-    virtual void SetUniform(const std::string& key, const LA::vec2& v) const = 0;
-    virtual void SetUniform(const std::string& key, float x, float y) const = 0;
-    virtual void SetUniform(const std::string& key, const LA::vec3& v) const = 0;
-    virtual void SetUniform(const std::string& key, float x, float y, float z) const = 0;
-    virtual void SetUniform(const std::string& key, const LA::vec4& v) const = 0;
-    virtual void SetUniform(const std::string& key, float x, float y, float z, float w) const = 0;
-    // matrix uniforms
-    virtual void SetUniform(const std::string& key, const LA::mat2& m) const = 0;
-    virtual void SetUniform(const std::string& key, const LA::mat3& m) const = 0;
-    virtual void SetUniform(const std::string& key, const LA::mat4& m) const = 0;
 };
 
 }

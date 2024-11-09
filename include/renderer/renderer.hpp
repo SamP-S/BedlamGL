@@ -113,19 +113,10 @@ public:
     // module interface
     virtual bool Boot() = 0;
     virtual bool Shutdown() = 0;
-
-    /// --- Factories ---
-    // virtual std::shared_ptr<Buffer> CreateBuffer(void* data, size_t size, BufferTarget target, BufferUsage usage) = 0;
-    // virtual std::shared_ptr<Mesh> CreateMesh(int vCount, size_t vSize, std::shared_ptr<Buffer> vBuf, std::vector<VertexAttribute> vAttrs, PrimitiveType primitive) = 0;
-    // virtual std::shared_ptr<Shader> CreateShader(const std::string& vSrc, const std::string& fSrc) = 0;
-    // virtual std::shared_ptr<Texture> CreateTexture1D() = 0;
-    // virtual std::shared_ptr<Texture> CreateTexture2D() = 0;
-    // virtual std::shared_ptr<Texture> CreateTexture3D() = 0;
-    // virtual std::shared_ptr<Texture> CreateTextureCube() = 0;
     
     // validation
-    virtual bool ValidateShaderCode(const std::string code, ShaderType stageType, std::string& err) = 0;
-    
+    virtual bool ValidateShader(std::shared_ptr<Shader> shader) = 0;
+    virtual bool ValidateMesh(std::shared_ptr<Mesh> mesh) = 0;
 
     /// --- Drawing ---
     // clear active canvas/screen of all color, depth, and stencil buffers
@@ -134,18 +125,12 @@ public:
     virtual void Clear(bool clearColor, bool clearStencil, bool clearDepth) = 0;
 
     // // Draw2D
-    // virtual void Draw2D() = 0;
     // virtual void Draw2DCircle() = 0;
-    // virtual void Draw2DTriangle() = 0;
-    // virtual void Draw2DLine() = 0;
     // virtual void Draw2DRectangle() = 0;
-    // virtual void Draw2DPoint() = 0;
+
     // // Draw3D
     virtual void Draw(Mesh& d) = 0;
-    // virtual void DrawLine() = 0;
-    // virtual void DrawPoint() = 0;
     // virtual void DrawCube() = 0;
-    // virtual void DrawSphere() = 0;
 
     /// --- State Management ---
     virtual void SetState(RendererState state) = 0;
@@ -201,6 +186,27 @@ public:
     virtual void PushScale(LA::vec3 scale);
     // virtual LA::vec3 ScreenToGlobal(const LA::vec2& point);
     // virtual LA::vec2 GlobalToScreen(const LA::vec3& point);
+
+    /// --- Shader Methods ---
+    virtual bool HasUniform(const std::string& key) const = 0;
+
+    // single value uniforms
+    virtual bool SetUniform(const std::string& key, bool value) const = 0;
+    virtual bool SetUniform(const std::string& key, int value) const = 0;
+    virtual bool SetUniform(const std::string& key, uint32_t value) const = 0;
+    virtual bool SetUniform(const std::string& key, float value) const = 0;
+    virtual bool SetUniform(const std::string& key, double value) const = 0;
+    // vector uniforms
+    virtual void SetUniform(const std::string& key, const LA::vec2& v) const = 0;
+    virtual void SetUniform(const std::string& key, float x, float y) const = 0;
+    virtual void SetUniform(const std::string& key, const LA::vec3& v) const = 0;
+    virtual void SetUniform(const std::string& key, float x, float y, float z) const = 0;
+    virtual void SetUniform(const std::string& key, const LA::vec4& v) const = 0;
+    virtual void SetUniform(const std::string& key, float x, float y, float z, float w) const = 0;
+    // matrix uniforms
+    virtual void SetUniform(const std::string& key, const LA::mat2& m) const = 0;
+    virtual void SetUniform(const std::string& key, const LA::mat3& m) const = 0;
+    virtual void SetUniform(const std::string& key, const LA::mat4& m) const = 0;
     
     /// --- Debug Info ---
     virtual RenderStats GetRenderStats();

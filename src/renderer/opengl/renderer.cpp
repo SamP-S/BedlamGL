@@ -53,9 +53,28 @@ const std::unordered_map<DepthFunc, GLenum> Renderer::s_depthFuncMap = {
     {DepthFunc::GREATER_EQUAL, GL_GEQUAL}
 };
 
+const std::unordered_map<ShaderType, GLenum> Renderer::s_shaderTypeMap = {
+    { ShaderType::VERTEX, GL_VERTEX_SHADER },
+    { ShaderType::FRAGMENT, GL_FRAGMENT_SHADER }
+};
+
 Renderer::Renderer() 
     : renderer::Renderer("marathon.renderer.opengl.Renderer") {}
-Renderer::~Renderer() {}
+Renderer::~Renderer() {
+    // delete opengl resources
+    for (auto& mesh : _meshes) {
+        if (mesh != nullptr) {
+            glDeleteVertexArrays(1, &mesh->vao);
+            glDeleteBuffers(1, &mesh->vbo);
+            glDeleteBuffers(1, &mesh->ibo);
+        }
+    }
+    for (auto& shader : _shaders) {
+        if (shader != nullptr) {
+            glDeleteProgram(shader->program);
+        }
+    }
+}
 
 // module interface
 bool Renderer::Boot() {
@@ -67,19 +86,10 @@ bool Renderer::Shutdown() {
     return true;
 }
 
-// /// --- Factories ---
-// std::shared_ptr<renderer::Buffer> Renderer::CreateBuffer(void* data, size_t size, BufferTarget target, BufferUsage usage) {
-//     return std::shared_ptr<renderer::Buffer>(new opengl::Buffer(data, size, target, usage));
-// }
-// std::shared_ptr<renderer::Mesh> Renderer::CreateMesh(int vCount, size_t vSize, std::shared_ptr<renderer::Buffer> vBuf, std::vector<VertexAttribute> vAttrs, PrimitiveType primitive) {
-//     return std::shared_ptr<renderer::Mesh>(new opengl::Mesh(vCount, vSize, vBuf, vAttrs, primitive));
-// }
-// std::shared_ptr<renderer::Shader> Renderer::CreateShader(const std::string& vSrc, const std::string& fSrc) {
-//     return std::shared_ptr<renderer::Shader>(new opengl::Shader(vSrc, fSrc));
-// }
 
 // validation
-bool Renderer::ValidateShaderCode(const std::string code, ShaderType stageType, std::string& err) {}
+bool Renderer::ValidateShader(std::shared_ptr<Shader> shader) {}
+bool Renderer::ValidateMesh(std::shared_ptr<Mesh> mesh) {}
 
 
 /// --- Drawing ---
@@ -204,18 +214,23 @@ std::shared_ptr<renderer::Shader> Renderer::GetShader() {
 // set nullptr as shader should mean use a default not just shit the bed 
 void Renderer::SetShader(std::shared_ptr<renderer::Shader> shader) {
     // skip if same
-    if (_shader == shader)
+    if (_shader == shader) {
         return;
+    }
+
+    /// TODO: use shader handlers
 
     // unbind previous shader, if any
     if (_shader != nullptr) {
-        _shader->Unbind();
+        //glUseProgram(0);
     }
 
     // set and bind new shader
     _shader = shader;
     if (_shader != nullptr) {
-        _shader->Bind();
+       // glUseProgram()
+    } else {
+        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::SetShader shader arg is null" << std::endl;
     }
 }
 
