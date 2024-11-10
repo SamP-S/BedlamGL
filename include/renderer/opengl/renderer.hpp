@@ -42,17 +42,23 @@ protected:
     /// TODO:
     // should hold default meshes for standard draws calls
     // e.g. circle, square, cube, sphere, etc.
-    // CONSIDER: what arguments should be used for draw calls i.e. 2D vs 3D
+    /// CONSIDER: what arguments should be used for draw calls i.e. 2D vs 3D
 
     LA::mat4 _projection = LA::mat4();
     LA::mat4 _view = LA::mat4();
     std::stack<LA::mat4> _transforms;
+    /// TODO: consider alternative to raw ptr, could use int idxer
+    /// also move to RenderState
+    ShaderHandler* _shaderHandler = nullptr;
 
-    std::vector<std::unique_ptr<MeshHandler>> _meshHandlers;
-    std::vector<std::unique_ptr<ShaderHandler>> _shaderHandlers;
 
-    std::unique_ptr<MeshHandler> CreateMeshHandler(std::shared_ptr<Mesh> mesh);
-    std::unique_ptr<ShaderHandler> CreateShaderHandler(std::shared_ptr<Shader> shader); 
+    std::vector<MeshHandler> _meshHandlers;
+    std::vector<ShaderHandler> _shaderHandlers;
+
+    int CreateShaderHandler(std::shared_ptr<Shader> shader);
+    int CreateMeshHandler(std::shared_ptr<Mesh> mesh);
+    int FindOrCreateShaderHandler(std::shared_ptr<Shader> shader);
+    int FindOrCreateMeshHandler(std::shared_ptr<Mesh> mesh);
 
 public:
     Renderer();
@@ -79,9 +85,6 @@ public:
     void SetState(RendererState state) override;
     void ResetState() override;
     bool IsUsable() override;
-    // bound active objects
-    std::shared_ptr<renderer::Shader> GetShader() override;
-    void SetShader(std::shared_ptr<renderer::Shader> shader) override;
     // colour
     LA::vec4 GetClearColor() override;
     LA::vec4 GetColorMask() override;
@@ -108,6 +111,9 @@ public:
     void SetLineWidth(float width) override;
     void SetPointSize(float size) override;
     void SetIsWireframe(bool enabled) override;
+    // bound active objects
+    std::shared_ptr<renderer::Shader> GetShader() override;
+    void SetShader(std::shared_ptr<renderer::Shader> shader) override;
 
     /// --- Shader Methods ---
     bool HasUniform(const std::string& key) const override;

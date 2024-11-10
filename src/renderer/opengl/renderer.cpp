@@ -88,8 +88,8 @@ bool Renderer::Shutdown() {
 
 
 // validation
-bool Renderer::ValidateShader(std::shared_ptr<Shader> shader) {}
-bool Renderer::ValidateMesh(std::shared_ptr<Mesh> mesh) {}
+bool Renderer::ValidateShader(std::shared_ptr<Shader> shader, std::string& err) {}
+bool Renderer::ValidateMesh(std::shared_ptr<Mesh> mesh, std::string& err) {}
 
 
 /// --- Drawing ---
@@ -206,23 +206,101 @@ void Renderer::SetIsWireframe(bool enabled) {
     if (enabled) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
+
+/// --- Mesh Stuff ---
+int Renderer::CreateMeshHandler(std::shared_ptr<Mesh> mesh) {
+    std::cout << "src/renderer/opengl/renderer.cpp: CreateMeshHandler() not implemented" << std::endl;
+    return 0;
+}
+int Renderer::FindOrCreateMeshHandler(std::shared_ptr<Mesh> mesh) {
+    std::cout << "src/renderer/opengl/renderer.cpp: FindOrCreateMeshHandler() not implemented" << std::endl;
+    return 0;
+}
+
+
+/// --- Shader Stuff ---
+/// TODO: consider how to handle shader warnings and forcing the user to deal with bad shaders
+int Renderer::CreateShaderHandler(std::shared_ptr<Shader> shader) {
+    GLuint program = glCreateProgram();
+    GLuint vShader = glCreateShader(GL_VERTEX_SHADER);
+    GLuint fShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+    const char* vSrcC = shader->GetVertexSource().c_str();
+    const char* fSrcC = shader->GetFragmentSource().c_str();
+
+    glShaderSource(vShader, 1, &vSrcC, nullptr);
+    glShaderSource(fShader, 1, &fSrcC, nullptr);
+
+    glCompileShader(vShader);
+    glCompileShader(fShader);
+
+    GLint success;
+    std::string warnings = "";
+    glGetShaderiv(vShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        GLchar infoLog[512];
+        glGetShaderInfoLog(vShader, 512, nullptr, infoLog);
+        warnings += "Vertex shader compilation failed: \n" + std::string(infoLog) + "\n\n";
+    }
+
+    glGetShaderiv(fShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        GLchar infoLog[512];
+        glGetShaderInfoLog(fShader, 512, nullptr, infoLog);
+        warnings += "Fragment shader compilation failed: \n" + std::string(infoLog) + "\n\n";
+    }
+
+    glAttachShader(program, vShader);
+    glAttachShader(program, fShader);
+    glLinkProgram(program);
+
+    glGetProgramiv(program, GL_LINK_STATUS, &success);
+    if (!success) {
+        GLchar infoLog[512];
+        glGetProgramInfoLog(program, 512, nullptr, infoLog);
+        warnings += "Shader program linking failed: \n" + std::string(infoLog) + "\n\n";
+    }
+
+    glDeleteShader(vShader);
+    glDeleteShader(fShader);
+
+    ShaderHandler shaderHandler = {
+        .program = program,
+        .warnings = warnings,
+        .shader = shader
+    };
+    _shaderHandlers.push_back(shaderHandler);
+    return _shaderHandlers.size() - 1;
+}
+int Renderer::FindOrCreateShaderHandler(std::shared_ptr<Shader> shader) {
+    for (int i = 0; i < _shaderHandlers.size(); i++) {
+        if (_shaderHandlers[i]->shader == shader) {
+            return i;
+        }
+    }
+    return CreateShaderHandler(shader);
+}
+
 // bound objects
 std::shared_ptr<renderer::Shader> Renderer::GetShader() {
-    return _shader;
+    if (_shaderHandler == nullptr)
+        return nullptr;
+    return _shaderHandler->shader;
 }
 /// TODO:
 // set nullptr as shader should mean use a default not just shit the bed 
 void Renderer::SetShader(std::shared_ptr<renderer::Shader> shader) {
-    // skip if same
-    if (_shader == shader) {
+    if (shader == nullptr) {
+        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::SetShader: setting shader null, won't be able to draw" << std::endl;
+        _shaderHandler = nullptr;
+        glUseProgram(0);
         return;
     }
 
-    /// TODO: use shader handlers
-
-    // unbind previous shader, if any
-    if (_shader != nullptr) {
-        //glUseProgram(0);
+    // skip if same
+    if (_shaderHandlers != nullptr && _shaderHandler->shader == shader) {
+        std::cout << "src/renderer/opengl/renderer.cpp: MESSAGE @ Renderer::SetShader: setting shader to already bound shader" << std::endl;
+        return;
     }
 
     // set and bind new shader
@@ -230,7 +308,7 @@ void Renderer::SetShader(std::shared_ptr<renderer::Shader> shader) {
     if (_shader != nullptr) {
        // glUseProgram()
     } else {
-        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::SetShader shader arg is null" << std::endl;
+        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::SetShader: shader arg is null" << std::endl;
     }
 }
 

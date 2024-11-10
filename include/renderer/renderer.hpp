@@ -101,7 +101,6 @@ protected:
     RendererState _state = RendererState();
     RenderStats _stats = RenderStats();
     TransformState _transforms = TransformState();
-    std::shared_ptr<Shader> _shader = nullptr;
 
     Renderer(const std::string& name);
     

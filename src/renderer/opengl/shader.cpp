@@ -7,52 +7,6 @@ namespace renderer {
 namespace opengl {
 
 
-
-Shader::Shader(const std::string& vSrc, const std::string& fSrc) 
-    : renderer::Shader("marathon.renderer.opengl.Shader", vSrc, fSrc) {
-    _program = glCreateProgram();
-    GLuint vShader = glCreateShader(GL_VERTEX_SHADER);
-    GLuint fShader = glCreateShader(GL_FRAGMENT_SHADER);
-
-    const char* vSrcC = vSrc.c_str();
-    const char* fSrcC = fSrc.c_str();
-
-    glShaderSource(vShader, 1, &vSrcC, nullptr);
-    glShaderSource(fShader, 1, &fSrcC, nullptr);
-
-    glCompileShader(vShader);
-    glCompileShader(fShader);
-
-    GLint success;
-    glGetShaderiv(vShader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        GLchar infoLog[512];
-        glGetShaderInfoLog(vShader, 512, nullptr, infoLog);
-        _warnings += "Vertex shader compilation failed: \n" + std::string(infoLog) + "\n\n";
-    }
-
-    glGetShaderiv(fShader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        GLchar infoLog[512];
-        glGetShaderInfoLog(fShader, 512, nullptr, infoLog);
-        _warnings += "Fragment shader compilation failed: \n" + std::string(infoLog) + "\n\n";
-    }
-
-    glAttachShader(_program, vShader);
-    glAttachShader(_program, fShader);
-    glLinkProgram(_program);
-
-    glGetProgramiv(_program, GL_LINK_STATUS, &success);
-    if (!success) {
-        GLchar infoLog[512];
-        glGetProgramInfoLog(_program, 512, nullptr, infoLog);
-        _warnings += "Shader program linking failed: \n" + std::string(infoLog) + "\n\n";
-    }
-
-    glDeleteShader(vShader);
-    glDeleteShader(fShader);
-}
-
 bool Shader::HasUniform(const std::string& key) const {
     return glGetUniformLocation(_program, key.c_str()) != -1;
 }
