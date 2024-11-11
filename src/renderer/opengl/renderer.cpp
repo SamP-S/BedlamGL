@@ -1,7 +1,4 @@
 #include "renderer/opengl/renderer.hpp"
-#include "renderer/opengl/shader.hpp"
-#include "renderer/opengl/buffer.hpp"
-#include "renderer/opengl/mesh.hpp"
 
 namespace marathon {
 
@@ -219,6 +216,18 @@ int Renderer::FindOrCreateMeshHandler(std::shared_ptr<Mesh> mesh) {
 
 
 /// --- Shader Stuff ---
+bool Renderer::CheckBoundShader() {
+    if (_shaderHandler == nullptr) {
+        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::CheckBoundShader: no shader bound" << std::endl;
+        return false;
+    }
+    if (!_shaderHandler->isValid) {
+        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::CheckBoundShader: shader is invalid" << std::endl;
+        return false;
+    }
+    return true;
+}
+
 /// TODO: consider how to handle shader warnings and forcing the user to deal with bad shaders
 int Renderer::CreateShaderHandler(std::shared_ptr<Shader> shader) {
     GLuint program = glCreateProgram();
@@ -234,17 +243,18 @@ int Renderer::CreateShaderHandler(std::shared_ptr<Shader> shader) {
     glCompileShader(vShader);
     glCompileShader(fShader);
 
-    GLint success;
+    GLint vSuccess;
     std::string warnings = "";
-    glGetShaderiv(vShader, GL_COMPILE_STATUS, &success);
-    if (!success) {
+    glGetShaderiv(vShader, GL_COMPILE_STATUS, &vSuccess);
+    if (!vSuccess) {
         GLchar infoLog[512];
         glGetShaderInfoLog(vShader, 512, nullptr, infoLog);
         warnings += "Vertex shader compilation failed: \n" + std::string(infoLog) + "\n\n";
     }
 
-    glGetShaderiv(fShader, GL_COMPILE_STATUS, &success);
-    if (!success) {
+    GLint fSuccess;
+    glGetShaderiv(fShader, GL_COMPILE_STATUS, &fSuccess);
+    if (!fSuccess) {
         GLchar infoLog[512];
         glGetShaderInfoLog(fShader, 512, nullptr, infoLog);
         warnings += "Fragment shader compilation failed: \n" + std::string(infoLog) + "\n\n";
@@ -254,8 +264,9 @@ int Renderer::CreateShaderHandler(std::shared_ptr<Shader> shader) {
     glAttachShader(program, fShader);
     glLinkProgram(program);
 
-    glGetProgramiv(program, GL_LINK_STATUS, &success);
-    if (!success) {
+    GLint pSuccess;
+    glGetProgramiv(program, GL_LINK_STATUS, &pSuccess);
+    if (!pSuccess) {
         GLchar infoLog[512];
         glGetProgramInfoLog(program, 512, nullptr, infoLog);
         warnings += "Shader program linking failed: \n" + std::string(infoLog) + "\n\n";
@@ -267,7 +278,8 @@ int Renderer::CreateShaderHandler(std::shared_ptr<Shader> shader) {
     ShaderHandler shaderHandler = {
         .program = program,
         .warnings = warnings,
-        .shader = shader
+        .shader = shader,
+        .isValid = vSuccess && fSuccess && pSuccess
     };
     _shaderHandlers.push_back(shaderHandler);
     return _shaderHandlers.size() - 1;
@@ -311,6 +323,75 @@ void Renderer::SetShader(std::shared_ptr<renderer::Shader> shader) {
         std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::SetShader: shader arg is null" << std::endl;
     }
 }
+
+/// --- Shader Methods ---
+bool Renderer::HasUniform(const std::string& key) const {
+    if (!CheckBoundShader)
+        return false;
+    return glGetUniformLocation(_shaderHandler->program, key.c_str()) != -1;
+}
+
+/// TODO: implement SetUniforms
+// single value uniforms
+bool Renderer::SetUniform(const std::string& key, bool value) const {
+    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
+    return false;
+}
+bool Renderer::SetUniform(const std::string& key, int value) const {
+    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
+    return false;
+}
+bool Renderer::SetUniform(const std::string& key, uint32_t value) const {
+    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
+    return false;
+}
+bool Renderer::SetUniform(const std::string& key, float value) const {
+    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
+    return false;
+}
+bool Renderer::SetUniform(const std::string& key, double value) const {
+    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
+    return false;
+}
+// vector uniforms
+void Renderer::SetUniform(const std::string& key, const LA::vec2& v) const {
+    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
+    return false;
+}
+void Renderer::SetUniform(const std::string& key, float x, float y) const {
+    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
+    return false;
+}
+void Renderer::SetUniform(const std::string& key, const LA::vec3& v) const {
+    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
+    return false;
+}
+void Renderer::SetUniform(const std::string& key, float x, float y, float z) const {
+    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
+    return false;
+}
+void Renderer::SetUniform(const std::string& key, const LA::vec4& v) const {
+    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
+    return false;
+}
+void Renderer::SetUniform(const std::string& key, float x, float y, float z, float w) const {
+    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
+    return false;
+}
+// matrix uniforms
+void Renderer::SetUniform(const std::string& key, const LA::mat2& m) const {
+    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
+    return false;
+}
+void Renderer::SetUniform(const std::string& key, const LA::mat3& m) const {
+    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
+    return false;
+}
+void Renderer::SetUniform(const std::string& key, const LA::mat4& m) const {
+    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
+    return false;
+}
+
 
 } // namespace opengl
 

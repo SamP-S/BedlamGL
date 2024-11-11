@@ -26,6 +26,7 @@ protected:
 
     struct ShaderHandler {
         GLuint program = 0;
+        bool isValid = false;
         std::string warnings = "";
         std::shared_ptr<Shader> shader = nullptr;
     };
@@ -52,6 +53,7 @@ protected:
     ShaderHandler* _shaderHandler = nullptr;
 
 
+    /// TODO: replace vectors with ordered map
     std::vector<MeshHandler> _meshHandlers;
     std::vector<ShaderHandler> _shaderHandlers;
 
@@ -59,6 +61,7 @@ protected:
     int CreateMeshHandler(std::shared_ptr<Mesh> mesh);
     int FindOrCreateShaderHandler(std::shared_ptr<Shader> shader);
     int FindOrCreateMeshHandler(std::shared_ptr<Mesh> mesh);
+    bool CheckBoundShader();
 
 public:
     Renderer();
