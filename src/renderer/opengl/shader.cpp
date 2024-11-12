@@ -7,40 +7,6 @@ namespace renderer {
 namespace opengl {
 
 
-bool Shader::HasUniform(const std::string& key) const {
-    return glGetUniformLocation(_program, key.c_str()) != -1;
-}
-
-// single value uniforms
-bool Shader::SetUniform(const std::string& key, bool value) const {
-    if (!HasUniform(key)) return false;
-    glUniform1i(glGetUniformLocation(_program, key.c_str()), static_cast<int>(value));
-    return true;
-}
-
-bool Shader::SetUniform(const std::string& key, int value) const {
-    if (!HasUniform(key)) return false;
-    glUniform1i(glGetUniformLocation(_program, key.c_str()), value);
-    return true;
-}
-
-bool Shader::SetUniform(const std::string& key, uint32_t value) const {
-    if (!HasUniform(key)) return false;
-    glUniform1ui(glGetUniformLocation(_program, key.c_str()), value);
-    return true;
-}
-
-bool Shader::SetUniform(const std::string& key, float value) const {
-    if (!HasUniform(key)) return false;
-    glUniform1f(glGetUniformLocation(_program, key.c_str()), value);
-    return true;
-}
-
-bool Shader::SetUniform(const std::string& key, double value) const {
-    if (!HasUniform(key)) return false;
-    glUniform1d(glGetUniformLocation(_program, key.c_str()), value);
-    return true;
-}
 
 // vector uniforms
 void Shader::SetUniform(const std::string& key, const LA::vec2& v) const {

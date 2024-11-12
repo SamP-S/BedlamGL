@@ -122,7 +122,6 @@ public:
     bool HasUniform(const std::string& key) const override;
 
     // single value uniforms
-    bool SetUniform(const std::string& key, bool value) const override;
     bool SetUniform(const std::string& key, int value) const override;
     bool SetUniform(const std::string& key, uint32_t value) const override;
     bool SetUniform(const std::string& key, float value) const override;

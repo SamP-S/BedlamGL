@@ -332,26 +332,32 @@ bool Renderer::HasUniform(const std::string& key) const {
 }
 
 /// TODO: implement SetUniforms
+/// currently implemented as direct uploads to gpu using bound shader
+/// change implementation to store uniforms with shader that are uploaded to gpu at draw time
 // single value uniforms
-bool Renderer::SetUniform(const std::string& key, bool value) const {
-    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
-    return false;
-}
 bool Renderer::SetUniform(const std::string& key, int value) const {
-    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
-    return false;
+    if (!HasUniform(key))
+        return false;
+    glUniform1i(glGetUniformLocation(_shaderHandler->program, key.c_str()), value);
+    return true;
 }
 bool Renderer::SetUniform(const std::string& key, uint32_t value) const {
-    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
-    return false;
+    if (!HasUniform(key))
+        return false;
+    glUniform1ui(glGetUniformLocation(_shaderHandler->program, key.c_str()), value);
+    return true;
 }
 bool Renderer::SetUniform(const std::string& key, float value) const {
-    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
-    return false;
+    if (!HasUniform(key))
+        return false;
+    glUniform1f(glGetUniformLocation(_shaderHandler->program, key.c_str()), value);
+    return true;
 }
 bool Renderer::SetUniform(const std::string& key, double value) const {
-    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
-    return false;
+    if (!HasUniform(key))
+        return false;
+    glUniform1d(glGetUniformLocation(_shaderHandler->program, key.c_str()), value);
+    return true;
 }
 // vector uniforms
 void Renderer::SetUniform(const std::string& key, const LA::vec2& v) const {
