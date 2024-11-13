@@ -58,7 +58,9 @@ public:
     std::string GetFragmentSource() const;
     ShaderDirty GetDirtyFlag() const;
 
+    // call to stop data being uploaded to GPU next frame
     void ClearDirtyFlag();
+    // set shader sources
     void SetVertexSource(const std::string& vSrc);
     void SetFragmentSource(const std::string& fSrc);
     void SetSources(const std::string& vSrc, const std::string& fSrc);
