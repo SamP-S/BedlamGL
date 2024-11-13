@@ -122,7 +122,7 @@ void Renderer::Clear(bool clearColor, bool clearStencil, bool clearDepth) {
     glClear(mask);
 }
 
-void Renderer::Draw(Mesh& d) {
+void Renderer::Draw(std::shared_ptr<Mesh> mesh) {
     /// TODO: implement
     std::cout << "renderer/opengl/renderer.cpp: draw call, PLEASE IMPLEMENT" << std::endl;
     _stats.drawCalls++;

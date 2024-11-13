@@ -123,7 +123,7 @@ public:
     // virtual void Draw2DRectangle() = 0;
 
     // // Draw3D
-    virtual void Draw(Mesh& d) = 0;
+    virtual void Draw(std::shared_ptr<Mesh> mesh) = 0;
     // virtual void DrawCube() = 0;
 
     /// --- State Management ---

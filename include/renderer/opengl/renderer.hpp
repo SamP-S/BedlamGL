@@ -93,7 +93,7 @@ public:
     void Clear(bool clearColor, bool clearStencil, bool clearDepth) override;
 
     /// --- Draw Calls ---
-    void Draw(Mesh& d) override;
+    void Draw(std::shared_ptr<Mesh> mesh) override;
 
     /// --- State Management ---
     void SetState(RendererState state) override;
