@@ -123,9 +123,32 @@ void Renderer::Clear(bool clearColor, bool clearStencil, bool clearDepth) {
 }
 
 void Renderer::Draw(std::shared_ptr<Mesh> mesh) {
-    /// TODO: implement
-    std::cout << "renderer/opengl/renderer.cpp: draw call, PLEASE IMPLEMENT" << std::endl;
     _stats.drawCalls++;
+    if (mesh == nullptr) {
+        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::Draw: mesh is null" << std::endl;
+        return;
+    }
+    
+    std::string err = "";
+    if (!ValidateMesh(mesh, err)) {
+        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::Draw: can't draw invalid mesh" << std::endl;
+        return;
+    }
+
+    /// TODO: set default uniforms here
+    
+    int meshHandlerIdx = FindOrCreateMeshHandler(mesh);
+    MeshHandler& meshHandler = _meshHandlers[meshHandlerIdx];
+    // actual draw command
+    glBindVertexArray(meshHandler.vao);
+    GLenum primitive = s_primitiveMap.at(mesh->GetPrimitiveType());
+    if (meshHandler.ibo != 0) {
+        GLenum indexType = s_indexFormatMap.at(mesh->GetIndexFormat());
+        glDrawElements(primitive, meshHandler.mesh->GetIndexCount(), indexType, nullptr);
+    } else {
+        glDrawArrays(primitive, 0, meshHandler.mesh->GetVertexCount());
+    }
+    glBindVertexArray(0);
 }
 
 /// --- State Management ---
@@ -332,6 +355,9 @@ int Renderer::CreateShaderHandler(std::shared_ptr<Shader> shader) {
 
     const char* vSrcC = shader->GetVertexSource().c_str();
     const char* fSrcC = shader->GetFragmentSource().c_str();
+
+    // std::cout << "Vertex Shader Code: \n" << vSrcC << std::endl;
+    // std::cout << "Fragment Shader Code: \n" << fSrcC << std::endl;
 
     glShaderSource(vShader, 1, &vSrcC, nullptr);
     glShaderSource(fShader, 1, &fSrcC, nullptr);
