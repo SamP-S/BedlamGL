@@ -54,8 +54,8 @@ public:
     // empty everything, delete internal resources
     void Clear();
 
-    std::string GetVertexSource() const;
-    std::string GetFragmentSource() const;
+    const std::string& GetVertexSource() const;
+    const std::string& GetFragmentSource() const;
     ShaderDirty GetDirtyFlag() const;
 
     // call to stop data being uploaded to GPU next frame

@@ -14,11 +14,11 @@ void Shader::Clear() {
     _dirty = ShaderDirty::DIRTY_DELETE;
 }
 
-std::string Shader::GetVertexSource() const {
+const std::string& Shader::GetVertexSource() const {
     return _vSrc;
 }
 
-std::string Shader::GetFragmentSource() const {
+const std::string& Shader::GetFragmentSource() const {
     return _fSrc;
 }
 
