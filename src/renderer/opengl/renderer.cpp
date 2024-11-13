@@ -122,7 +122,11 @@ void Renderer::Clear(bool clearColor, bool clearStencil, bool clearDepth) {
     glClear(mask);
 }
 
+/// NOTE: do not change shader bindings inside of draw calls
+/// user should use SetShader before Draw
+/// TODO: draw commands should be queued later
 void Renderer::Draw(std::shared_ptr<Mesh> mesh) {
+    CheckError();
     _stats.drawCalls++;
     if (mesh == nullptr) {
         std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::Draw: mesh is null" << std::endl;
@@ -132,6 +136,16 @@ void Renderer::Draw(std::shared_ptr<Mesh> mesh) {
     std::string err = "";
     if (!ValidateMesh(mesh, err)) {
         std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::Draw: can't draw invalid mesh" << std::endl;
+        return;
+    }
+
+    if (_shaderHandler == nullptr) {
+        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::Draw: no shader bound" << std::endl;
+        return;
+    }
+
+    if (!ValidateShader(_shaderHandler->shader, err)) {
+        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::Draw: can't draw with invalid shader" << std::endl;
         return;
     }
 
@@ -256,6 +270,8 @@ int Renderer::CreateMeshHandler(std::shared_ptr<Mesh> mesh) {
     // assert(vCount > 0 && "Vertex count must be greater than 0");
     // assert(vAttrs.size() > 0 && "Vertex attributes must not be empty");
 
+    CheckError();
+
     int vertexCount = mesh->GetVertexCount();
     std::vector<VertexAttributeDescriptor>vertexAttrs = mesh->GetVertexAttributes();
     int vertexSize = mesh->GetVertexSize();
@@ -318,6 +334,7 @@ int Renderer::CreateMeshHandler(std::shared_ptr<Mesh> mesh) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * indexSize, indexData, GL_STATIC_DRAW);
     } else {
+
         std::cout << "src/renderer/opengl/renderer.cpp: MESSAGE @ Renderer::CreateMeshHandler: no indices defined" << std::endl;
     }
 
@@ -349,6 +366,8 @@ int Renderer::FindOrCreateMeshHandler(std::shared_ptr<Mesh> mesh) {
 
 /// TODO: consider how to handle shader warnings and forcing the user to deal with bad shaders
 int Renderer::CreateShaderHandler(std::shared_ptr<Shader> shader) {
+    CheckError();
+
     GLuint program = glCreateProgram();
     GLuint vShader = glCreateShader(GL_VERTEX_SHADER);
     GLuint fShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -433,7 +452,7 @@ void Renderer::SetShader(std::shared_ptr<renderer::Shader> shader) {
 
     // skip if same
     if (_shaderHandler != nullptr && _shaderHandler->shader == shader) {
-        std::cout << "src/renderer/opengl/renderer.cpp: MESSAGE @ Renderer::SetShader: setting shader to already bound shader" << std::endl;
+        // std::cout << "src/renderer/opengl/renderer.cpp: MESSAGE @ Renderer::SetShader: setting shader to already bound shader" << std::endl;
         return;
     }
 
@@ -446,6 +465,7 @@ void Renderer::SetShader(std::shared_ptr<renderer::Shader> shader) {
     // set and bind new shader
     int shaderHandlerIdx = FindOrCreateShaderHandler(shader);
     _shaderHandler = &_shaderHandlers.at(shaderHandlerIdx);
+    glUseProgram(_shaderHandler->program);
 }
 
 /// --- Shader Methods ---
