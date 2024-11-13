@@ -1,6 +1,8 @@
 #include <iostream>
+#include <string>
 
 #include "marathon.hpp"
+#include "renderer/default.hpp"
 #include "renderer/shader.hpp"
 #include "events/events.hpp"
 #include "renderer/mesh.hpp"
@@ -25,15 +27,52 @@ events::Events& Events = events::Events::Instance();
 
 void start() {
     // create defaults
-    _shader = std::make
-    _shader = Renderer.CreateShader(renderer::defaultVertexShader, renderer::defaultFragmentShader);
-    _triVBuf = Renderer.CreateBuffer((void*)&renderer::defaultTriangleVertices[0][0], renderer::defaultTriangleVertices.size() * sizeof(LA::vec3), renderer::BufferTarget::VERTEX, renderer::BufferUsage::STATIC);
-    _triangleMesh = Renderer.CreateMesh(3, sizeof(LA::vec3), _triVBuf, {{0, 3, renderer::VertexAttributeFormat::FLOAT}}, renderer::PrimitiveType::TRIANGLES);
-    
+    _shader = std::make_shared<renderer::Shader>();
+    _shader->SetFragmentSource(renderer::defaultFragmentShader);
+    _shader->SetVertexSource(renderer::defaultVertexShader);
+
+    _triangleMesh = std::make_shared<renderer::Mesh>();
+    _triangleMesh->SetVertexParams(
+        renderer::defaultTriangleVertices.size(), 
+        {
+            {renderer::VertexAttribute::POSITION, 3, renderer::VertexAttributeFormat::FLOAT}
+        }
+    );
+    _triangleMesh->SetVertexData((void*)&renderer::defaultTriangleVertices[0][0], renderer::defaultTriangleVertices.size() * sizeof(LA::vec3), 0, 0);
+
+
+    // create mesh with vbo & ibo
+    _quadMesh = std::make_shared<renderer::Mesh>();
+    _quadMesh->SetVertexParams(
+        renderer::defaultQuadVertices.size(), 
+        {
+            {renderer::VertexAttribute::POSITION, 3, renderer::VertexAttributeFormat::FLOAT}
+        }
+    );
+    _quadMesh->SetVertexData((void*)&renderer::defaultQuadVertices[0][0], renderer::defaultQuadVertices.size() * sizeof(LA::vec3), 0, 0);   
+    _quadMesh->SetIndexParams(renderer::defaultQuadIndices.size(), renderer::IndexFormat::UINT32, renderer::PrimitiveType::TRIANGLES);
+    _quadMesh->SetIndexData((void*)&renderer::defaultQuadIndices[0], renderer::defaultQuadIndices.size() * sizeof(uint32_t), 0, 0);
+
     // create object
     _obj = MyObject();
     _obj.color = {1.0f, 0.2f, 0.2f, 1.0f};
     _obj.mesh = _triangleMesh;
+
+    // create object
+    _obj2 = MyObject();
+    _obj2.color = {0.2f, 0.2f, 1.0f, 1.0f};
+    _obj2.mesh = _quadMesh;
+
+    std::string err = "";
+    if (!Renderer.ValidateShader(_shader, err)) {
+        std::cout << "bedlam/include/runtime.hpp: shader validation failed: \n" << err << std::endl;
+    }
+    if (!Renderer.ValidateMesh(_triangleMesh, err)) {
+        std::cout << "bedlam/include/runtime.hpp: triangle mesh validation failed: \n" << err << std::endl;
+    }
+    if (!Renderer.ValidateMesh(_quadMesh, err)) {
+        std::cout << "bedlam/include/runtime.hpp: quad mesh validation failed: " << err << std::endl;
+    }
 }
 
 void update(double dt) {
@@ -59,9 +98,12 @@ void update(double dt) {
     if (_obj.mesh != nullptr) {
         Renderer.PushScale({0.5f, 0.5f, 0.5f});
         Renderer.PushTranslate(_obj.position);
-        Renderer.GetShader()->SetUniform("uTransform", Renderer.GetModel());
-        Renderer.Draw(*_obj.mesh.get());
+        Renderer.SetUniform("uTransform", Renderer.GetModel());
+        Renderer.Draw(_obj.mesh);
         Renderer.PopTransform();
+        Renderer.PushTranslate(_obj2.position);
+        Renderer.SetUniform("uTransform", Renderer.GetModel());
+        Renderer.Draw(_obj2.mesh);
         Renderer.PopTransform();
     } else {
         std::cout << "bedlam/include/runtime.hpp: test obj mesh is null" << std::endl;
