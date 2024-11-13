@@ -18,27 +18,35 @@ protected:
 
     /// ---- User Object Handling ---
     struct MeshHandler {
+        // hold reference to user struct
+        std::shared_ptr<Mesh> mesh = nullptr;
+        // opengl internal
+
         GLuint vao = 0;
         GLuint vbo = 0;
         GLuint ibo = 0;
-        std::shared_ptr<Mesh> mesh = nullptr;
+        // error state info
+        std::string warnings = "";
+        bool isValid = false;
     };
 
     struct ShaderHandler {
-        GLuint program = 0;
-        bool isValid = false;
-        std::string warnings = "";
+        // hold reference to user struct
         std::shared_ptr<Shader> shader = nullptr;
+        // opengl internal
+        GLuint program = 0;
+        // error state info
+        std::string warnings = "";
+        bool isValid = false;
     };
     
-
-    static const std::unordered_map<VertexAttributeFormat, GLenum> s_vertAttrFormatMap;
-    static const std::unordered_map<PrimitiveType, GLenum> s_primitiveMap;
+    /// OpenGL Enum Lookup Maps
+    static const std::unordered_map<VertexAttributeFormat, GLenum> s_vertexAttrFormatMap;
     static const std::unordered_map<IndexFormat, GLenum> s_indexFormatMap;
+    static const std::unordered_map<PrimitiveType, GLenum> s_primitiveMap;
     static const std::unordered_map<CullFace, GLenum> s_cullFaceMap;
     static const std::unordered_map<CullWinding, GLenum> s_cullWindingMap;
     static const std::unordered_map<DepthFunc, GLenum> s_depthFuncMap;
-    static const std::unordered_map<ShaderType, GLenum> s_shaderTypeMap;
 
     /// TODO:
     // should hold default meshes for standard draws calls
@@ -57,11 +65,13 @@ protected:
     std::vector<MeshHandler> _meshHandlers;
     std::vector<ShaderHandler> _shaderHandlers;
 
+    /// internal user struct handler methods
     int CreateShaderHandler(std::shared_ptr<Shader> shader);
-    int CreateMeshHandler(std::shared_ptr<Mesh> mesh);
     int FindOrCreateShaderHandler(std::shared_ptr<Shader> shader);
+
+    int CreateMeshHandler(std::shared_ptr<Mesh> mesh);
     int FindOrCreateMeshHandler(std::shared_ptr<Mesh> mesh);
-    bool CheckBoundShader();
+    
 
 public:
     Renderer();

@@ -12,7 +12,6 @@
 // includes
 #include "la_extended.h"
 #include "core/module.hpp"
-#include "renderer/buffer.hpp"
 #include "renderer/mesh.hpp"
 #include "renderer/shader.hpp"
 #include "renderer/default.hpp"
@@ -91,10 +90,6 @@ struct TransformState {
 };
 
 // forward declarations
-class Buffer;
-class Mesh;
-class Shader;
-enum class ShaderType;
 
 class Renderer : public Module {
 protected:

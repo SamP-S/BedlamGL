@@ -56,12 +56,10 @@ enum class VertexAttributeFormat {
     INT8, 
     INT16,
     INT32,
-    INT64,
     // unsigned
     UINT8,
     UINT16,
-    UINT32,
-    UINT64
+    UINT32
 };
 
 enum class IndexFormat {

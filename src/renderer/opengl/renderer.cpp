@@ -9,11 +9,18 @@ namespace opengl {
 /// --- Mesh Handling ---
 /// TODO:
 // support for a simple wireframe mode to convert to LINE versions of primitive types
-const std::unordered_map<AttributeType, GLenum> Renderer::s_attrTypeMap = {
-    { AttributeType::FLOAT, GL_FLOAT },
-    { AttributeType::UINT8, GL_UNSIGNED_BYTE },
-    { AttributeType::UINT16, GL_UNSIGNED_SHORT },
-    { AttributeType::UINT32, GL_UNSIGNED_INT }
+// implement a better invalid state, as not uniform across all enums
+const std::unordered_map<VertexAttributeFormat, GLenum> Renderer::s_vertexAttrFormatMap = {
+    { VertexAttributeFormat::INVALID, 0 },
+    { VertexAttributeFormat::HALF_FLOAT, GL_HALF_FLOAT },
+    { VertexAttributeFormat::FLOAT, GL_FLOAT },
+    { VertexAttributeFormat::DOUBLE, GL_DOUBLE },
+    { VertexAttributeFormat::INT8, GL_BYTE },
+    { VertexAttributeFormat::INT16, GL_SHORT },
+    { VertexAttributeFormat::INT32, GL_INT },
+    { VertexAttributeFormat::UINT8, GL_UNSIGNED_BYTE },
+    { VertexAttributeFormat::UINT16, GL_UNSIGNED_SHORT },
+    { VertexAttributeFormat::UINT32, GL_UNSIGNED_INT },
 };
 
 const std::unordered_map<PrimitiveType, GLenum> Renderer::s_primitiveMap = {
@@ -22,10 +29,11 @@ const std::unordered_map<PrimitiveType, GLenum> Renderer::s_primitiveMap = {
     { PrimitiveType::STRIP, GL_TRIANGLE_STRIP }
 };
 
-const std::unordered_map<IndexType, GLenum> Renderer::s_indexTypeMap = {
-    { IndexType::UINT8, GL_UNSIGNED_BYTE },
-    { IndexType::UINT16, GL_UNSIGNED_SHORT },
-    { IndexType::UINT32, GL_UNSIGNED_INT }
+const std::unordered_map<IndexFormat, GLenum> Renderer::s_indexFormatMap = {
+    { IndexFormat::UINT8, GL_UNSIGNED_BYTE },
+    { IndexFormat::UINT16, GL_UNSIGNED_SHORT },
+    { IndexFormat::UINT32, GL_UNSIGNED_INT },
+    { IndexFormat::INVALID, 0 }
 };
 
 const std::unordered_map<CullFace, GLenum> Renderer::s_cullFaceMap = {
@@ -48,11 +56,6 @@ const std::unordered_map<DepthFunc, GLenum> Renderer::s_depthFuncMap = {
     {DepthFunc::LESS_EQUAL, GL_LEQUAL},
     {DepthFunc::GREATER, GL_GREATER},
     {DepthFunc::GREATER_EQUAL, GL_GEQUAL}
-};
-
-const std::unordered_map<ShaderType, GLenum> Renderer::s_shaderTypeMap = {
-    { ShaderType::VERTEX, GL_VERTEX_SHADER },
-    { ShaderType::FRAGMENT, GL_FRAGMENT_SHADER }
 };
 
 Renderer::Renderer() 
@@ -85,8 +88,21 @@ bool Renderer::Shutdown() {
 
 
 // validation
-bool Renderer::ValidateShader(std::shared_ptr<Shader> shader, std::string& err) {}
-bool Renderer::ValidateMesh(std::shared_ptr<Mesh> mesh, std::string& err) {}
+/// TODO: currently does not consider if user shader is dirty
+bool Renderer::ValidateShader(std::shared_ptr<Shader> shader, std::string& err) {
+    int shaderHandlerIdx = FindOrCreateShaderHandler(shader);
+    ShaderHandler& shaderHandler = _shaderHandlers[shaderHandlerIdx];
+    if (shaderHandler.isValid) {
+        return true;
+    }
+    err = shaderHandler.warnings;
+    return false;
+}
+
+bool Renderer::ValidateMesh(std::shared_ptr<Mesh> mesh, std::string& err) {
+    std::cout << "src/renderer/opengl/renderer.cpp: ValidateMesh() not implemented" << std::endl;
+    return false;
+}
 
 
 /// --- Drawing ---
@@ -216,17 +232,6 @@ int Renderer::FindOrCreateMeshHandler(std::shared_ptr<Mesh> mesh) {
 
 
 /// --- Shader Stuff ---
-bool Renderer::CheckBoundShader() {
-    if (_shaderHandler == nullptr) {
-        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::CheckBoundShader: no shader bound" << std::endl;
-        return false;
-    }
-    if (!_shaderHandler->isValid) {
-        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::CheckBoundShader: shader is invalid" << std::endl;
-        return false;
-    }
-    return true;
-}
 
 /// TODO: consider how to handle shader warnings and forcing the user to deal with bad shaders
 int Renderer::CreateShaderHandler(std::shared_ptr<Shader> shader) {
@@ -326,8 +331,14 @@ void Renderer::SetShader(std::shared_ptr<renderer::Shader> shader) {
 
 /// --- Shader Methods ---
 bool Renderer::HasUniform(const std::string& key) const {
-    if (!CheckBoundShader)
+    if (_shaderHandler == nullptr) {
+        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::HasUniform: no shader bound" << std::endl;
         return false;
+    }
+    if (!ValidateShader(_shaderHandler->shader, "")) {
+        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::HasUniform: bound shader is invalid" << std::endl;
+        return false;
+    }
     return glGetUniformLocation(_shaderHandler->program, key.c_str()) != -1;
 }
 

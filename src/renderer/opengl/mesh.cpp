@@ -10,26 +10,6 @@ namespace renderer {
 namespace opengl {
 
 
-/// TODO:
-// support for a simple wireframe mode to convert to LINE versions of primitive types
-const std::unordered_map<AttributeType, GLenum> Mesh::s_attrTypeMap = {
-    { AttributeType::FLOAT, GL_FLOAT },
-    { AttributeType::UINT8, GL_UNSIGNED_BYTE },
-    { AttributeType::UINT16, GL_UNSIGNED_SHORT },
-    { AttributeType::UINT32, GL_UNSIGNED_INT }
-};
-
-const std::unordered_map<PrimitiveType, GLenum> Mesh::s_primitiveMap = {
-    { PrimitiveType::TRIANGLES, GL_TRIANGLES },
-    { PrimitiveType::FAN, GL_TRIANGLE_FAN },
-    { PrimitiveType::STRIP, GL_TRIANGLE_STRIP }
-};
-
-const std::unordered_map<IndexType, GLenum> Mesh::s_indexTypeMap = {
-    { IndexType::UINT8, GL_UNSIGNED_BYTE },
-    { IndexType::UINT16, GL_UNSIGNED_SHORT },
-    { IndexType::UINT32, GL_UNSIGNED_INT }
-};
 
 Mesh::Mesh(int vCount, size_t vSize, std::shared_ptr<renderer::Buffer> vBuf, std::vector<VertexAttribute> vAttrs, PrimitiveType primitive)
     : opengl::Mesh(vCount, vSize, vBuf, vAttrs, nullptr, IndexType::NONE, primitive) {
