@@ -14,7 +14,6 @@
 
 #include "la_extended.h"
 #include "core/resource.hpp"
-#include "renderer/buffer.hpp"
 
 namespace marathon {
 
@@ -89,6 +88,7 @@ enum class DataDirty {
     INVALID,
     DIRTY_REALLOC,
     DIRTY_UPDATE,
+    DIRTY_DELETE,
     CLEAN
 };
 
@@ -168,6 +168,7 @@ public:
 
     // helper getters
     bool HasVertexAttribute(VertexAttribute attr) const;
+    int GetVertexAttributeLocation(VertexAttribute attr) const;
     int GetVertexAttributeComponents(VertexAttribute attr) const;
     VertexAttributeFormat GetVertexAttributeFormat(VertexAttribute attr) const;
     size_t GetVertexAttributeOffset(VertexAttribute attr) const;
@@ -188,6 +189,7 @@ public:
     // getters
     const void* GetIndexPtr() const;
     int GetIndexCount() const;
+    size_t GetIndexSize() const;
     IndexFormat GetIndexFormat() const;
     PrimitiveType GetPrimitiveType() const;
     DataDirty GetIndexDirtyFlag() const;

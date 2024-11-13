@@ -109,8 +109,8 @@ public:
     virtual bool Shutdown() = 0;
     
     // validation
-    virtual bool ValidateShader(std::shared_ptr<Shader> shader) = 0;
-    virtual bool ValidateMesh(std::shared_ptr<Mesh> mesh) = 0;
+    virtual bool ValidateShader(std::shared_ptr<Shader> shader, std::string& err_msg) = 0;
+    virtual bool ValidateMesh(std::shared_ptr<Mesh> mesh, std::string& err_msg) = 0;
 
     /// --- Drawing ---
     // clear active canvas/screen of all color, depth, and stencil buffers
@@ -182,25 +182,25 @@ public:
     // virtual LA::vec2 GlobalToScreen(const LA::vec3& point);
 
     /// --- Shader Methods ---
-    virtual bool HasUniform(const std::string& key) const = 0;
+    virtual bool HasUniform(const std::string& key) = 0;
 
     // single value uniforms
-    virtual bool SetUniform(const std::string& key, bool value) const = 0;
-    virtual bool SetUniform(const std::string& key, int value) const = 0;
-    virtual bool SetUniform(const std::string& key, uint32_t value) const = 0;
-    virtual bool SetUniform(const std::string& key, float value) const = 0;
-    virtual bool SetUniform(const std::string& key, double value) const = 0;
+    virtual bool SetUniform(const std::string& key, bool value) = 0;
+    virtual bool SetUniform(const std::string& key, int value) = 0;
+    virtual bool SetUniform(const std::string& key, uint32_t value) = 0;
+    virtual bool SetUniform(const std::string& key, float value) = 0;
+    virtual bool SetUniform(const std::string& key, double value) = 0;
     // vector uniforms
-    virtual void SetUniform(const std::string& key, const LA::vec2& v) const = 0;
-    virtual void SetUniform(const std::string& key, float x, float y) const = 0;
-    virtual void SetUniform(const std::string& key, const LA::vec3& v) const = 0;
-    virtual void SetUniform(const std::string& key, float x, float y, float z) const = 0;
-    virtual void SetUniform(const std::string& key, const LA::vec4& v) const = 0;
-    virtual void SetUniform(const std::string& key, float x, float y, float z, float w) const = 0;
+    virtual bool SetUniform(const std::string& key, const LA::vec2& v) = 0;
+    virtual bool SetUniform(const std::string& key, float x, float y) = 0;
+    virtual bool SetUniform(const std::string& key, const LA::vec3& v) = 0;
+    virtual bool SetUniform(const std::string& key, float x, float y, float z) = 0;
+    virtual bool SetUniform(const std::string& key, const LA::vec4& v) = 0;
+    virtual bool SetUniform(const std::string& key, float x, float y, float z, float w) = 0;
     // matrix uniforms
-    virtual void SetUniform(const std::string& key, const LA::mat2& m) const = 0;
-    virtual void SetUniform(const std::string& key, const LA::mat3& m) const = 0;
-    virtual void SetUniform(const std::string& key, const LA::mat4& m) const = 0;
+    virtual bool SetUniform(const std::string& key, const LA::mat2& m) = 0;
+    virtual bool SetUniform(const std::string& key, const LA::mat3& m) = 0;
+    virtual bool SetUniform(const std::string& key, const LA::mat4& m) = 0;
     
     /// --- Debug Info ---
     virtual RenderStats GetRenderStats();

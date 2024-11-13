@@ -4,9 +4,11 @@ namespace marathon {
 
 namespace renderer {
 
-Shader::Shader(const std::string& name, const std::string& vSrc, const std::string& fSrc) 
-    : Resource(name), _vSrc(vSrc), _fSrc(fSrc) {}
+Shader::Shader() 
+    : Resource("marathon.renderer.shader") {}
 Shader::~Shader() {}
+
+/// TODO: implement shader
 
 } // namespace renderer
 

@@ -82,6 +82,16 @@ bool Mesh::HasVertexAttribute(VertexAttribute attr) const {
     return GetVertexAttributeIndex(attr) != -1;
 }
 
+// returns -1 if failed
+int Mesh::GetVertexAttributeLocation(VertexAttribute attr) const {
+    auto it = s_vertexAttributeLayoutMap.find(attr);
+    if (it != s_vertexAttributeLayoutMap.end()) {
+        return it->second;
+    } else {
+        return -1;
+    }
+}
+
 // return 0 if failed
 int Mesh::GetVertexAttributeComponents(VertexAttribute attr) const {
     int idx = GetVertexAttributeIndex(attr);
@@ -178,6 +188,10 @@ int Mesh::GetIndexCount() const {
     return _indexCount;
 }
 
+size_t Mesh::GetIndexSize() const {
+    return s_indexFormatMap.at(_indexFormat);
+}
+
 DataDirty Mesh::GetIndexDirtyFlag() const {
     return _indexDataDirty;
 }
@@ -230,6 +244,7 @@ Mesh::~Mesh() {}
 void Mesh::Clear() {
     ClearVertices();
     ClearIndices();
+    _indexDataDirty = DataDirty::DIRTY_DELETE;
 }
 
 

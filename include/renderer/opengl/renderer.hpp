@@ -17,6 +17,7 @@ class Renderer : public renderer::Renderer {
 protected:
 
     /// ---- User Object Handling ---
+    /// TODO: implement InternalHandler as a base struct
     struct MeshHandler {
         // hold reference to user struct
         std::shared_ptr<Mesh> mesh = nullptr;
@@ -82,8 +83,8 @@ public:
     bool Shutdown() override;
 
     /// --- Validation ---
-    bool ValidateShader(std::shared_ptr<Shader> shader) override;
-    bool ValidateMesh(std::shared_ptr<Mesh> mesh) override;
+    bool ValidateShader(std::shared_ptr<Shader> shader, std::string& err_msg) override;
+    bool ValidateMesh(std::shared_ptr<Mesh> mesh, std::string& err_msg) override;
 
     /// --- Drawing ---
     // clear active canvas/screen of all color, depth, and stencil buffers
@@ -129,24 +130,24 @@ public:
     void SetShader(std::shared_ptr<renderer::Shader> shader) override;
 
     /// --- Shader Methods ---
-    bool HasUniform(const std::string& key) const override;
+    bool HasUniform(const std::string& key) override;
 
     // single value uniforms
-    bool SetUniform(const std::string& key, int value) const override;
-    bool SetUniform(const std::string& key, uint32_t value) const override;
-    bool SetUniform(const std::string& key, float value) const override;
-    bool SetUniform(const std::string& key, double value) const override;
+    bool SetUniform(const std::string& key, int value) override;
+    bool SetUniform(const std::string& key, uint32_t value) override;
+    bool SetUniform(const std::string& key, float value) override;
+    bool SetUniform(const std::string& key, double value) override;
     // vector uniforms
-    void SetUniform(const std::string& key, const LA::vec2& v) const override;
-    void SetUniform(const std::string& key, float x, float y) const override;
-    void SetUniform(const std::string& key, const LA::vec3& v) const override;
-    void SetUniform(const std::string& key, float x, float y, float z) const override;
-    void SetUniform(const std::string& key, const LA::vec4& v) const override;
-    void SetUniform(const std::string& key, float x, float y, float z, float w) const override;
+    bool SetUniform(const std::string& key, const LA::vec2& v) override;
+    bool SetUniform(const std::string& key, float x, float y) override;
+    bool SetUniform(const std::string& key, const LA::vec3& v) override;
+    bool SetUniform(const std::string& key, float x, float y, float z) override;
+    bool SetUniform(const std::string& key, const LA::vec4& v) override;
+    bool SetUniform(const std::string& key, float x, float y, float z, float w) override;
     // matrix uniforms
-    void SetUniform(const std::string& key, const LA::mat2& m) const override;
-    void SetUniform(const std::string& key, const LA::mat3& m) const override;
-    void SetUniform(const std::string& key, const LA::mat4& m) const override;
+    bool SetUniform(const std::string& key, const LA::mat2& m) override;
+    bool SetUniform(const std::string& key, const LA::mat3& m) override;
+    bool SetUniform(const std::string& key, const LA::mat4& m) override;
 
 };
 

@@ -100,7 +100,8 @@ void main()
 
 enum class ShaderDirty {
     INVALID,
-    DIRTY_RECOMPILE,
+    DIRTY_COMPILE,
+    DIRTY_DELETE,
     CLEAN
 };
 
@@ -114,10 +115,14 @@ public:
     Shader();
     ~Shader();
 
+    // empty everything, delete internal resources
+    void Clear();
+
     std::string GetVertexSource() const;
     std::string GetFragmentSource() const;
     ShaderDirty GetDirtyFlag() const;
 
+    void ClearDirtyFlag();
     void SetVertexSource(const std::string& vSrc);
     void SetFragmentSource(const std::string& fSrc);
     void SetSources(const std::string& vSrc, const std::string& fSrc);
