@@ -94,8 +94,8 @@ enum class DataDirty {
 /// describes a single vertex attribute
 struct VertexAttributeDescriptor {
     VertexAttribute attribute = VertexAttribute::POSITION;
-    VertexAttributeFormat format = VertexAttributeFormat::FLOAT;
     int numComponents = 3;
+    VertexAttributeFormat format = VertexAttributeFormat::FLOAT;
 };
 
 /// TODO:
