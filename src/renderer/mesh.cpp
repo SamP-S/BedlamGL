@@ -28,11 +28,9 @@ const std::unordered_map<VertexAttributeFormat, size_t> Mesh::s_vertexAttributeF
     {VertexAttributeFormat::INT8, 1},
     {VertexAttributeFormat::INT16, 2},
     {VertexAttributeFormat::INT32, 4},
-    {VertexAttributeFormat::INT64, 8},
     {VertexAttributeFormat::UINT8, 1},
     {VertexAttributeFormat::UINT16, 2},
-    {VertexAttributeFormat::UINT32, 4},
-    {VertexAttributeFormat::UINT64, 8}
+    {VertexAttributeFormat::UINT32, 4}
 };
 
 const std::unordered_map<VertexAttribute, int> Mesh::s_vertexAttributeLayoutMap = {
