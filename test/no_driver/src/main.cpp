@@ -105,6 +105,7 @@ void update(double dt) {
         Renderer.SetUniform("uTransform", Renderer.GetModel());
         Renderer.Draw(_obj2.mesh);
         Renderer.PopTransform();
+        Renderer.PopTransform();
     } else {
         std::cout << "bedlam/include/runtime.hpp: test obj mesh is null" << std::endl;
     }
