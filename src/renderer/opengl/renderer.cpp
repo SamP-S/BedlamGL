@@ -360,42 +360,60 @@ bool Renderer::SetUniform(const std::string& key, double value) const {
     return true;
 }
 // vector uniforms
-void Renderer::SetUniform(const std::string& key, const LA::vec2& v) const {
-    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
-    return false;
+bool Renderer::SetUniform(const std::string& key, const LA::vec2& v) const {
+    if (!HasUniform(key))
+        return false;
+    glUniform2f(glGetUniformLocation(_shaderHandler->program, key.c_str()), v.x, v.y);
+    return true;
 }
-void Renderer::SetUniform(const std::string& key, float x, float y) const {
-    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
-    return false;
+bool Renderer::SetUniform(const std::string& key, float x, float y) const {
+    if (!HasUniform(key))
+        return false;
+    glUniform2f(glGetUniformLocation(_shaderHandler->program, key.c_str()), x, y);
+    return true;
 }
-void Renderer::SetUniform(const std::string& key, const LA::vec3& v) const {
-    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
-    return false;
+bool Renderer::SetUniform(const std::string& key, const LA::vec3& v) const {
+    if (!HasUniform(key))
+        return false;
+    glUniform3f(glGetUniformLocation(_shaderHandler->program, key.c_str()), v.x, v.y, v.z);
+    return true;
 }
-void Renderer::SetUniform(const std::string& key, float x, float y, float z) const {
-    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
-    return false;
+bool Renderer::SetUniform(const std::string& key, float x, float y, float z) const {
+    if (!HasUniform(key))
+        return false;
+    glUniform3f(glGetUniformLocation(_shaderHandler->program, key.c_str()), x, y, z);
+    return true;
 }
-void Renderer::SetUniform(const std::string& key, const LA::vec4& v) const {
-    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
-    return false;
+bool Renderer::SetUniform(const std::string& key, const LA::vec4& v) const {
+    if (!HasUniform(key))
+        return false;
+    glUniform4f(glGetUniformLocation(_shaderHandler->program, key.c_str()), v.x, v.y, v.z, v.w);
+    return true;
 }
-void Renderer::SetUniform(const std::string& key, float x, float y, float z, float w) const {
-    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
-    return false;
+bool Renderer::SetUniform(const std::string& key, float x, float y, float z, float w) const {
+    if (!HasUniform(key))
+        return false;
+    glUniform4f(glGetUniformLocation(_shaderHandler->program, key.c_str()), x, y, z, w);
+    return true;
 }
 // matrix uniforms
-void Renderer::SetUniform(const std::string& key, const LA::mat2& m) const {
-    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
-    return false;
+bool Renderer::SetUniform(const std::string& key, const LA::mat2& m) const {
+    if (!HasUniform(key))
+        return false;
+    glUniformMatrix2fv(glGetUniformLocation(_shaderHandler->program, key.c_str()), 1, GL_FALSE, &m[0][0]);
+    return true;
 }
-void Renderer::SetUniform(const std::string& key, const LA::mat3& m) const {
-    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
-    return false;
+bool Renderer::SetUniform(const std::string& key, const LA::mat3& m) const {
+    if (!HasUniform(key))
+        return false;
+    glUniformMatrix3fv(glGetUniformLocation(_shaderHandler->program, key.c_str()), 1, GL_FALSE, &m[0][0]);
+    return true;
 }
-void Renderer::SetUniform(const std::string& key, const LA::mat4& m) const {
-    std::cout << "src/renderer/opengl/renderer.cpp: SetUniform() not implemented" << std::endl;
-    return false;
+bool Renderer::SetUniform(const std::string& key, const LA::mat4& m) const {
+    if (!HasUniform(key))
+        return false;
+    glUniformMatrix4fv(glGetUniformLocation(_shaderHandler->program, key.c_str()), 1, GL_FALSE, &m[0][0]);
+    return true;
 }
 
 
