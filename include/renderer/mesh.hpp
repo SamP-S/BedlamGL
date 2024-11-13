@@ -35,7 +35,7 @@ enum class BufferFormat {
     // signed
     INT8, 
     INT16,
-    INT32
+    INT32,
     // unsigned
     UINT8,
     UINT16,

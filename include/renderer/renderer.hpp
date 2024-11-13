@@ -185,7 +185,6 @@ public:
     virtual bool HasUniform(const std::string& key) = 0;
 
     // single value uniforms
-    virtual bool SetUniform(const std::string& key, bool value) = 0;
     virtual bool SetUniform(const std::string& key, int value) = 0;
     virtual bool SetUniform(const std::string& key, uint32_t value) = 0;
     virtual bool SetUniform(const std::string& key, float value) = 0;

@@ -15,7 +15,6 @@ struct MyObject {
 
 MyObject _obj; MyObject _obj2;
 std::shared_ptr<renderer::Shader> _shader;
-std::shared_ptr<renderer::Buffer> _triVBuf;
 std::shared_ptr<renderer::Mesh> _triangleMesh;
 std::shared_ptr<renderer::Mesh> _quadMesh;
 
@@ -26,6 +25,7 @@ events::Events& Events = events::Events::Instance();
 
 void start() {
     // create defaults
+    _shader = std::make
     _shader = Renderer.CreateShader(renderer::defaultVertexShader, renderer::defaultFragmentShader);
     _triVBuf = Renderer.CreateBuffer((void*)&renderer::defaultTriangleVertices[0][0], renderer::defaultTriangleVertices.size() * sizeof(LA::vec3), renderer::BufferTarget::VERTEX, renderer::BufferUsage::STATIC);
     _triangleMesh = Renderer.CreateMesh(3, sizeof(LA::vec3), _triVBuf, {{0, 3, renderer::VertexAttributeFormat::FLOAT}}, renderer::PrimitiveType::TRIANGLES);
