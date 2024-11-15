@@ -36,13 +36,16 @@ A simple 2D/3D game library using a module based system inspired by pygame/love2
 - [ ] Rendering 3D models
 - [ ] Coordinate space transformation stack
 - [ ] Orthoganol and Perspective camera types
-- [ ] Default and custom shader support
-- [ ] Default and custom vertex data
+- [x] Custom shader support
+- [x] Custom mesh support
+- [ ] Default resources/objects/meshes/shaders
 - [ ] Multi Threading
 - [ ] Filesystem management
 - [ ] Support ImGui layer
-- [ ] Allow seperate subsystem initialisation
-- [ ] Allow objects to be created before initialisation
+- [x] Allow seperate subsystem initialisation
+- [x] Allow objects to be created before initialisation
+- [ ] Custom shader auto binding layer
+- [x] User managed resources
 
 
 ## Modules
@@ -51,12 +54,27 @@ The library consists of a set of fundamental modules that empower the user to cr
 - Renderer (OpenGL/Vulkan)
 - Time
 - Events (SDL2)
+- Math (LA)
 
 To-Do:
-- Math (LA)
 - Audio (SDL2)
 - Input (SDL2)
 - Filesystem
+
+## Target Applications:
+- Simple collision simulation spheres, AABBs, boxes
+- Live FPS controller
+- Environment scene layout (with serialization)
+- Standard asset model loader/viewer (with textures & lighting)
+
+**ImGui Integrated:**
+- Editor using a standard set of types & ptrs & base classes to auto configure gui elements to represent custom user classes
+- Live shader editor
+- Scene layout
+- Sound player
+- Skeleton animation display
+- Live global illumination/shadows (directional, spot, point)
+
 
 ## Future Feature List
 - Multiple cameras, quick switch abilities
