@@ -75,11 +75,7 @@ enum class VertexAttribute {
     TEXCOORD0,
     TEXCOORD1,
     TEXCOORD2,
-    TEXCOORD3,
-    TEXCOORD4,
-    TEXCOORD5,
-    TEXCOORD6,
-    TEXCOORD7
+    TEXCOORD3
 };
 
 enum class DataDirty {

@@ -16,6 +16,11 @@ namespace opengl {
 class Renderer : public renderer::Renderer {
 protected:
 
+    // build-in shaders
+    static const std::string _globalHeader;
+    static const std::string _vertexHeader;
+    static const std::string _fragmentHeader;
+
     /// ---- User Object Handling ---
     /// TODO: implement InternalHandler as a base struct
     struct MeshHandler {
