@@ -58,7 +58,7 @@ static const std::vector<uint32_t> defaultCubeIndices = {
 static const std::string defaultVertexShader = R"(
 void main()
 {
-    varying_position = vertex_position;
+    varying_position = vec4(vertex_position, 1.0f);
 	gl_Position = u_model_view_projection * vec4(vertex_position, 1.0f);
 }
 )";
@@ -69,7 +69,7 @@ out vec4 out_color;
 
 void main()
 {
-    out_color = vec4(varying_positon, 1.0);
+    out_color = varying_position;
     // out_color = vec4(1, 1, 1, 1);
 }
 )";

@@ -15,7 +15,6 @@ uniform float   u_time;
 uniform float   u_time_delta;
 uniform int     u_frame_index;
 uniform vec2    u_resolution;
-
 )";
 
 const std::string Renderer::_vertexHeader = R"(
@@ -36,18 +35,17 @@ layout(location =  6) in vec2 vertex_uv2;
 layout(location =  7) in vec2 vertex_uv3;
 
 // "varying" variables
-out vec3 varying_position;
-out vec3 varying_normal;
-out vec3 varying_tangent;
-out vec3 varying_color;
-out vec3 varying_uv0;
-out vec3 varying_uv1;
-out vec3 varying_uv2;
-out vec3 varying_uv3;
+out vec4 varying_position;
+out vec4 varying_normal;
+out vec4 varying_tangent;
+out vec4 varying_color;
+out vec4 varying_uv0;
+out vec4 varying_uv1;
+out vec4 varying_uv2;
+out vec4 varying_uv3;
 
 // vertex uniforms
 uniform mat4    u_model_view_projection;
-
 )";
 
 const std::string Renderer::_fragmentHeader = R"(
@@ -58,15 +56,14 @@ const std::string Renderer::_fragmentHeader = R"(
 // out float gl_FragDepth;      // If the shader does not statically write this value, then it will take the value of gl_FragCoord.z.
 
 // "varying" variables
-in vec3 varying_position;
-in vec3 varying_normal;
-in vec3 varying_tangent;
-in vec3 varying_color;
-in vec3 varying_uv0;
-in vec3 varying_uv1;
-in vec3 varying_uv2;
-in vec3 varying_uv3;
-
+in vec4 varying_position;
+in vec4 varying_normal;
+in vec4 varying_tangent;
+in vec4 varying_color;
+in vec4 varying_uv0;
+in vec4 varying_uv1;
+in vec4 varying_uv2;
+in vec4 varying_uv3;
 )";
 
 /// --- Mesh Handling ---
@@ -440,8 +437,8 @@ int Renderer::CreateShaderHandler(std::shared_ptr<Shader> shader) {
     const char* vSrcC = vSource.c_str();
     const char* fSrcC = fSource.c_str();
 
-    std::cout << "Vertex Shader Code: \n" << vSrcC << std::endl;
-    std::cout << "Fragment Shader Code: \n" << fSrcC << std::endl;
+    // std::cout << "Vertex Shader Code: \n" << vSrcC << std::endl;
+    // std::cout << "Fragment Shader Code: \n" << fSrcC << std::endl;
 
     glShaderSource(vShader, 1, &vSrcC, nullptr);
     glShaderSource(fShader, 1, &fSrcC, nullptr);
