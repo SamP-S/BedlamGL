@@ -67,6 +67,12 @@ RenderStats Renderer::GetRenderStats() {
     return _stats;
 }
 
+void Renderer::NextFrame() {
+    _stats.frameIndex++;
+    _stats.drawCalls = 0;
+    _stats.trianglesRendered = 0;
+}
+
 } // renderer
 
 } // marathon

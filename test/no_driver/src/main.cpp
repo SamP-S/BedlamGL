@@ -121,20 +121,17 @@ void update(double dt) {
 
         // draw triangle
         Renderer.PushTranslate(_obj.position);
-        Renderer.SetUniform("u_model_view_projection", Renderer.GetModel());
         //Renderer.Draw(_obj.mesh);
         Renderer.PopTransform();
 
         // draw quad
         Renderer.PushTranslate(_obj2.position);
-        Renderer.SetUniform("u_model_view_projection", Renderer.GetModel());
         //Renderer.Draw(_obj2.mesh);
         Renderer.PopTransform();
 
         // draw cube
         Renderer.PushRotate(_obj3.rotation);
         Renderer.PushTranslate(_obj3.position);
-        Renderer.SetUniform("u_model_view_projection", Renderer.GetModel());
         Renderer.Draw(_obj3.mesh);
         Renderer.PopTransform();
         Renderer.PopTransform();

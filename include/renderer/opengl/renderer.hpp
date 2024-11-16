@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <unordered_map>
 
 #include "renderer/mesh.hpp"
@@ -17,9 +18,10 @@ class Renderer : public renderer::Renderer {
 protected:
 
     // build-in shaders
-    static const std::string _globalHeader;
-    static const std::string _vertexHeader;
-    static const std::string _fragmentHeader;
+    static const std::vector<std::string> s_reservedUniforms;
+    static const std::string s_globalHeader;
+    static const std::string s_vertexHeader;
+    static const std::string s_fragmentHeader;
 
     /// ---- User Object Handling ---
     /// TODO: implement InternalHandler as a base struct
@@ -78,6 +80,7 @@ protected:
     int CreateMeshHandler(std::shared_ptr<Mesh> mesh);
     int FindOrCreateMeshHandler(std::shared_ptr<Mesh> mesh);
     
+    void SetDefaultUniforms();
 
 public:
     Renderer();

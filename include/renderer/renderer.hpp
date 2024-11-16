@@ -64,6 +64,7 @@ enum class DrawMode {
 
 // per frame
 struct RenderStats {
+    int frameIndex = 0;
     int drawCalls = 0;
     int trianglesRendered = 0;
 };
@@ -203,6 +204,7 @@ public:
     
     /// --- Debug Info ---
     virtual RenderStats GetRenderStats();
+    virtual void NextFrame();
 
 };
 

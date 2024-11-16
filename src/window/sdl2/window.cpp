@@ -1,4 +1,5 @@
 #include "window/sdl2/window.hpp"
+#include "renderer/renderer.hpp"
 
 namespace marathon {
 
@@ -94,6 +95,7 @@ SDL_Window* Window::GetWindow() {
 
 // call at the end of the frame to swap displayed buffer
 void Window::SwapFrame() {
+    renderer::Renderer::Instance().NextFrame();
     SDL_GL_SwapWindow(_window);
 }
 
