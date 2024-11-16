@@ -42,11 +42,7 @@ const std::unordered_map<VertexAttribute, int> Mesh::s_vertexAttributeLayoutMap 
     {VertexAttribute::TEXCOORD0, 4},
     {VertexAttribute::TEXCOORD1, 5},
     {VertexAttribute::TEXCOORD2, 6},
-    {VertexAttribute::TEXCOORD3, 7},
-    {VertexAttribute::TEXCOORD4, 8},
-    {VertexAttribute::TEXCOORD5, 9},
-    {VertexAttribute::TEXCOORD6, 10},
-    {VertexAttribute::TEXCOORD7, 11}
+    {VertexAttribute::TEXCOORD3, 7}
 };
 
 void Mesh::ClearVertices() {
