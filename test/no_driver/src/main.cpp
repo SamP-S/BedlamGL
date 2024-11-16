@@ -115,25 +115,26 @@ void update(double dt) {
     // make draw call of obj at position
     Renderer.Clear();
     Renderer.SetShader(_shader);
+    Renderer.SetDepthTest(true);
     if (_obj.mesh != nullptr) {
         Renderer.PushScale({0.5f, 0.5f, 0.5f}); // scale down
 
         // draw triangle
         Renderer.PushTranslate(_obj.position);
-        Renderer.SetUniform("uTransform", Renderer.GetModel());
+        Renderer.SetUniform("u_model_view_projection", Renderer.GetModel());
         //Renderer.Draw(_obj.mesh);
         Renderer.PopTransform();
 
         // draw quad
         Renderer.PushTranslate(_obj2.position);
-        Renderer.SetUniform("uTransform", Renderer.GetModel());
+        Renderer.SetUniform("u_model_view_projection", Renderer.GetModel());
         //Renderer.Draw(_obj2.mesh);
         Renderer.PopTransform();
 
         // draw cube
         Renderer.PushRotate(_obj3.rotation);
         Renderer.PushTranslate(_obj3.position);
-        Renderer.SetUniform("uTransform", Renderer.GetModel());
+        Renderer.SetUniform("u_model_view_projection", Renderer.GetModel());
         Renderer.Draw(_obj3.mesh);
         Renderer.PopTransform();
         Renderer.PopTransform();
