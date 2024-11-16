@@ -80,7 +80,7 @@ protected:
     int CreateMeshHandler(std::shared_ptr<Mesh> mesh);
     int FindOrCreateMeshHandler(std::shared_ptr<Mesh> mesh);
     
-    void SetDefaultUniforms();
+    bool SetDefaultUniforms();
 
 public:
     Renderer();

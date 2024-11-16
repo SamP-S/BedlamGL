@@ -216,7 +216,9 @@ void Renderer::Draw(std::shared_ptr<Mesh> mesh) {
         return;
     }
 
-    /// TODO: set default uniforms here
+    if (!SetDefaultUniforms()) {
+        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::Draw: failed to set default uniforms" << std::endl;
+    }
     
     int meshHandlerIdx = FindOrCreateMeshHandler(mesh);
     MeshHandler& meshHandler = _meshHandlers[meshHandlerIdx];
@@ -642,7 +644,17 @@ bool Renderer::SetUniform(const std::string& key, const LA::mat4& m) {
     return true;
 }
 
-void Renderer::SetDefaultUniforms() {
+bool Renderer::SetDefaultUniforms() {
+    if (_shaderHandler == nullptr) {
+        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::HasUniform: no shader bound" << std::endl;
+        return false;
+    }
+    std::string err;
+    if (!ValidateShader(_shaderHandler->shader, err)) {
+        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::HasUniform: bound shader is invalid" << std::endl;
+        return false;
+    }
+
     // set default uniforms
     glUniform1f(glGetUniformLocation(_shaderHandler->program, "u_time"), time::Time::Instance().GetTime());
     glUniform1f(glGetUniformLocation(_shaderHandler->program, "u_time_delta"), time::Time::Instance().GetDeltaTime());
@@ -650,6 +662,7 @@ void Renderer::SetDefaultUniforms() {
     glUniformMatrix4fv(glGetUniformLocation(_shaderHandler->program, "u_model_view_projection"), 1, GL_FALSE, &GetModel()[0][0]);
     /// TODO: set resolution from viewport
     glUniform2f(glGetUniformLocation(_shaderHandler->program, "u_resolution"), 0.0f, 0.0f);
+    return true;
 }
 
 
