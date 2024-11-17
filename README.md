@@ -46,6 +46,7 @@ A simple 2D/3D game library using a module based system inspired by pygame/love2
 - [x] Allow objects to be created before initialisation
 - [ ] Custom shader auto binding layer
 - [x] User managed resources
+- [ ] Support manual calls and base app extension
 
 
 ## Modules
