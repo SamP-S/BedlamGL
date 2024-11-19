@@ -53,15 +53,10 @@ target_link_libraries(marathon PUBLIC ${GLEW_LIBRARIES})
 message(STATUS "GLEW included at ${GLEW_INCLUDE_DIRS}")
 message(STATUS "GLEW libraries are ${GLEW_LIBRARIES}")
 
-# # runtime
-# add_executable(bedlam "test/bedlam/src/main.cpp")
-# target_include_directories(bedlam PUBLIC "test/bedlam/include")
-# target_link_libraries(bedlam PUBLIC marathon)
-
-# test no driver
-add_executable(no_driver "test/no_driver/src/main.cpp")
-target_include_directories(no_driver PUBLIC "test/no_driver/include")
-target_link_libraries(no_driver PUBLIC marathon)
+# runtime
+add_executable(example "test/example/src/main.cpp")
+target_include_directories(example PUBLIC "test/example/include")
+target_link_libraries(example PUBLIC marathon)
 
 
 add_executable(la_test "test/la_test.cpp")
