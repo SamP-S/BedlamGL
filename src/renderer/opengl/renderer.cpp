@@ -154,6 +154,10 @@ bool Renderer::Shutdown() {
 // validation
 /// TODO: currently does not consider if user shader is dirty
 bool Renderer::ValidateShader(std::shared_ptr<Shader> shader, std::string& err) {
+    if (shader == nullptr) {
+        err = "Shader is null\n";
+        return false;
+    }
     int shaderHandlerIdx = FindOrCreateShaderHandler(shader);
     ShaderHandler& shaderHandler = _shaderHandlers[shaderHandlerIdx];
     if (shaderHandler.isValid) {
@@ -165,6 +169,10 @@ bool Renderer::ValidateShader(std::shared_ptr<Shader> shader, std::string& err) 
 
 /// TODO: currently does not consider if user shader is dirty
 bool Renderer::ValidateMesh(std::shared_ptr<Mesh> mesh, std::string& err) {
+    if (mesh == nullptr) {
+        err = "Mesh is null\n";
+        return false;
+    }
     int meshHandlerIdx = FindOrCreateMeshHandler(mesh);
     MeshHandler& meshHandler = _meshHandlers[meshHandlerIdx];
     if (meshHandler.isValid) {

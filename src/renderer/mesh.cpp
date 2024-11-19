@@ -242,6 +242,133 @@ void Mesh::Clear() {
 }
 
 
+/// --- BoxMesh --- ///
+/// TODO: allow for not always reallocating during generation
+BoxMesh::BoxMesh() {
+    Generate();
+}
+
+BoxMesh::~BoxMesh() {}
+
+LA::vec3 BoxMesh::GetSize() const {
+    return _size;
+}
+
+void BoxMesh::SetSize(LA::vec3 size) {
+    _size = size;
+    Generate();
+}
+
+void BoxMesh::Generate() {
+    // setup vertex data format
+    std::vector<VertexAttributeDescriptor> attributes = {
+        {VertexAttribute::POSITION, 3, VertexAttributeFormat::FLOAT},
+        {VertexAttribute::NORMAL, 3, VertexAttributeFormat::FLOAT},
+        {VertexAttribute::TEXCOORD0, 2, VertexAttributeFormat::FLOAT}
+    };
+    SetVertexParams(24, attributes);
+
+    float half_x = _size.x / 2.0f;
+    float half_y = _size.y / 2.0f;
+    float half_z = _size.z / 2.0f;
+    float vertices[] = {
+        // Positions                   // Normals           // TexCoords
+        -half_x, -half_y, -half_z,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+         half_x, -half_y, -half_z,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+         half_x,  half_y, -half_z,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+        -half_x,  half_y, -half_z,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+
+        -half_x, -half_y,  half_z,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
+         half_x, -half_y,  half_z,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
+         half_x,  half_y,  half_z,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
+        -half_x,  half_y,  half_z,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
+
+        -half_x,  half_y,  half_z, -1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+        -half_x,  half_y, -half_z, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+        -half_x, -half_y, -half_z, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+        -half_x, -half_y,  half_z, -1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+
+         half_x,  half_y,  half_z,  1.0f,  0.0f,  0.0f,  1.0f, 0.0f,
+         half_x,  half_y, -half_z,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f,
+         half_x, -half_y, -half_z,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f,
+         half_x, -half_y,  half_z,  1.0f,  0.0f,  0.0f,  0.0f, 0.0f,
+
+        -half_x, -half_y, -half_z,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+         half_x, -half_y, -half_z,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+         half_x, -half_y,  half_z,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+        -half_x, -half_y,  half_z,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+
+        -half_x,  half_y, -half_z,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+         half_x,  half_y, -half_z,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
+         half_x,  half_y,  half_z,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+        -half_x,  half_y,  half_z,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f
+    };
+    SetVertexData((void*)vertices, sizeof(vertices), 0, 0);
+
+    unsigned int indices[] = {
+        0, 1, 2, 2, 3, 0,
+        4, 5, 6, 6, 7, 4,
+        8, 9, 10, 10, 11, 8,
+        12, 13, 14, 14, 15, 12,
+        16, 17, 18, 18, 19, 16,
+        20, 21, 22, 22, 23, 20
+    };
+    SetIndexParams(36, IndexFormat::UINT32, PrimitiveType::TRIANGLES);
+    SetIndexData(indices, sizeof(indices), 0, 0);
+}
+
+/// --- QuadMesh --- ///
+QuadMesh::QuadMesh() {
+    Generate();
+}
+
+QuadMesh::~QuadMesh() {}
+
+LA::vec2 QuadMesh::GetSize() const {
+    return _size;
+}
+
+void QuadMesh::SetSize(LA::vec2 size) {
+    _size = size;
+    Generate();
+}
+
+void QuadMesh::Generate() {
+    // setup vertex data format
+    std::vector<VertexAttributeDescriptor> attributes = {
+        {VertexAttribute::POSITION, 3, VertexAttributeFormat::FLOAT},
+        {VertexAttribute::NORMAL, 3, VertexAttributeFormat::FLOAT},
+        {VertexAttribute::TEXCOORD0, 2, VertexAttributeFormat::FLOAT}
+    };
+    SetVertexParams(8, attributes);
+
+    float half_x = _size.x / 2.0f;
+    float half_y = _size.y / 2.0f;
+
+    float vertices[] = {
+        // Positions             // Normals           // TexCoords
+        -half_x, -half_y, 0.0f,  0.0f,  0.0f, -1.0f,  0.0f, 0.0f,
+         half_x, -half_y, 0.0f,  0.0f,  0.0f, -1.0f,  1.0f, 0.0f,
+         half_x,  half_y, 0.0f,  0.0f,  0.0f, -1.0f,  1.0f, 1.0f,
+        -half_x,  half_y, 0.0f,  0.0f,  0.0f, -1.0f,  0.0f, 1.0f,
+
+        -half_x, -half_y, 0.0f,  0.0f,  0.0f,  1.0f,  0.0f, 0.0f,
+         half_x, -half_y, 0.0f,  0.0f,  0.0f,  1.0f,  1.0f, 0.0f,
+         half_x,  half_y, 0.0f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f,
+        -half_x,  half_y, 0.0f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f,
+
+    };
+    SetVertexData((void*)vertices, sizeof(vertices), 0, 0);
+
+    unsigned int indices[] = {
+        0, 1, 2, 2, 3, 0,
+        4, 5, 6, 6, 7, 4
+    };
+    SetIndexParams(12, IndexFormat::UINT32, PrimitiveType::TRIANGLES);
+    SetIndexData(indices, sizeof(indices), 0, 0);
+}
+
+
 } // namespace renderer
 
 } // namespace marathon

@@ -195,6 +195,35 @@ public:
     void SetIndexData(void* data, size_t size, size_t src_start, size_t dest_start);
 };
 
+class BoxMesh : public Mesh {
+protected:
+    LA::vec3 _size = {1.0f, 1.0f, 1.0f};
+
+    void Generate();
+
+public:
+    BoxMesh();
+    ~BoxMesh();
+
+    LA::vec3 GetSize() const;
+    void SetSize(LA::vec3 size);
+};
+
+class QuadMesh : public Mesh {
+protected:
+    LA::vec2 _size = {1.0f, 1.0f};
+
+    void Generate();
+
+public:
+    QuadMesh();
+    ~QuadMesh();
+
+    LA::vec2 GetSize() const;
+    void SetSize(LA::vec2 size);
+};
+
+
 } // renderer
 
 } // marathon
