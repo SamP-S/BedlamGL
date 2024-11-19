@@ -4,7 +4,8 @@ namespace marathon {
     
 class App {
 private:
-    bool _mQuit = false;   
+    bool _mQuit = false;
+    bool _mFailed = false;
 
 protected:
     App();
@@ -20,7 +21,7 @@ public:
 
     // virtual methods for user to implement
     virtual void Start() = 0;
-    virtual void Update(double delta_time) = 0;
+    virtual void Update(double deltaTime) = 0;
     
 };
 

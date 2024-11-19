@@ -1,5 +1,6 @@
 #include "runtime/app.hpp"
 
+#include "marathon.hpp"
 #include "window/window.hpp"
 #include "events/events.hpp"
 #include "time/time.hpp"
@@ -9,19 +10,30 @@ namespace marathon {
 App::App() {}
 App::~App() {}
 
+/// TODO: ensure Init/Quit are successful
+
 // boot systems and modules
 void App::Boot() {
-    std::cout << "App::Boot()" << std::endl;
+    if (marathon::Init() != 0) {
+        std::cout << "Failed to initialise marathon. :(" << std::endl;
+        _mFailed = true;
+    }
 }
 
 // shutdown systems and modules
 void App::Shutdown() {
-    std::cout << "App::Shutdown()" << std::endl;
+    if (marathon::Quit() != 0) {
+        std::cout << "Failed to quit marathon. :(" << std::endl;
+        _mFailed = true;
+    }
 }
 
 void App::Run() {
     // boot all systems and modules
     Boot();
+    if (_mFailed) {
+        return;
+    }
 
     // main game loop
     while (!_mQuit) {
@@ -38,6 +50,9 @@ void App::Run() {
 
     // shutdown safely
     Shutdown();
+    if (_mFailed) {
+        return;
+    }
 }
 
 void App::Quit() {
