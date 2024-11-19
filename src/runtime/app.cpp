@@ -29,11 +29,14 @@ void App::Shutdown() {
 }
 
 void App::Run() {
-    // boot all systems and modules
+    // internal boot all systems and modules
     Boot();
     if (_mFailed) {
         return;
     }
+
+    // user defined start
+    Start();
 
     // main game loop
     while (!_mQuit) {
@@ -42,13 +45,14 @@ void App::Run() {
         
         // interactive tick
         double dt = time::Time::Instance().Tick();
+        // user defined update
         Update(dt);
         
         // swap frame shown
         window::Window::Instance().SwapFrame();
     }
 
-    // shutdown safely
+    // internal shutdown safely
     Shutdown();
     if (_mFailed) {
         return;
