@@ -317,6 +317,8 @@ void BoxMesh::Generate() {
     SetIndexData(indices, sizeof(indices), 0, 0);
 }
 
+
+
 /// --- QuadMesh --- ///
 QuadMesh::QuadMesh() {
     Generate();
@@ -365,6 +367,57 @@ void QuadMesh::Generate() {
         4, 5, 6, 6, 7, 4
     };
     SetIndexParams(12, IndexFormat::UINT32, PrimitiveType::TRIANGLES);
+    SetIndexData(indices, sizeof(indices), 0, 0);
+}
+
+
+
+/// --- PlaneMesh --- ///
+PlaneMesh::PlaneMesh() {
+    Generate();
+}
+
+PlaneMesh::~PlaneMesh() {}
+
+LA::vec2 PlaneMesh::GetSize() const {
+    return _size;
+}
+
+void PlaneMesh::SetSize(LA::vec2 size) {
+    _size = size;
+    Generate();
+}
+
+void PlaneMesh::Generate() {
+    // setup vertex data format
+    std::vector<VertexAttributeDescriptor> attributes = {
+        {VertexAttribute::POSITION, 3, VertexAttributeFormat::FLOAT},
+        {VertexAttribute::NORMAL, 3, VertexAttributeFormat::FLOAT},
+        {VertexAttribute::TEXCOORD0, 2, VertexAttributeFormat::FLOAT}
+    };
+    SetVertexParams(24, attributes);
+
+    float half_x = _size.x / 2.0f;
+    float half_y = _size.y / 2.0f;
+    float vertices[] = {
+        // Positions             // Normals           // TexCoords
+        -half_x, 0.0f, -half_y,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f,
+         half_x, 0.0f, -half_y,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f,
+         half_x, 0.0f,  half_y,  0.0f, -1.0f,  0.0f,  1.0f, 0.0f,
+        -half_x, 0.0f,  half_y,  0.0f, -1.0f,  0.0f,  0.0f, 0.0f,
+
+        -half_x, 0.0f, -half_y,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f,
+         half_x, 0.0f, -half_y,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f,
+         half_x, 0.0f,  half_y,  0.0f,  1.0f,  0.0f,  1.0f, 0.0f,
+        -half_x, 0.0f,  half_y,  0.0f,  1.0f,  0.0f,  0.0f, 0.0f
+    };
+    SetVertexData((void*)vertices, sizeof(vertices), 0, 0);
+
+    unsigned int indices[] = {
+        0, 1, 2, 2, 3, 0,
+        4, 5, 6, 6, 7, 4
+    };
+    SetIndexParams(36, IndexFormat::UINT32, PrimitiveType::TRIANGLES);
     SetIndexData(indices, sizeof(indices), 0, 0);
 }
 

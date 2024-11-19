@@ -223,6 +223,20 @@ public:
     void SetSize(LA::vec2 size);
 };
 
+class PlaneMesh : public Mesh {
+protected:
+    LA::vec2 _size = {1.0f, 1.0f};
+
+    void Generate();
+
+public:
+    PlaneMesh();
+    ~PlaneMesh();
+
+    LA::vec2 GetSize() const;
+    void SetSize(LA::vec2 size);
+};
+
 
 } // renderer
 
