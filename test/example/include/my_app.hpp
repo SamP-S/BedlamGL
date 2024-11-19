@@ -22,7 +22,7 @@ class MyApp : public App {
 private:
     MyObject _obj; MyObject _obj2; MyObject _obj3;
     std::shared_ptr<renderer::Shader> _shader;
-    std::shared_ptr<renderer::Mesh> _triangleMesh;
+    std::shared_ptr<renderer::Mesh> _planeMesh;
     std::shared_ptr<renderer::Mesh> _quadMesh;
     std::shared_ptr<renderer::Mesh> _cubeMesh;
 
@@ -45,27 +45,19 @@ public:
         // create mesh with vbo & ibo
         _quadMesh = std::make_shared<renderer::QuadMesh>();
         _cubeMesh = std::make_shared<renderer::BoxMesh>();
+        _planeMesh = std::make_shared<renderer::PlaneMesh>();
 
         // create object
         _obj = MyObject();
         _obj.color = {1.0f, 0.2f, 0.2f, 1.0f};
-        _obj.mesh = _triangleMesh;
-
-        // create object
-        _obj2 = MyObject();
-        _obj2.color = {0.2f, 0.2f, 1.0f, 1.0f};
-        _obj2.mesh = _quadMesh;
-
-        _obj3 = MyObject();
-        _obj3.color = {0.2f, 1.0f, 0.2f, 1.0f};
-        _obj3.mesh = _cubeMesh;
+        _obj.mesh = _planeMesh;
 
         std::string err = "";
         if (!Renderer.ValidateShader(_shader, err)) {
             std::cout << "bedlam/include/runtime.hpp: shader validation failed: \n" << err << std::endl;
         }
-        if (!Renderer.ValidateMesh(_triangleMesh, err)) {
-            std::cout << "bedlam/include/runtime.hpp: triangle mesh validation failed: \n" << err << std::endl;
+        if (!Renderer.ValidateMesh(_planeMesh, err)) {
+            std::cout << "bedlam/include/runtime.hpp: plane mesh validation failed: \n" << err << std::endl;
         }
         if (!Renderer.ValidateMesh(_quadMesh, err)) {
             std::cout << "bedlam/include/runtime.hpp: quad mesh validation failed: " << err << std::endl;
@@ -83,11 +75,24 @@ public:
         }
 
         double time = Time.GetTime();
-        _obj.position.x = 0.5f * sin(time);
-        _obj2.position.y = 0.5f * cos(time * 2);
-        _obj3.rotation.y = time * 40.0f;
-        _obj3.rotation.x = time * 20.0f;
-        // std::cout << "bedlam/include/runtime.hpp: time = " << time << " :: sin = " << sin(time) << std::endl;
+        _obj.position.x = 0.25f * sin(time);
+        _obj.position.y = 0.2f * cos(time * 2);
+        _obj.rotation.y = time * 4.0f;
+        _obj.rotation.x = time * 2.0f;
+
+        int meshIdx = (int)time % 3;
+        switch (meshIdx) {
+            case 0:
+                _obj.mesh = _cubeMesh;
+                break;
+            case 1:
+                _obj.mesh = _quadMesh;
+                break;
+            case 2:
+            default:
+                _obj.mesh = _planeMesh;
+                break;
+        }
 
         // make draw call of obj at position
         Renderer.Clear();
@@ -96,20 +101,10 @@ public:
         
         Renderer.PushScale({0.5f, 0.5f, 0.5f}); // scale down
 
-        // draw triangle
-        Renderer.PushTranslate(_obj.position);
-        //Renderer.Draw(_obj.mesh);
-        Renderer.PopTransform();
-
-        // draw quad
-        Renderer.PushTranslate(_obj2.position);
-        //Renderer.Draw(_obj2.mesh);
-        Renderer.PopTransform();
-
         // draw cube
-        Renderer.PushRotate(_obj3.rotation);
-        Renderer.PushTranslate(_obj3.position);
-        Renderer.Draw(_obj3.mesh);
+        Renderer.PushRotate(_obj.rotation);
+        Renderer.PushTranslate(_obj.position);
+        Renderer.Draw(_obj.mesh);
         Renderer.PopTransform();
         Renderer.PopTransform();
 
