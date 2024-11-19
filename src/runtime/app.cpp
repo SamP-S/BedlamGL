@@ -19,11 +19,6 @@ void App::Shutdown() {
     std::cout << "App::Shutdown()" << std::endl;
 }
 
-
-void App::Update(double delta_time) {
-    std::cout << "App::Update(" << delta_time << ")" << std::endl;
-}
-
 void App::Run() {
     // boot all systems and modules
     Boot();
@@ -48,5 +43,6 @@ void App::Run() {
 void App::Quit() {
     _mQuit = true;
 }
+
 
 } // namespace marathon

@@ -10,13 +10,18 @@ protected:
     App();
     ~App();
 
-    virtual void Boot();
-    virtual void Shutdown();
-    virtual void Update(double delta_time);
+    void Boot();
+    void Shutdown();
 
 public:
-    virtual void Run();
-    virtual void Quit();
+    // main methods for user to use
+    void Run();
+    void Quit();
+
+    // virtual methods for user to implement
+    virtual void Start() = 0;
+    virtual void Update(double delta_time) = 0;
+    
 };
 
 } // namespace marathon
