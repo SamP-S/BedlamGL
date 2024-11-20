@@ -137,13 +137,6 @@ protected:
     // index maps
     static const std::unordered_map<IndexFormat, size_t> s_indexFormatMap;
 
-    /// --- INTERNAL ---
-    int GetVertexAttributeIndex(VertexAttribute attr) const;
-
-public:
-    // create empty mesh
-    Mesh();
-    ~Mesh();
 
     // clear all data
     void Clear();
@@ -153,21 +146,8 @@ public:
     void ClearVertices();
     // call to stop data being uploaded to GPU next frame
     void ClearVertexDirtyFlag();
-
-    // getters
-    const void* GetVertexPtr() const;
-    int GetVertexCount() const;
-    std::vector<VertexAttributeDescriptor> GetVertexAttributes() const;
-    DataDirty GetVertexDirtyFlag() const;
-
-    // helper getters
-    bool HasVertexAttribute(VertexAttribute attr) const;
-    int GetVertexAttributeLocation(VertexAttribute attr) const;
-    int GetVertexAttributeComponents(VertexAttribute attr) const;
-    VertexAttributeFormat GetVertexAttributeFormat(VertexAttribute attr) const;
-    size_t GetVertexAttributeOffset(VertexAttribute attr) const;
-    size_t GetVertexSize() const;
-    
+    // INTERNAL get attribute index in descriptor list
+    int GetVertexAttributeIndex(VertexAttribute attr) const;
     // allocates memory according to attributes, vertex data expected to be interleaved in provided order
     void SetVertexParams(int vertexCount, std::vector<VertexAttributeDescriptor> attributes);
     // will error if size/offset data range outside expected
@@ -179,20 +159,36 @@ public:
     void ClearIndices();
     // call to stop data being uploaded to GPU next frame
     void ClearIndexDirtyFlag();
+    // set index data formatting
+    void SetIndexParams(int indexCount, IndexFormat format, PrimitiveType primitive);
+    // will error if size/offset data range outside expected
+    // use SetIndexParams to reallocate buffer size if needed
+    void SetIndexData(void* data, size_t size, size_t src_start, size_t dest_start);
 
-    // getters
+public:
+    // create empty mesh
+    Mesh();
+    ~Mesh();
+
+    // vbo getters
+    const void* GetVertexPtr() const;
+    int GetVertexCount() const;
+    std::vector<VertexAttributeDescriptor> GetVertexAttributes() const;
+    DataDirty GetVertexDirtyFlag() const;
+    bool HasVertexAttribute(VertexAttribute attr) const;
+    int GetVertexAttributeLocation(VertexAttribute attr) const;
+    int GetVertexAttributeComponents(VertexAttribute attr) const;
+    VertexAttributeFormat GetVertexAttributeFormat(VertexAttribute attr) const;
+    size_t GetVertexAttributeOffset(VertexAttribute attr) const;
+    size_t GetVertexSize() const;
+
+    // ibo getters
     const void* GetIndexPtr() const;
     int GetIndexCount() const;
     size_t GetIndexSize() const;
     IndexFormat GetIndexFormat() const;
     PrimitiveType GetPrimitiveType() const;
     DataDirty GetIndexDirtyFlag() const;
-
-    // set index data formatting
-    void SetIndexParams(int indexCount, IndexFormat format, PrimitiveType primitive);
-    // will error if size/offset data range outside expected
-    // use SetIndexParams to reallocate buffer size if needed
-    void SetIndexData(void* data, size_t size, size_t src_start, size_t dest_start);
 };
 
 /// TODO: implement mesh subdivision
@@ -237,6 +233,27 @@ public:
 
     LA::vec2 GetSize() const;
     void SetSize(LA::vec2 size);
+};
+
+class RawMesh : public Mesh {
+public:
+    RawMesh();
+    ~RawMesh();
+
+    // mesh operations
+    using Mesh::Clear;
+
+    // vbo
+    using Mesh::ClearVertices;
+    using Mesh::ClearVertexDirtyFlag;
+    using Mesh::SetVertexParams;
+    using Mesh::SetVertexData;
+
+    // ibo
+    using Mesh::ClearIndices;
+    using Mesh::ClearIndexDirtyFlag;
+    using Mesh::SetIndexParams;
+    using Mesh::SetIndexData;
 };
 
 

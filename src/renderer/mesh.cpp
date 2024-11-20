@@ -421,6 +421,12 @@ void PlaneMesh::Generate() {
     SetIndexData(indices, sizeof(indices), 0, 0);
 }
 
+// ensure to call base class constructor
+RawMesh::RawMesh()
+    : Mesh() {}
+// base class destructor is called automatically
+RawMesh::~RawMesh() {}
+
 
 } // namespace renderer
 

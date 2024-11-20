@@ -23,7 +23,7 @@ struct MyObject {
 class MyApp : public App {
 private:
     MyObject _obj; MyObject _obj2; MyObject _obj3;
-    std::shared_ptr<renderer::Shader> _shader;
+    std::shared_ptr<renderer::Material> _colourMaterial;
     std::shared_ptr<renderer::Mesh> _planeMesh;
     std::shared_ptr<renderer::Mesh> _quadMesh;
     std::shared_ptr<renderer::Mesh> _cubeMesh;
@@ -39,9 +39,8 @@ public:
     ~MyApp() = default;
 
     void Start() override {
-        // create defaults
-        _shader = std::make_shared<renderer::Shader>();
-
+        // create material
+        _colourMaterial = std::make_shared<renderer::ColourMaterial>();
         // create mesh with vbo & ibo
         _quadMesh = std::make_shared<renderer::QuadMesh>();
         _cubeMesh = std::make_shared<renderer::BoxMesh>();
@@ -53,7 +52,7 @@ public:
         _obj.mesh = _planeMesh;
 
         std::string err = "";
-        if (!Renderer.ValidateShader(_shader, err)) {
+        if (!Renderer.ValidateShader(_colourMaterial->GetShader(), err)) {
             std::cout << "bedlam/include/runtime.hpp: shader validation failed: \n" << err << std::endl;
         }
         if (!Renderer.ValidateMesh(_planeMesh, err)) {
@@ -65,6 +64,8 @@ public:
         if (!Renderer.ValidateMesh(_cubeMesh, err)) {
             std::cout << "bedlam/include/runtime.hpp: quad mesh validation failed: " << err << std::endl;
         }
+
+        std::cout << "start complete" << std::endl;
     }
 
     void Update(double deltaTime) override {
@@ -99,7 +100,7 @@ public:
 
         // make draw call of obj at position
         Renderer.Clear();
-        Renderer.SetShader(_shader);
+        Renderer.SetShader(_colourMaterial->GetShader());
         Renderer.SetDepthTest(true);
         
         Renderer.PushScale({0.5f, 0.5f, 0.5f}); // scale down
