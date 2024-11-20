@@ -216,7 +216,7 @@ void Renderer::Draw(std::shared_ptr<Mesh> mesh) {
         return;
     }
 
-    if (!(mesh->GetMaterial() == nullptr)) {
+    if (mesh->GetMaterial() == nullptr) {
         std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::Draw: mesh has no material" << std::endl;
         return;
     }
@@ -719,11 +719,15 @@ bool Renderer::SetMaterialUniforms(std::shared_ptr<Material> material) {
         std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::SetMaterialUniforms: no shader bound" << std::endl;
         return false;
     }
-    for (const auto& pair : material->GetUniforms()) {
-        if (!SetUniform(pair.first, pair.second)) {
-            std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::SetMaterialUniforms: failed to set uniform \"" << pair.first << "\"" << std::endl;
+    // iterate through uniform map
+    std::unordered_map<std::string, UniformProperty>& uniforms = material->GetUniforms();
+    for (auto it = uniforms.begin(); it != uniforms.end(); ++it) {
+        if (!SetUniform(it->first, it->second)) {
+            std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::SetMaterialUniforms: failed to set uniform \"" << it->first << "\"" << std::endl;
+            return false;
         }
     }
+    return true;
 }
 
 
