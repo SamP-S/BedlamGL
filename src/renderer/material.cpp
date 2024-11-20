@@ -28,7 +28,7 @@ bool Material::HasUniform(const std::string& key) const {
     return _mUniforms.find(key) != _mUniforms.end();
 }
 
-std::unordered_map<std::string, UniformProperty>& Material::GetUniforms() {
+const std::unordered_map<std::string, UniformProperty>& Material::GetUniforms() const {
     return _mUniforms;
 }
 

@@ -720,7 +720,7 @@ bool Renderer::SetMaterialUniforms(std::shared_ptr<Material> material) {
         return false;
     }
     // iterate through uniform map
-    std::unordered_map<std::string, UniformProperty>& uniforms = material->GetUniforms();
+    const std::unordered_map<std::string, UniformProperty>& uniforms = material->GetUniforms();
     for (auto it = uniforms.begin(); it != uniforms.end(); ++it) {
         if (!SetUniform(it->first, it->second)) {
             std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::SetMaterialUniforms: failed to set uniform \"" << it->first << "\"" << std::endl;

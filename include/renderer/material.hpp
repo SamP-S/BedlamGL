@@ -30,7 +30,7 @@ public:
     void SetShader(std::shared_ptr<renderer::Shader> shader);
 
     bool HasUniform(const std::string& key) const;
-    std::unordered_map<std::string, UniformProperty>& GetUniforms();
+    const std::unordered_map<std::string, UniformProperty>& GetUniforms() const;
     UniformProperty GetUniform(const std::string& key) const;
     void SetUniform(const std::string& key, UniformProperty value);
 };
