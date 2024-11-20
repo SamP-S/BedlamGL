@@ -139,13 +139,13 @@ void Mesh::SetVertexData(void* data, size_t size, size_t src_start, size_t dest_
     size_t dataSize = vertexSize * _vertexCount;
     // catch fucky wuckys
     if (data == nullptr) {
-        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetVertexData() data is nullptr" << std::endl;
+        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetVertexData(): data is nullptr" << std::endl;
         return;
     } else if (_vertexData == nullptr) {
-        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetVertexData() vertex data is nullptr" << std::endl;
+        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetVertexData(): vertex data is nullptr" << std::endl;
         return;
     } else if (size + src_start > dataSize - dest_start) {
-        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetVertexData() data range out of bounds" << std::endl;
+        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetVertexData(): data range out of bounds" << std::endl;
         return;
     }
     // copy data

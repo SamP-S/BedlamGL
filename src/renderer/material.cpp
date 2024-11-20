@@ -7,7 +7,36 @@ namespace marathon {
 
 namespace renderer {
 
+    Material::Material() {
+        _mShader = std::make_shared<Shader>();
+    }
 
+    Material::~Material() {}
+
+    std::shared_ptr<Shader> Material::GetShader() const {
+        return _mShader;
+    }
+
+    void Material::SetShader(std::shared_ptr<Shader> shader) {
+        _mShader = shader;
+    }
+
+    bool Material::HasUniform(const std::string& key) const {
+        return _mUniforms.find(key) != _mUniforms.end();
+    }
+
+    UniformProperty Material::GetUniform(const std::string& key) const {
+        auto it = _mUniforms.find(key);
+        if (it == _mUniforms.end()) {
+            std::cout << "src/renderer/material.cpp: ERROR @ Material::GetUniform(): uniform \"" << key << "\" not found in material uniforms" << std::endl;
+            return UniformProperty(); // return default constructed UniformProperty
+        }
+        return it->second;
+    }
+
+    void Material::SetUniform(const std::string& key, UniformProperty value) {
+        _mUniforms[key] = value;
+    }
 
 std::string ColourMaterial::_sVertexSource = R"(
 void main()
@@ -20,24 +49,46 @@ std::string ColourMaterial::_sFragmentSource = R"(
 // outputs
 layout(location = 0) out vec4 out_color;
 
+uniform vec4 u_colour;
+
 void main()
 {
-    out_color = varying_position;
-    // out_color = vec4(1, 1, 1, 1);
+    out_color = u_colour;
 }
 )";
 
 ColourMaterial::ColourMaterial() {
+    // create shader
     _mShader = std::make_shared<Shader>();
     _mShader->SetSources(_sVertexSource, _sFragmentSource);
+
+    _mUniforms["u_colour"] = LA::vec4({1.0f, 1.0f, 1.0f, 1.0f});
 };
 ColourMaterial::~ColourMaterial() {};
 
 LA::vec4 ColourMaterial::GetColour() const {
-    return _mColour;
+    auto it = _mUniforms.find("u_colour");
+    // check if uniform key in map
+    if (it == _mUniforms.end()) {
+        std::cout << "src/renderer/material.cpp: ERROR @ ColourMaterial::GetColour(): uniform \"u_colour\" not found in material uniforms" << std::endl;
+        return LA::vec4(1.0f);
+    }
+    // check uniform type is correct
+    if (!std::holds_alternative<LA::vec4>(it->second)) {
+        std::cout << "src/renderer/material.cpp: ERROR @ ColourMaterial::GetColour(): uniform \"u_colour\" variant does not contain correct type" << std::endl;
+        return LA::vec4(1.0f);
+    }
+    return std::get<LA::vec4>(it->second);
+
 }
 void ColourMaterial::SetColour(LA::vec4 colour) {
-    _mColour = colour;
+    auto it = _mUniforms.find("u_colour");
+    // check if uniform key in map
+    if (it == _mUniforms.end()) {
+        std::cout << "src/renderer/material.cpp: WARNING @ ColourMaterial::SetColour(): uniform \"u_colour\" not found in material uniforms" << std::endl;
+    }
+    // assign/reassign/create either way
+    _mUniforms["u_colour"] = colour;
 }
 
 } // renderer
