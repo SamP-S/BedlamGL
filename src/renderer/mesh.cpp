@@ -241,6 +241,14 @@ void Mesh::Clear() {
     _indexDataDirty = DataDirty::DIRTY_DELETE;
 }
 
+std::shared_ptr<Material> Mesh::GetMaterial() const {
+    return _material;
+}
+
+void Mesh::SetMaterial(std::shared_ptr<Material> material) {
+    _material = material;
+}
+
 
 /// --- BoxMesh --- ///
 /// TODO: allow for not always reallocating during generation

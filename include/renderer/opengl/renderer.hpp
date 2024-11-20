@@ -5,6 +5,7 @@
 
 #include "renderer/mesh.hpp"
 #include "renderer/shader.hpp"
+#include "renderer/material.hpp"
 #include "renderer/opengl/opengl.hpp"
 #include "renderer/renderer.hpp"
 
@@ -81,6 +82,7 @@ protected:
     int FindOrCreateMeshHandler(std::shared_ptr<Mesh> mesh);
     
     bool SetDefaultUniforms();
+    bool SetMaterialUniforms(std::shared_ptr<Material> material);
 
 public:
     Renderer();
@@ -156,6 +158,8 @@ public:
     bool SetUniform(const std::string& key, const LA::mat2& m) override;
     bool SetUniform(const std::string& key, const LA::mat3& m) override;
     bool SetUniform(const std::string& key, const LA::mat4& m) override;
+    // uniform property
+    bool SetUniform(const std::string& key, const UniformProperty& value) override;
 
 };
 

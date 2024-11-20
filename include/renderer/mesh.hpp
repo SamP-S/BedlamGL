@@ -14,6 +14,7 @@
 
 #include "la_extended.h"
 #include "core/resource.hpp"
+#include "renderer/material.hpp"
 
 namespace marathon {
 
@@ -165,6 +166,9 @@ protected:
     // use SetIndexParams to reallocate buffer size if needed
     void SetIndexData(void* data, size_t size, size_t src_start, size_t dest_start);
 
+    /// --- Material ---
+    std::shared_ptr<Material> _material = nullptr;
+    
 public:
     // create empty mesh
     Mesh();
@@ -189,6 +193,10 @@ public:
     IndexFormat GetIndexFormat() const;
     PrimitiveType GetPrimitiveType() const;
     DataDirty GetIndexDirtyFlag() const;
+
+    // material
+    std::shared_ptr<Material> GetMaterial() const;
+    void SetMaterial(std::shared_ptr<Material> material);
 };
 
 /// TODO: implement mesh subdivision

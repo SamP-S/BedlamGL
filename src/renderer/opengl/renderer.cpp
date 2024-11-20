@@ -216,6 +216,13 @@ void Renderer::Draw(std::shared_ptr<Mesh> mesh) {
         return;
     }
 
+    if (!(mesh->GetMaterial() == nullptr)) {
+        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::Draw: mesh has no material" << std::endl;
+        return;
+    }
+    // set shader to material shader
+    SetShader(mesh->GetMaterial()->GetShader());
+
     if (_shaderHandler == nullptr) {
         std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::Draw: no shader bound" << std::endl;
         return;
@@ -228,6 +235,10 @@ void Renderer::Draw(std::shared_ptr<Mesh> mesh) {
 
     if (!SetDefaultUniforms()) {
         std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::Draw: failed to set default uniforms" << std::endl;
+    }
+
+    if (!SetMaterialUniforms(mesh->GetMaterial())) {
+        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::Draw: failed to set material uniforms" << std::endl;
     }
     
     int meshHandlerIdx = FindOrCreateMeshHandler(mesh);
@@ -654,6 +665,31 @@ bool Renderer::SetUniform(const std::string& key, const LA::mat4& m) {
     return true;
 }
 
+bool Renderer::SetUniform(const std::string& key, const UniformProperty& value) {
+    if (std::holds_alternative<int>(value)) {
+        return SetUniform(key, std::get<int>(value));
+    } else if (std::holds_alternative<uint32_t>(value)) {
+        return SetUniform(key, std::get<uint32_t>(value));
+    } else if (std::holds_alternative<float>(value)) {
+        return SetUniform(key, std::get<float>(value));
+    } else if (std::holds_alternative<double>(value)) {
+        return SetUniform(key, std::get<double>(value));
+    } else if (std::holds_alternative<LA::vec2>(value)) {
+        return SetUniform(key, std::get<LA::vec2>(value));
+    } else if (std::holds_alternative<LA::vec3>(value)) {
+        return SetUniform(key, std::get<LA::vec3>(value));
+    } else if (std::holds_alternative<LA::vec4>(value)) {
+        return SetUniform(key, std::get<LA::vec4>(value));
+    } else if (std::holds_alternative<LA::mat2>(value)) {
+        return SetUniform(key, std::get<LA::mat2>(value));
+    } else if (std::holds_alternative<LA::mat3>(value)) {
+        return SetUniform(key, std::get<LA::mat3>(value));
+    } else if (std::holds_alternative<LA::mat4>(value)) {
+        return SetUniform(key, std::get<LA::mat4>(value));
+    }
+    return false;
+}
+
 bool Renderer::SetDefaultUniforms() {
     if (_shaderHandler == nullptr) {
         std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::HasUniform: no shader bound" << std::endl;
@@ -675,6 +711,19 @@ bool Renderer::SetDefaultUniforms() {
     /// TODO: set resolution from viewport
     glUniform2f(glGetUniformLocation(_shaderHandler->program, "u_resolution"), 0.0f, 0.0f);
     return true;
+}
+
+/// TODO: add validation
+bool Renderer::SetMaterialUniforms(std::shared_ptr<Material> material) {
+    if (_shaderHandler == nullptr) {
+        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::SetMaterialUniforms: no shader bound" << std::endl;
+        return false;
+    }
+    for (const auto& pair : material->GetUniforms()) {
+        if (!SetUniform(pair.first, pair.second)) {
+            std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::SetMaterialUniforms: failed to set uniform \"" << pair.first << "\"" << std::endl;
+        }
+    }
 }
 
 

@@ -43,8 +43,14 @@ public:
         _colourMaterial = std::make_shared<renderer::ColourMaterial>();
         // create mesh with vbo & ibo
         _quadMesh = std::make_shared<renderer::QuadMesh>();
+        _quadMesh->SetMaterial(_colourMaterial);
         _cubeMesh = std::make_shared<renderer::BoxMesh>();
+        _cubeMesh->SetMaterial(_colourMaterial);
         _planeMesh = std::make_shared<renderer::PlaneMesh>();
+        _planeMesh->SetMaterial(_colourMaterial);
+
+        // renderer setup
+        Renderer.SetDepthTest(true);
 
         // create object
         _obj = MyObject();
@@ -83,6 +89,9 @@ public:
         _obj.position.y = 0.2f * cos(time * 2);
         _obj.rotation.y = time * 4.0f;
         _obj.rotation.x = time * 2.0f;
+        _obj.color.r = 0.5f + 0.5f * sin(time);
+        _obj.color.g = 0.5f + 0.5f * cos(time);
+        _obj.color.b = 0.5f + 0.5f * sin(time * 2);
 
         int meshIdx = (int)time % 3;
         switch (meshIdx) {
@@ -100,9 +109,6 @@ public:
 
         // make draw call of obj at position
         Renderer.Clear();
-        Renderer.SetShader(_colourMaterial->GetShader());
-        Renderer.SetDepthTest(true);
-        
         Renderer.PushScale({0.5f, 0.5f, 0.5f}); // scale down
 
         // draw cube

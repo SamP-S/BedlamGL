@@ -7,36 +7,46 @@ namespace marathon {
 
 namespace renderer {
 
-    Material::Material() {
-        _mShader = std::make_shared<Shader>();
-    }
+//// Material -------------------------------------------------------------------
 
-    Material::~Material() {}
+Material::Material()
+    : Resource("marathon.renderer.material") {
+    _mShader = std::make_shared<Shader>();
+}
 
-    std::shared_ptr<Shader> Material::GetShader() const {
-        return _mShader;
-    }
+Material::~Material() {}
 
-    void Material::SetShader(std::shared_ptr<Shader> shader) {
-        _mShader = shader;
-    }
+std::shared_ptr<Shader> Material::GetShader() const {
+    return _mShader;
+}
 
-    bool Material::HasUniform(const std::string& key) const {
-        return _mUniforms.find(key) != _mUniforms.end();
-    }
+void Material::SetShader(std::shared_ptr<Shader> shader) {
+    _mShader = shader;
+}
 
-    UniformProperty Material::GetUniform(const std::string& key) const {
-        auto it = _mUniforms.find(key);
-        if (it == _mUniforms.end()) {
-            std::cout << "src/renderer/material.cpp: ERROR @ Material::GetUniform(): uniform \"" << key << "\" not found in material uniforms" << std::endl;
-            return UniformProperty(); // return default constructed UniformProperty
-        }
-        return it->second;
-    }
+bool Material::HasUniform(const std::string& key) const {
+    return _mUniforms.find(key) != _mUniforms.end();
+}
 
-    void Material::SetUniform(const std::string& key, UniformProperty value) {
-        _mUniforms[key] = value;
+const std::unordered_map<std::string, UniformProperty>& Material::GetUniforms() const {
+    return _mUniforms;
+}
+
+UniformProperty Material::GetUniform(const std::string& key) const {
+    auto it = _mUniforms.find(key);
+    if (it == _mUniforms.end()) {
+        std::cout << "src/renderer/material.cpp: ERROR @ Material::GetUniform(): uniform \"" << key << "\" not found in material uniforms" << std::endl;
+        return UniformProperty(); // return default constructed UniformProperty
     }
+    return it->second;
+}
+
+void Material::SetUniform(const std::string& key, UniformProperty value) {
+    _mUniforms[key] = value;
+}
+
+
+//// ColourMaterial ------------------------------------------------------------
 
 std::string ColourMaterial::_sVertexSource = R"(
 void main()
