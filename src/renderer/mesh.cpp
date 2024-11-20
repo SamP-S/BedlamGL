@@ -403,7 +403,7 @@ void PlaneMesh::Generate() {
         {VertexAttribute::NORMAL, 3, VertexAttributeFormat::FLOAT},
         {VertexAttribute::TEXCOORD0, 2, VertexAttributeFormat::FLOAT}
     };
-    SetVertexParams(24, attributes);
+    SetVertexParams(8, attributes);
 
     float half_x = _size.x / 2.0f;
     float half_y = _size.y / 2.0f;
