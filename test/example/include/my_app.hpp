@@ -14,16 +14,14 @@ using namespace marathon;
 struct MyObject {
     LA::vec3 position = LA::vec3();
     LA::vec3 rotation = LA::vec3();
-    LA::vec4 color = LA::vec4({1.0f, 1.0f, 1.0f, 1.0f});
     std::shared_ptr<renderer::Mesh> mesh = nullptr;
-    std::shared_ptr<renderer::Material> material = nullptr;
 };
 
 
 class MyApp : public App {
 private:
     MyObject _obj; MyObject _obj2; MyObject _obj3;
-    std::shared_ptr<renderer::Material> _colourMaterial;
+    std::shared_ptr<renderer::ColourMaterial> _colourMaterial;
     std::shared_ptr<renderer::Mesh> _planeMesh;
     std::shared_ptr<renderer::Mesh> _quadMesh;
     std::shared_ptr<renderer::Mesh> _cubeMesh;
@@ -54,7 +52,6 @@ public:
 
         // create object
         _obj = MyObject();
-        _obj.color = {1.0f, 0.2f, 0.2f, 1.0f};
         _obj.mesh = _planeMesh;
 
         std::string err = "";
@@ -89,9 +86,9 @@ public:
         _obj.position.y = 0.2f * cos(time * 2);
         _obj.rotation.y = time * 4.0f;
         _obj.rotation.x = time * 2.0f;
-        _obj.color.r = 0.5f + 0.5f * sin(time);
-        _obj.color.g = 0.5f + 0.5f * cos(time);
-        _obj.color.b = 0.5f + 0.5f * sin(time * 2);
+        _colourMaterial->SetColour(
+            LA::vec4({0.5f + sin(time), 0.5f + cos(time), 0.5f + sin(time * 2), 1.0f})
+        );
 
         int meshIdx = (int)time % 3;
         switch (meshIdx) {
