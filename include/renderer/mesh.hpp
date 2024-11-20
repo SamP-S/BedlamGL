@@ -195,6 +195,8 @@ public:
     void SetIndexData(void* data, size_t size, size_t src_start, size_t dest_start);
 };
 
+/// TODO: implement mesh subdivision
+
 class BoxMesh : public Mesh {
 protected:
     LA::vec3 _size = {1.0f, 1.0f, 1.0f};

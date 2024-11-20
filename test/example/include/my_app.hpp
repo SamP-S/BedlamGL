@@ -62,6 +62,9 @@ public:
         if (!Renderer.ValidateMesh(_quadMesh, err)) {
             std::cout << "bedlam/include/runtime.hpp: quad mesh validation failed: " << err << std::endl;
         }
+        if (!Renderer.ValidateMesh(_cubeMesh, err)) {
+            std::cout << "bedlam/include/runtime.hpp: quad mesh validation failed: " << err << std::endl;
+        }
     }
 
     void Update(double deltaTime) override {
