@@ -5,24 +5,26 @@
 #include <vector>
 #include <unordered_map>
 #include <memory>
+#include <variant>
 
 // marathon
 #include "core/module.hpp"
-#include "core/property.hpp"
 
 namespace marathon {
 
 namespace events {
 
+typedef std::variant<int, float, double, bool, std::string> EventProperty;
+
 // A signal consists of const data so it cannot be modified.
 // Signals should be handled as is and discarded after use.
 class Signal {
 public:
-    Signal(const std::string& name, const std::unordered_map<std::string, Property>& data);
+    Signal(const std::string& name, const std::unordered_map<std::string, EventProperty>& data);
     ~Signal() = default;
 
     const std::string name;
-    const std::unordered_map<std::string, Property> data;
+    const std::unordered_map<std::string, EventProperty> data;
 };
 
 class Events : public marathon::Module {

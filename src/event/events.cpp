@@ -5,7 +5,7 @@ namespace marathon {
 
 namespace events {
 
-Signal::Signal(const std::string& name, const std::unordered_map<std::string, Property>& data)
+Signal::Signal(const std::string& name, const std::unordered_map<std::string, EventProperty>& data)
     : name(name), data(data) {}
 
 // Constructor
