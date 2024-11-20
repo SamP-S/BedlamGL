@@ -13,8 +13,8 @@
 #include "la_extended.h"
 #include "core/module.hpp"
 #include "renderer/mesh.hpp"
+#include "renderer/material.hpp"
 #include "renderer/shader.hpp"
-#include "renderer/default.hpp"
 
 namespace marathon {
 

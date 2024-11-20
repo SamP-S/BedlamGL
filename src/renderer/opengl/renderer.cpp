@@ -52,7 +52,9 @@ out vec4 varying_uv2;
 out vec4 varying_uv3;
 
 // vertex uniforms
-uniform mat4    u_model_view_projection;
+uniform mat4    u_model;
+uniform mat4    u_view;
+uniform mat4    u_projection;
 )";
 
 const std::string Renderer::s_fragmentHeader = R"(
@@ -667,7 +669,9 @@ bool Renderer::SetDefaultUniforms() {
     glUniform1f(glGetUniformLocation(_shaderHandler->program, "u_time"), time::Time::Instance().GetTime());
     glUniform1f(glGetUniformLocation(_shaderHandler->program, "u_time_delta"), time::Time::Instance().GetDeltaTime());
     glUniform1i(glGetUniformLocation(_shaderHandler->program, "u_frame_index"), _stats.frameIndex);
-    glUniformMatrix4fv(glGetUniformLocation(_shaderHandler->program, "u_model_view_projection"), 1, GL_FALSE, &GetModel()[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(_shaderHandler->program, "u_model"), 1, GL_FALSE, &GetModel()[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(_shaderHandler->program, "u_view"), 1, GL_FALSE, &GetView()[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(_shaderHandler->program, "u_projection"), 1, GL_FALSE, &GetProjection()[0][0]);
     /// TODO: set resolution from viewport
     glUniform2f(glGetUniformLocation(_shaderHandler->program, "u_resolution"), 0.0f, 0.0f);
     return true;

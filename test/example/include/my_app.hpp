@@ -16,7 +16,9 @@ struct MyObject {
     LA::vec3 rotation = LA::vec3();
     LA::vec4 color = LA::vec4({1.0f, 1.0f, 1.0f, 1.0f});
     std::shared_ptr<renderer::Mesh> mesh = nullptr;
+    std::shared_ptr<renderer::Material> material = nullptr;
 };
+
 
 class MyApp : public App {
 private:
@@ -39,8 +41,6 @@ public:
     void Start() override {
         // create defaults
         _shader = std::make_shared<renderer::Shader>();
-        _shader->SetFragmentSource(renderer::defaultFragmentShader);
-        _shader->SetVertexSource(renderer::defaultVertexShader);
 
         // create mesh with vbo & ibo
         _quadMesh = std::make_shared<renderer::QuadMesh>();
