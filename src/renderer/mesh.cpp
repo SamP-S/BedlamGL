@@ -1,5 +1,7 @@
 #include "renderer/mesh.hpp"
 
+#include "core/logger.hpp"
+
 namespace marathon {
 
 namespace renderer {
@@ -48,7 +50,7 @@ const std::unordered_map<VertexAttribute, int> Mesh::s_vertexAttributeLayoutMap 
 void Mesh::ClearVertices() {
     // Empty implementation
     /// TODO: Implement
-    std::cout << "src/renderer/mesh.cpp: Mesh::ClearVertices() not implemented" << std::endl;
+    MT_CORE_DEBUG("src/renderer/mesh.cpp: Mesh::ClearVertices() not implemented");
 }
 
 void Mesh::ClearVertexDirtyFlag() {
@@ -127,6 +129,7 @@ size_t Mesh::GetVertexSize() const {
 }
 
 void Mesh::SetVertexParams(int vertexCount, std::vector<VertexAttributeDescriptor> attributes) {
+    MT_CORE_DEBUG("Mesh::SetVertexParams(): vertex_count = {0}, attribute_count = {1}", vertexCount, attributes.size());
     ClearVertices();
     _vertexCount = vertexCount;
     _vertexAttributeDescriptors = attributes;
@@ -139,13 +142,13 @@ void Mesh::SetVertexData(void* data, size_t size, size_t src_start, size_t dest_
     size_t dataSize = vertexSize * _vertexCount;
     // catch fucky wuckys
     if (data == nullptr) {
-        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetVertexData(): data is nullptr" << std::endl;
+        MT_ENGINE_WARN("Mesh::SetVertexData(): data is nullptr");
         return;
     } else if (_vertexData == nullptr) {
-        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetVertexData(): vertex data is nullptr" << std::endl;
+        MT_ENGINE_WARN("Mesh::SetVertexData(): vertex data is nullptr");
         return;
     } else if (size + src_start > dataSize - dest_start) {
-        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetVertexData(): data range out of bounds" << std::endl;
+        MT_ENGINE_WARN("Mesh::SetVertexData(): data range out of bounds");
         return;
     }
     // copy data
@@ -167,7 +170,7 @@ const std::unordered_map<IndexFormat, size_t> Mesh::s_indexFormatMap = {
 
 void Mesh::ClearIndices() {
     /// TODO: implement
-    std::cout << "src/renderer/mesh.cpp: Mesh::ClearIndices() not implemented" << std::endl;
+    MT_CORE_DEBUG("Mesh::ClearIndices() not implemented");
 }
 
 void Mesh::ClearIndexDirtyFlag() {
@@ -199,6 +202,7 @@ PrimitiveType Mesh::GetPrimitiveType() const {
 }
 
 void Mesh::SetIndexParams(int indexCount, IndexFormat format, PrimitiveType primitive) {
+    MT_CORE_DEBUG("Mesh::SetIndexParams(): index_count = {0}", indexCount);
     ClearIndices();
     _indexCount = indexCount;
     _indexFormat = format;
@@ -211,13 +215,13 @@ void Mesh::SetIndexData(void* data, size_t size, size_t src_start, size_t dest_s
     size_t dataSize = s_indexFormatMap.at(_indexFormat) * _indexCount;
     // catch bad args
     if (data == nullptr) {
-        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetIndexData() data is nullptr" << std::endl;
+        MT_ENGINE_WARN("Mesh::SetIndexData() data is nullptr");
         return;
     } else if (_indexData == nullptr) {
-        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetIndexData() index data is nullptr" << std::endl;
+        MT_ENGINE_WARN("Mesh::SetIndexData() index data is nullptr");
         return;
     } else if (size + src_start > dataSize - dest_start) {
-        std::cout << "src/renderer/mesh.cpp: WARNING @ Mesh::SetIndexData() data range out of bounds" << std::endl;
+        MT_ENGINE_WARN("Mesh::SetIndexData() data range out of bounds");
         return;
     }
     memcpy(_indexData + dest_start, data + src_start, size);
@@ -444,7 +448,7 @@ float SphereMesh::GetRadius() const {
 
 void SphereMesh::SetRadius(float radius) {
     if (radius == 0.0f) {
-        std::cout << "src/renderer/mesh.cpp: WARNING @ SphereMesh::SetRadius(): radius is zero" << std::endl;
+        MT_ENGINE_WARN("SphereMesh::SetRadius(): radius is zero");
     }
     _radius = radius;
     Generate();
@@ -468,14 +472,14 @@ void SphereMesh::SetLongitudeSegments(int longSegments) {
 void SphereMesh::SetSegments(int latSegments, int longSegments) {
     // latitude segments (horizontal)
     if (latSegments < 3) {
-        std::cout << "src/renderer/mesh.cpp: WARNING @ SphereMesh::SetSegments(): segments is less than 3" << std::endl;
+        MT_ENGINE_WARN("SphereMesh::SetSegments(): segments is less than 3");
         _latSegments = 3;
     } else {
         _latSegments = latSegments;
     }
     // longitude segments (vertical)
     if (longSegments < 3) {
-        std::cout << "src/renderer/mesh.cpp: WARNING @ SphereMesh::SetSegments(): segments is less than 3" << std::endl;
+        MT_ENGINE_WARN("SphereMesh::SetSegments(): segments is less than 3");
         _longSegments = 3;
     } else {
         _longSegments = longSegments;
@@ -549,8 +553,6 @@ void SphereMesh::Generate() {
         }
     }
 
-    // std::cout << "sphere: " << vertices.size() << " vertices, " << indices.size() << " indices" << std::endl;
-    // std::cout << "bytes: " << sizeof(vertices) << " vertices, " << sizeof(indices) << " indices" << std::endl;
     SetVertexParams(vertices.size(), attributes);
     SetVertexData((void*)&vertices[0][0], sizeof(LA::vec3) * vertices.size(), 0, 0);
 

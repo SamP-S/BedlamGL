@@ -8,6 +8,7 @@
 #include "time/time.hpp"
 #include "window/window.hpp"
 #include "la_extended.h"
+#include "core/logger.hpp"
 
 using namespace marathon;
 
@@ -38,6 +39,8 @@ public:
     ~MyApp() = default;
 
     void Start() override {
+        MT_SET_LEVEL(Log::Level::DEBUG);
+
         // create material
         _colourMaterial = std::make_shared<renderer::ColourMaterial>();
         // create mesh with vbo & ibo
@@ -60,29 +63,29 @@ public:
 
         std::string err = "";
         if (!Renderer.ValidateShader(_colourMaterial->GetShader(), err)) {
-            std::cout << "bedlam/include/runtime.hpp: shader validation failed: \n" << err << std::endl;
+            MT_WARN("Shader validation failed: {}",  err);
         }
         if (!Renderer.ValidateMesh(_planeMesh, err)) {
-            std::cout << "bedlam/include/runtime.hpp: plane mesh validation failed: \n" << err << std::endl;
+            MT_WARN("PlaneMesh validation failed: {}",  err);
         }
         if (!Renderer.ValidateMesh(_quadMesh, err)) {
-            std::cout << "bedlam/include/runtime.hpp: quad mesh validation failed: " << err << std::endl;
+            MT_WARN("QuadMesh validation failed: {}",  err);
         }
         if (!Renderer.ValidateMesh(_boxMesh, err)) {
-            std::cout << "bedlam/include/runtime.hpp: quad mesh validation failed: " << err << std::endl;
+            MT_WARN("BoxMesh validation failed: {}",  err);
         }
         if (!Renderer.ValidateMesh(_sphereMesh, err)) {
-            std::cout << "bedlam/include/runtime.hpp: sphere mesh validation failed: " << err << std::endl;
+            MT_WARN("SphereMesh validation failed: {}",  err);
         }
 
-        std::cout << "start complete" << std::endl;
+        MT_INFO("MyApp::Start(): success");
     }
 
     void Update(double deltaTime) override {
         // poll events
         std::shared_ptr<events::Signal> s;
         while (Events.Poll(s)) {
-            // std::cout << "bedlam/include/runtime.hpp: event " << s->name << std::endl;
+            MT_TRACE("bedlam/include/runtime.hpp: event {}", s->name);
             if (s->name == "quit") {
                 Quit();
             }

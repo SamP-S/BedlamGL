@@ -1,6 +1,7 @@
 #include "renderer/material.hpp"
 
 #include <iostream>
+#include "core/logger.hpp"
 #include "renderer/renderer.hpp"
 
 namespace marathon {
@@ -35,7 +36,7 @@ const std::unordered_map<std::string, UniformProperty>& Material::GetUniforms() 
 UniformProperty Material::GetUniform(const std::string& key) const {
     auto it = _mUniforms.find(key);
     if (it == _mUniforms.end()) {
-        std::cout << "src/renderer/material.cpp: ERROR @ Material::GetUniform(): uniform \"" << key << "\" not found in material uniforms" << std::endl;
+        MT_CORE_ERROR("Material::GetUniform(): uniform {} not found in material uniforms", key);
         return UniformProperty(); // return default constructed UniformProperty
     }
     return it->second;
@@ -80,12 +81,12 @@ LA::vec4 ColourMaterial::GetColour() const {
     auto it = _mUniforms.find("u_colour");
     // check if uniform key in map
     if (it == _mUniforms.end()) {
-        std::cout << "src/renderer/material.cpp: ERROR @ ColourMaterial::GetColour(): uniform \"u_colour\" not found in material uniforms" << std::endl;
+        MT_CORE_ERROR("ColourMaterial::GetColour(): uniform \"u_colour\" not found in material uniforms");
         return LA::vec4(1.0f);
     }
     // check uniform type is correct
     if (!std::holds_alternative<LA::vec4>(it->second)) {
-        std::cout << "src/renderer/material.cpp: ERROR @ ColourMaterial::GetColour(): uniform \"u_colour\" variant does not contain correct type" << std::endl;
+        MT_CORE_ERROR("ColourMaterial::GetColour(): uniform \"u_colour\" variant does not contain correct type");
         return LA::vec4(1.0f);
     }
     return std::get<LA::vec4>(it->second);
@@ -95,7 +96,7 @@ void ColourMaterial::SetColour(LA::vec4 colour) {
     auto it = _mUniforms.find("u_colour");
     // check if uniform key in map
     if (it == _mUniforms.end()) {
-        std::cout << "src/renderer/material.cpp: WARNING @ ColourMaterial::SetColour(): uniform \"u_colour\" not found in material uniforms" << std::endl;
+        MT_CORE_WARN("ColourMaterial::SetColour(): uniform \"u_colour\" not found in material uniforms");
     }
     // assign/reassign/create either way
     _mUniforms["u_colour"] = colour;

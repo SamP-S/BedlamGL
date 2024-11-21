@@ -4,6 +4,7 @@
 #include "window/window.hpp"
 #include "events/events.hpp"
 #include "time/time.hpp"
+#include "core/logger.hpp"
 
 namespace marathon {
 
@@ -15,7 +16,7 @@ App::~App() {}
 // boot systems and modules
 void App::Boot() {
     if (marathon::Init() != 0) {
-        std::cout << "Failed to initialise marathon. :(" << std::endl;
+        MT_ENGINE_CRITICAL("App::Boot(): Failed to initialise marathon. :(");
         _mFailed = true;
     }
 }
@@ -23,7 +24,7 @@ void App::Boot() {
 // shutdown systems and modules
 void App::Shutdown() {
     if (marathon::Quit() != 0) {
-        std::cout << "Failed to quit marathon. :(" << std::endl;
+        MT_ENGINE_CRITICAL("App::Shutdown(): Failed to initialise marathon. :(");
         _mFailed = true;
     }
 }

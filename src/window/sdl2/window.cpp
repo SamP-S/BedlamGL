@@ -115,8 +115,6 @@ void Window::Close() {
         _window = nullptr;
     }
     _isOpen = false;
-    // std::cout << "window/sdl2/window.cpp: Window closed" << std::endl;
-    // std::cout << "error check: " << SDL_GetError() << std::endl;
 }
 
 void Window::SetWindowMinSize(int minWidth, int minHeight) {

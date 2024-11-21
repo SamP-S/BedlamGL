@@ -1,6 +1,7 @@
 #include "SDL2/SDL_events.h"
 #include "SDL2/SDL.h"
 
+#include "core/logger.hpp"
 #include "events/sdl2/events.hpp"
 
 #include <iostream>
@@ -19,7 +20,7 @@ Events::~Events() {}
 
 bool Events::Boot() {
     if (SDL_Init(SDL_INIT_EVENTS) != 0) {
-        std::cout << "events/sdl2/events.cpp: SDL_Init Error = " << SDL_GetError() << std::endl;
+        MT_CORE_ERROR("events/sdl2/events.cpp: SDL_Init Error = {}", SDL_GetError());
     }
     // TODO: actually validate
     _active = true;

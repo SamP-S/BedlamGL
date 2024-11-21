@@ -1,5 +1,7 @@
 #include "renderer/opengl/opengl.hpp"
 
+#include "core/logger.hpp"
+
 namespace marathon {
 
 namespace renderer {
@@ -12,33 +14,34 @@ bool CheckError() {
         return true;
     }
     
-    std::cout << "ERROR (OpenGL): ";
+    std::string err = "";
     switch (error) {
         case GL_INVALID_OPERATION:
-            std::cout << "operation is not allowed in the current state" << std::endl;
+            err = "operation is not allowed in the current state.\n";
             break;
         case GL_INVALID_VALUE:
-            std::cout << "numeric argument is out of range" << std::endl;
+            err = "numeric argument is out of range.\n";
             break;
         case GL_STACK_OVERFLOW:
-            std::cout << "stack overflow" << std::endl;
+            err = "stack overflow.\n";
             break;
         case GL_STACK_UNDERFLOW:
-            std::cout << "unacceptable value for an enum arg" << std::endl;
+            err = "unacceptable value for an enum arg.\n";
             break;
         case GL_INVALID_FRAMEBUFFER_OPERATION:
-            std::cout << "framebuffer invalid or not complete" << std::endl;
+            err = "framebuffer invalid or not complete.\n";
             break;
         case GL_OUT_OF_MEMORY:
-            std::cout << "out of GPU memory" << std::endl;
+            err = "out of GPU memory.\n";
             break;
         case GL_INVALID_ENUM:
-            std::cout << "unacceptable value for an enum arg" << std::endl;
+            err = "unacceptable value for an enum arg.\n";
             break;
         default:
-            std::cout << "unknown error" << std::endl;
+            err = "unknown error.\n";
             break;
     }
+    MT_CORE_ERROR("renderer::opengl::CheckError: {}", err);
     return false;
 }
 
@@ -48,36 +51,37 @@ bool CheckFrameBufferError() {
         return true;
     }
     
-    std::cout << "ERROR (OpenGL): ";
+    std::string err = "";
     switch (status) {
         case GL_FRAMEBUFFER_UNDEFINED:
-            std::cout << "framebuffer undefined" << std::endl;
+            err = "framebuffer undefined.\n";
             break;
         case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
-            std::cout << "framebuffer incomplete attachment" << std::endl;
+            err = "framebuffer incomplete attachment.\n";
             break;
         case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
-            std::cout << "framebuffer incomplete missing attachment" << std::endl;
+            err = "framebuffer incomplete missing attachment.\n";
             break;
         case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
-            std::cout << "framebuffer incomplete draw buffer" << std::endl;
+            err = "framebuffer incomplete draw buffer.\n";
             break;
         case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
-            std::cout << "framebuffer incomplete read buffer" << std::endl;
+            err = "framebuffer incomplete read buffer.\n";
             break;
         case GL_FRAMEBUFFER_UNSUPPORTED:
-            std::cout << "framebuffer unsupported" << std::endl;
+            err = "framebuffer unsupported.\n";
             break;
         case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
-            std::cout << "framebuffer incomplete multisample" << std::endl;
+            err = "framebuffer incomplete multisample.\n";
             break;
         case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
-            std::cout << "framebuffer incomplete layer targets" << std::endl;
+            err = "framebuffer incomplete layer targets.\n";
             break;
         default:
-            std::cout << "unknown error" << std::endl;
+            err = "unknown error.\n";
             break;
     }
+    MT_CORE_ERROR("renderer::opengl::CheckFrameBufferError: {}", err);
     return false;
 }
 bool CheckShaderError(GLuint shader) {
@@ -89,7 +93,7 @@ bool CheckShaderError(GLuint shader) {
     
     char infoLog[512];
     glGetShaderInfoLog(shader, 512, NULL, infoLog);
-    std::cout << "ERROR (OpenGL): shader compilation failed\n" << infoLog << std::endl;
+    MT_CORE_ERROR("renderer::opengl::CheckShaderError: shader compilation failed\n{}", infoLog);
     return false;
 }
 bool CheckProgramError(GLuint program) {
@@ -101,7 +105,7 @@ bool CheckProgramError(GLuint program) {
     
     char infoLog[512];
     glGetProgramInfoLog(program, 512, NULL, infoLog);
-    std::cout << "ERROR (OpenGL): program linking failed\n" << infoLog << std::endl;
+    MT_CORE_ERROR("renderer::opengl::CheckProgramError: program linking failed\n{}", infoLog);
     return false;
 }
 bool IsEnabled(GLenum cap) {
