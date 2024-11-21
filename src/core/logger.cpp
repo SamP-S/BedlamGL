@@ -2,6 +2,11 @@
 
 namespace marathon {
 
+// define static loggers
+std::shared_ptr<spdlog::logger> Log::s_coreLogger;
+std::shared_ptr<spdlog::logger> Log::s_engineLogger;
+std::shared_ptr<spdlog::logger> Log::s_userLogger;
+
 void Log::Init() {
     std::vector<spdlog::sink_ptr> logSinks;
 
