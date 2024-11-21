@@ -22,6 +22,7 @@ endif()
 
 # add submodule libraries
 add_subdirectory("dependencies/la")
+add_subdirectory("dependencies/spdlog")
 
 set(INCLUDE_DIRS
     "include"
@@ -34,6 +35,7 @@ message(STATUS "SRC_FILES: ${SRC_FILES}")
 add_library(marathon ${SRC_FILES})
 target_include_directories(marathon PUBLIC ${INCLUDE_DIRS})
 target_link_libraries(marathon PUBLIC la)
+target_link_libraries(marathon PUBLIC spdlog)
 
 find_package(OpenGL REQUIRED)
 target_include_directories(marathon PUBLIC ${OPENGL_INCLUDE_DIRS})
