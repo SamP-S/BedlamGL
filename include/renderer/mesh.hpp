@@ -246,8 +246,8 @@ public:
 class SphereMesh : public Mesh {
 protected:
     float _radius = 0.5f;
-    int _latSegments = 6;
-    int _longSegments = 6;
+    int _latSegments = 16;
+    int _longSegments = 16;
 
     void Generate();
 

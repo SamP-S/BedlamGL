@@ -22,9 +22,10 @@ class MyApp : public App {
 private:
     MyObject _obj; MyObject _obj2; MyObject _obj3;
     std::shared_ptr<renderer::ColourMaterial> _colourMaterial;
-    std::shared_ptr<renderer::Mesh> _planeMesh;
-    std::shared_ptr<renderer::Mesh> _quadMesh;
-    std::shared_ptr<renderer::Mesh> _cubeMesh;
+    std::shared_ptr<renderer::PlaneMesh> _planeMesh;
+    std::shared_ptr<renderer::QuadMesh> _quadMesh;
+    std::shared_ptr<renderer::BoxMesh> _boxMesh;
+    std::shared_ptr<renderer::SphereMesh> _sphereMesh;
 
     /// TODO: remove this
     time::Time& Time = time::Time::Instance();
@@ -42,13 +43,16 @@ public:
         // create mesh with vbo & ibo
         _quadMesh = std::make_shared<renderer::QuadMesh>();
         _quadMesh->SetMaterial(_colourMaterial);
-        _cubeMesh = std::make_shared<renderer::BoxMesh>();
-        _cubeMesh->SetMaterial(_colourMaterial);
+        _boxMesh = std::make_shared<renderer::BoxMesh>();
+        _boxMesh->SetMaterial(_colourMaterial);
         _planeMesh = std::make_shared<renderer::PlaneMesh>();
         _planeMesh->SetMaterial(_colourMaterial);
+        _sphereMesh = std::make_shared<renderer::SphereMesh>();
+        _sphereMesh->SetMaterial(_colourMaterial);
 
         // renderer setup
         Renderer.SetDepthTest(true);
+        Renderer.SetCullTest(false);
 
         // create object
         _obj = MyObject();
@@ -64,8 +68,11 @@ public:
         if (!Renderer.ValidateMesh(_quadMesh, err)) {
             std::cout << "bedlam/include/runtime.hpp: quad mesh validation failed: " << err << std::endl;
         }
-        if (!Renderer.ValidateMesh(_cubeMesh, err)) {
+        if (!Renderer.ValidateMesh(_boxMesh, err)) {
             std::cout << "bedlam/include/runtime.hpp: quad mesh validation failed: " << err << std::endl;
+        }
+        if (!Renderer.ValidateMesh(_sphereMesh, err)) {
+            std::cout << "bedlam/include/runtime.hpp: sphere mesh validation failed: " << err << std::endl;
         }
 
         std::cout << "start complete" << std::endl;
@@ -90,15 +97,17 @@ public:
             LA::vec4({0.5f + sin(time), 0.5f + cos(time), 0.5f + sin(time * 2), 1.0f})
         );
 
-        int meshIdx = (int)time % 3;
+        int meshIdx = (int)time % 4;
         switch (meshIdx) {
             case 0:
-                _obj.mesh = _cubeMesh;
+                _obj.mesh = _boxMesh;
                 break;
             case 1:
                 _obj.mesh = _quadMesh;
                 break;
             case 2:
+                _obj.mesh = _sphereMesh;
+                break;
             default:
                 _obj.mesh = _planeMesh;
                 break;
