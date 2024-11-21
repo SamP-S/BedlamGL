@@ -243,6 +243,27 @@ public:
     void SetSize(LA::vec2 size);
 };
 
+class SphereMesh : public Mesh {
+protected:
+    float _radius = 0.5f;
+    int _latSegments = 6;
+    int _longSegments = 6;
+
+    void Generate();
+
+public:
+    SphereMesh();
+    ~SphereMesh();
+
+    float GetRadius() const;
+    void SetRadius(float radius);
+    int GetLatitudeSegments() const;
+    int GetLongitudeSegments() const;
+    void SetLatitudeSegments(int latSegments);
+    void SetLongitudeSegments(int longSegments);
+    void SetSegments(int latSegments, int longSegments);
+};
+
 class RawMesh : public Mesh {
 public:
     RawMesh();

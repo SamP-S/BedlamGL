@@ -429,6 +429,138 @@ void PlaneMesh::Generate() {
     SetIndexData(indices, sizeof(indices), 0, 0);
 }
 
+
+
+/// --- PlaneMesh --- ///
+SphereMesh::SphereMesh() {
+    Generate();
+}
+
+SphereMesh::~SphereMesh() {}
+
+float SphereMesh::GetRadius() const {
+    return _radius;
+}
+
+void SphereMesh::SetRadius(float radius) {
+    if (radius == 0.0f) {
+        std::cout << "src/renderer/mesh.cpp: WARNING @ SphereMesh::SetRadius(): radius is zero" << std::endl;
+    }
+    _radius = radius;
+    Generate();
+}
+
+int SphereMesh::GetLatitudeSegments() const {
+    return _latSegments;
+}
+int SphereMesh::GetLongitudeSegments() const {
+    return _longSegments;
+}
+
+void SphereMesh::SetLatitudeSegments(int latSegments) {
+    SetSegments(latSegments, _longSegments);
+}
+
+void SphereMesh::SetLongitudeSegments(int longSegments) {
+    SetSegments(_latSegments, longSegments);
+}
+
+void SphereMesh::SetSegments(int latSegments, int longSegments) {
+    // latitude segments (horizontal)
+    if (latSegments < 3) {
+        std::cout << "src/renderer/mesh.cpp: WARNING @ SphereMesh::SetSegments(): segments is less than 3" << std::endl;
+        _latSegments = 3;
+    } else {
+        _latSegments = latSegments;
+    }
+    // longitude segments (vertical)
+    if (longSegments < 3) {
+        std::cout << "src/renderer/mesh.cpp: WARNING @ SphereMesh::SetSegments(): segments is less than 3" << std::endl;
+        _longSegments = 3;
+    } else {
+        _longSegments = longSegments;
+    }
+    Generate();
+}
+
+
+/// NOTE: https://danielsieger.com/blog/2021/03/27/generating-spheres.html
+/// TODO: https://danielsieger.com/blog/2021/05/03/generating-primitive-shapes.html
+void SphereMesh::Generate() {
+        // setup vertex data format
+    std::vector<VertexAttributeDescriptor> attributes = {
+        {VertexAttribute::POSITION, 3, VertexAttributeFormat::FLOAT}
+    };
+
+    std::vector<LA::vec3> vertices;
+    std::vector<uint32_t> indices;
+
+    // add top vertex
+    vertices.push_back(LA::vec3({0.0f, _radius, 0.0f}));
+    // generate iterating by lat -> long
+    for (int j = 0; j < _latSegments - 1; j++) {
+        double phi = M_PI * (double)(j + 1) / (double)_latSegments;
+        for (int i = 0; i < _longSegments; i++) {
+            double theta = 2.0 * M_PI * (double)i / (double)_longSegments;
+            float x = _radius * sin(phi) * cos(theta);
+            float y = _radius * cos(phi);
+            float z = _radius * sin(phi) * sin(theta);
+            vertices.push_back(LA::vec3({x, y, z}));
+        }
+    }
+    // add bottom vertex
+    vertices.push_back(LA::vec3({0.0f, -_radius, 0.0f}));
+
+    // add triangles for top and bottom
+    for (int i = 0; i < _longSegments; ++i) {
+        // top
+        uint32_t i0 = i + 1;
+        uint32_t i1 = (i + 1) % _longSegments + 1;
+        indices.push_back(0);
+        indices.push_back(i1);
+        indices.push_back(i0);
+
+        // bottom
+        i0 = i + _longSegments * (_latSegments - 2) + 1;
+        i1 = (i + 1) % _longSegments + _longSegments * (_latSegments - 2) + 1;
+        indices.push_back(vertices.size() - 1);
+        indices.push_back(i0);
+        indices.push_back(i1);
+    }
+
+    // add triangles for quads
+    for (int j = 0; j < _latSegments - 2; j++) {
+        uint32_t j0 = j * _longSegments + 1;
+        uint32_t j1 = (j + 1) * _longSegments + 1;
+        for (int i = 0; i < _longSegments; i++) {
+            uint32_t i0 = j0 + i;
+            uint32_t i1 = j0 + (i + 1) % _longSegments;
+            uint32_t i2 = j1 + (i + 1) % _longSegments;
+            uint32_t i3 = j1 + i;
+
+            // Add two triangles for each quad
+            indices.push_back(i0);
+            indices.push_back(i1);
+            indices.push_back(i2);
+
+            indices.push_back(i0);
+            indices.push_back(i2);
+            indices.push_back(i3);
+        }
+    }
+
+    // std::cout << "sphere: " << vertices.size() << " vertices, " << indices.size() << " indices" << std::endl;
+    // std::cout << "bytes: " << sizeof(vertices) << " vertices, " << sizeof(indices) << " indices" << std::endl;
+    SetVertexParams(vertices.size(), attributes);
+    SetVertexData((void*)&vertices[0][0], sizeof(LA::vec3) * vertices.size(), 0, 0);
+
+    SetIndexParams(indices.size(), IndexFormat::UINT32, PrimitiveType::TRIANGLES);
+    SetIndexData((void*)&indices[0], sizeof(uint32_t) * indices.size(), 0, 0);
+}
+
+
+
+/// --- RawMesh --- ///
 // ensure to call base class constructor
 RawMesh::RawMesh()
     : Mesh() {}
