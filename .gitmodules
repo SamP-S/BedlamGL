@@ -1,3 +1,6 @@
 [submodule "dependencies/la"]
 	path = dependencies/la/la
 	url = git@github.com:SamP-S/LA.git
+[submodule "dependencies/spdlog"]
+	path = dependencies/spdlog
+	url = https://github.com/gabime/spdlog.git
