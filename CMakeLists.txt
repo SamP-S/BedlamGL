@@ -23,6 +23,7 @@ endif()
 # add submodule libraries
 add_subdirectory("dependencies/la")
 add_subdirectory("dependencies/spdlog")
+add_subdirectory("dependencies/json")
 
 set(INCLUDE_DIRS
     "include"
@@ -33,9 +34,11 @@ message(STATUS "SRC_FILES: ${SRC_FILES}")
 
 # game engine
 add_library(marathon ${SRC_FILES})
+### TODO: la should be private and considered "external/third-party" to marathon
 target_include_directories(marathon PUBLIC ${INCLUDE_DIRS})
 target_link_libraries(marathon PUBLIC la)
-target_link_libraries(marathon PUBLIC spdlog)
+target_link_libraries(marathon PRIVATE spdlog)
+target_link_libraries(marathon PRIVATE nlohmann_json::nlohmann_json)
 
 find_package(OpenGL REQUIRED)
 target_include_directories(marathon PUBLIC ${OPENGL_INCLUDE_DIRS})
