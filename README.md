@@ -97,7 +97,12 @@ To-Do:
 - each engine should encapsulate the buisness logic of handling its corresponding services functionality using the scene tree data
 - each engine should be thread safe
 - each engine should handle frequent update class to progress the game/interactive
-- a base app should be implemented that creates and operates the engines to power the app and provide some virtual methods for the user to override for initialisation
+- a MainLoop class should be implemented that creates and operates the engines to update positions, call renders, calculate physics, play audio etc.
+- different main loop's should be implemented for different desired circumstances:
+    - Standard Engine for a typical game loop
+    - Headless main loop for no rendering/window
+    - Multiplayer loop?
+- an app class should be created that the user can inherit and configure some high level global data like app name, multi threaded, choose main loop etc. and provide a run method to start the app.
 
 **App: User App**
 - the user's app should inherit from the engine and override provided virtual methods to setup the scene tree, instance nodes, create resources, custom nodes/resources, add scripts
