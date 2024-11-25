@@ -1,8 +1,7 @@
 #pragma once
 
 #include <string>
-#include <memory>
-#include <iostream>
+
 #include "core/uuid.hpp"
 
 namespace marathon {
@@ -16,8 +15,6 @@ private:
     UUID _mUUID = UUID();
 
 public:
-    Object() = default;
-    Object(const Object&) = default;
     Object(const std::string& type="marathon.object");
     ~Object() = default;
 
