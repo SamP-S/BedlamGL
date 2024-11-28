@@ -31,6 +31,10 @@ Run executable:
 ./build/graphics
 ```
 
+## Example Engines used for Research:
+- https://www.unrealengine.com/en-US/ue-on-github
+- https://sbox.game/about
+
 ## Summary
 A simple 2D/3D game library using a module based system inspired by pygame/love2d featuring:
 - [ ] Rendering 3D models
