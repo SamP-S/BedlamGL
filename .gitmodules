@@ -2,8 +2,8 @@
 	path = external/la
 	url = git@github.com:SamP-S/LA.git
 [submodule "dependencies/spdlog"]
-	path = dependencies/spdlog
+	path = external/spdlog
 	url = https://github.com/gabime/spdlog.git
 [submodule "dependencies/json"]
-	path = dependencies/json
+	path = external/json
 	url = https://github.com/nlohmann/json.git
