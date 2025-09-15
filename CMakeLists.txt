@@ -25,20 +25,18 @@ add_subdirectory("external/la")
 add_subdirectory("external/spdlog")
 add_subdirectory("external/json")
 
-set(INCLUDE_DIRS
-    "include"
-)
+set(INCLUDE_DIRS  "include")
 file(GLOB_RECURSE SRC_FILES "src/**.cpp")
 message(STATUS "INCLUDE_DIRS: " ${INCLUDE_DIRS})
 message(STATUS "SRC_FILES: ${SRC_FILES}")
 
 # game engine
-add_library(marathon ${SRC_FILES})
+add_library(marathon STATIC ${SRC_FILES})
 ### TODO: la should be private and considered "external/third-party" to marathon
 target_include_directories(marathon PUBLIC ${INCLUDE_DIRS})
 target_link_libraries(marathon PUBLIC la)
-target_link_libraries(marathon PRIVATE spdlog)
-target_link_libraries(marathon PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(marathon PUBLIC spdlog)
+target_link_libraries(marathon PUBLIC nlohmann_json::nlohmann_json)
 
 find_package(OpenGL REQUIRED)
 target_include_directories(marathon PUBLIC ${OPENGL_INCLUDE_DIRS})

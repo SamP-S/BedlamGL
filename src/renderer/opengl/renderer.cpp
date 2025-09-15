@@ -156,7 +156,7 @@ bool Renderer::Shutdown() {
 
 
 // validation
-bool CheckError() {
+bool Renderer::CheckError() {
     uint32_t error = glGetError();
     if (error == GL_NO_ERROR) {
         return true;
