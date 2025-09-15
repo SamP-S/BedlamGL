@@ -14,7 +14,7 @@ Node::~Node() {}
 std::weak_ptr<Node> Node::GetParent() {
     return _mParent;
 }
-void Node::SetParent(std::weak_ptr<Node> parent, bool keepWorldTransform=false) {
+void Node::SetParent(std::weak_ptr<Node> parent, bool keepWorldTransform) {
     MT_CORE_DEBUG("Node::SetParent: parent = {0}; keepWorldTransform = {1}", parent.expired(), keepWorldTransform);
     // if node already has a parent, remove it from the parent's children
     if (auto lockParent = _mParent.lock()) {

@@ -21,9 +21,9 @@ if (NOT EXISTS ${LIBTFD_DIR}/CMakeLists.txt)
 endif()
 
 # add submodule libraries
-add_subdirectory("dependencies/la")
-add_subdirectory("dependencies/spdlog")
-add_subdirectory("dependencies/json")
+add_subdirectory("external/la")
+add_subdirectory("external/spdlog")
+add_subdirectory("external/json")
 
 set(INCLUDE_DIRS
     "include"
