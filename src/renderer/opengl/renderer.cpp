@@ -1,4 +1,6 @@
 #include "renderer/opengl/renderer.hpp"
+
+#include "core/logger.hpp"
 #include "time/time.hpp"
 
 namespace marathon {
@@ -52,7 +54,9 @@ out vec4 varying_uv2;
 out vec4 varying_uv3;
 
 // vertex uniforms
-uniform mat4    u_model_view_projection;
+uniform mat4    u_model;
+uniform mat4    u_view;
+uniform mat4    u_projection;
 )";
 
 const std::string Renderer::s_fragmentHeader = R"(
@@ -152,8 +156,116 @@ bool Renderer::Shutdown() {
 
 
 // validation
+bool CheckError() {
+    uint32_t error = glGetError();
+    if (error == GL_NO_ERROR) {
+        return true;
+    }
+    
+    std::string err = "";
+    switch (error) {
+        case GL_INVALID_OPERATION:
+            err = "operation is not allowed in the current state.\n";
+            break;
+        case GL_INVALID_VALUE:
+            err = "numeric argument is out of range.\n";
+            break;
+        case GL_STACK_OVERFLOW:
+            err = "stack overflow.\n";
+            break;
+        case GL_STACK_UNDERFLOW:
+            err = "unacceptable value for an enum arg.\n";
+            break;
+        case GL_INVALID_FRAMEBUFFER_OPERATION:
+            err = "framebuffer invalid or not complete.\n";
+            break;
+        case GL_OUT_OF_MEMORY:
+            err = "out of GPU memory.\n";
+            break;
+        case GL_INVALID_ENUM:
+            err = "unacceptable value for an enum arg.\n";
+            break;
+        default:
+            err = "unknown error.\n";
+            break;
+    }
+    MT_CORE_ERROR("renderer::opengl::CheckError: {}", err);
+    return false;
+}
+
+bool CheckFrameBufferError() {
+    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if (status == GL_FRAMEBUFFER_COMPLETE) {
+        return true;
+    }
+    
+    std::string err = "";
+    switch (status) {
+        case GL_FRAMEBUFFER_UNDEFINED:
+            err = "framebuffer undefined.\n";
+            break;
+        case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+            err = "framebuffer incomplete attachment.\n";
+            break;
+        case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+            err = "framebuffer incomplete missing attachment.\n";
+            break;
+        case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+            err = "framebuffer incomplete draw buffer.\n";
+            break;
+        case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+            err = "framebuffer incomplete read buffer.\n";
+            break;
+        case GL_FRAMEBUFFER_UNSUPPORTED:
+            err = "framebuffer unsupported.\n";
+            break;
+        case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
+            err = "framebuffer incomplete multisample.\n";
+            break;
+        case GL_FRAMEBUFFER_INCOMPLETE_LAYER_TARGETS:
+            err = "framebuffer incomplete layer targets.\n";
+            break;
+        default:
+            err = "unknown error.\n";
+            break;
+    }
+    MT_CORE_ERROR("renderer::opengl::CheckFrameBufferError: {}", err);
+    return false;
+}
+
+bool CheckShaderError(GLuint shader) {
+    GLint success;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+    if (success == GL_TRUE) {
+        return true;
+    }
+    
+    char infoLog[512];
+    glGetShaderInfoLog(shader, 512, NULL, infoLog);
+    MT_CORE_ERROR("renderer::opengl::CheckShaderError: shader compilation failed\n{}", infoLog);
+    return false;
+}
+
+bool CheckProgramError(GLuint program) {
+    GLint success;
+    glGetProgramiv(program, GL_LINK_STATUS, &success);
+    if (success == GL_TRUE) {
+        return true;
+    }
+    
+    char infoLog[512];
+    glGetProgramInfoLog(program, 512, NULL, infoLog);
+    MT_CORE_ERROR("renderer::opengl::CheckProgramError: program linking failed\n{}", infoLog);
+    return false;
+}
+
+
 /// TODO: currently does not consider if user shader is dirty
 bool Renderer::ValidateShader(std::shared_ptr<Shader> shader, std::string& err) {
+    if (shader == nullptr) {
+        err = "Shader is null\n";
+        return false;
+    }
     int shaderHandlerIdx = FindOrCreateShaderHandler(shader);
     ShaderHandler& shaderHandler = _shaderHandlers[shaderHandlerIdx];
     if (shaderHandler.isValid) {
@@ -165,6 +277,10 @@ bool Renderer::ValidateShader(std::shared_ptr<Shader> shader, std::string& err) 
 
 /// TODO: currently does not consider if user shader is dirty
 bool Renderer::ValidateMesh(std::shared_ptr<Mesh> mesh, std::string& err) {
+    if (mesh == nullptr) {
+        err = "Mesh is null\n";
+        return false;
+    }
     int meshHandlerIdx = FindOrCreateMeshHandler(mesh);
     MeshHandler& meshHandler = _meshHandlers[meshHandlerIdx];
     if (meshHandler.isValid) {
@@ -196,28 +312,39 @@ void Renderer::Draw(std::shared_ptr<Mesh> mesh) {
     CheckError();
     _stats.drawCalls++;
     if (mesh == nullptr) {
-        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::Draw: mesh is null" << std::endl;
+        MT_CORE_WARN("Renderer::Draw: mesh is null");
         return;
     }
     
     std::string err = "";
     if (!ValidateMesh(mesh, err)) {
-        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::Draw: can't draw invalid mesh" << std::endl;
+        MT_CORE_WARN("Renderer::Draw: can't draw invalid mesh");
         return;
     }
 
+    if (mesh->GetMaterial() == nullptr) {
+        MT_CORE_WARN("Renderer::Draw: mesh has no material");
+        return;
+    }
+    // set shader to material shader
+    SetShader(mesh->GetMaterial()->GetShader());
+
     if (_shaderHandler == nullptr) {
-        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::Draw: no shader bound" << std::endl;
+        MT_CORE_WARN("Renderer::Draw: no shader bound");
         return;
     }
 
     if (!ValidateShader(_shaderHandler->shader, err)) {
-        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::Draw: can't draw with invalid shader" << std::endl;
+        MT_CORE_WARN("Renderer::Draw: can't draw with invalid shader");
         return;
     }
 
     if (!SetDefaultUniforms()) {
-        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::Draw: failed to set default uniforms" << std::endl;
+        MT_CORE_WARN("Renderer::Draw: failed to set default uniforms");
+    }
+
+    if (!SetMaterialUniforms(mesh->GetMaterial())) {
+        MT_CORE_WARN("Renderer::Draw: failed to set material uniforms");
     }
     
     int meshHandlerIdx = FindOrCreateMeshHandler(mesh);
@@ -404,8 +531,7 @@ int Renderer::CreateMeshHandler(std::shared_ptr<Mesh> mesh) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * indexSize, indexData, GL_STATIC_DRAW);
     } else {
-
-        std::cout << "src/renderer/opengl/renderer.cpp: MESSAGE @ Renderer::CreateMeshHandler: no indices defined" << std::endl;
+        MT_CORE_INFO("Renderer::CreateMeshHandler: no indices defined");
     }
 
     // unbind vao for safety
@@ -447,8 +573,8 @@ int Renderer::CreateShaderHandler(std::shared_ptr<Shader> shader) {
     const char* vSrcC = vSource.c_str();
     const char* fSrcC = fSource.c_str();
 
-    // std::cout << "Vertex Shader Code: \n" << vSrcC << std::endl;
-    // std::cout << "Fragment Shader Code: \n" << fSrcC << std::endl;
+    MT_CORE_TRACE("Vertex Shader Code: \n{}", vSrcC);
+    MT_CORE_TRACE("Fragment Shader Code: \n{}", fSrcC);
 
     glShaderSource(vShader, 1, &vSrcC, nullptr);
     glShaderSource(fShader, 1, &fSrcC, nullptr);
@@ -516,7 +642,7 @@ std::shared_ptr<renderer::Shader> Renderer::GetShader() {
 // set nullptr as shader should mean use a default not just shit the bed 
 void Renderer::SetShader(std::shared_ptr<renderer::Shader> shader) {
     if (shader == nullptr) {
-        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::SetShader: setting shader null, won't be able to draw" << std::endl;
+        MT_CORE_WARN("Renderer::SetShader(): setting shader null, won't be able to draw");
         _shaderHandler = nullptr;
         glUseProgram(0);
         return;
@@ -524,14 +650,14 @@ void Renderer::SetShader(std::shared_ptr<renderer::Shader> shader) {
 
     // skip if same
     if (_shaderHandler != nullptr && _shaderHandler->shader == shader) {
-        // std::cout << "src/renderer/opengl/renderer.cpp: MESSAGE @ Renderer::SetShader: setting shader to already bound shader" << std::endl;
+        MT_CORE_TRACE("Renderer::SetShader(): setting shader to already bound shader");
         return;
     }
 
     // check shader is valid
     std::string err = "";
     if (!ValidateShader(shader, err)) {
-        std::cout << "src/renderer/opengl/renderer.cpp: MESSAGE @ Renderer::SetShader: can't bind shader to invalid shader" << std::endl;
+        MT_CORE_TRACE("Renderer::SetShader: can't bind shader to invalid shader");
         return;
     }
     // set and bind new shader
@@ -543,17 +669,17 @@ void Renderer::SetShader(std::shared_ptr<renderer::Shader> shader) {
 /// --- Shader Methods ---
 bool Renderer::HasUniform(const std::string& key) {
     if (std::find(s_reservedUniforms.begin(), s_reservedUniforms.end(), key) != s_reservedUniforms.end()) {
-        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::HasUniform: uniform key is reserved" << std::endl;
+        MT_CORE_WARN("Renderer::HasUniform: uniform key is reserved");
         return false;
     }
 
     if (_shaderHandler == nullptr) {
-        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::HasUniform: no shader bound" << std::endl;
+        MT_CORE_WARN("Renderer::HasUniform: no shader bound");
         return false;
     }
     std::string err;
     if (!ValidateShader(_shaderHandler->shader, err)) {
-        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::HasUniform: bound shader is invalid" << std::endl;
+        MT_CORE_WARN("Renderer::HasUniform: bound shader is invalid");
         return false;
     }
     return glGetUniformLocation(_shaderHandler->program, key.c_str()) != -1;
@@ -644,14 +770,39 @@ bool Renderer::SetUniform(const std::string& key, const LA::mat4& m) {
     return true;
 }
 
+bool Renderer::SetUniform(const std::string& key, const UniformProperty& value) {
+    if (std::holds_alternative<int>(value)) {
+        return SetUniform(key, std::get<int>(value));
+    } else if (std::holds_alternative<uint32_t>(value)) {
+        return SetUniform(key, std::get<uint32_t>(value));
+    } else if (std::holds_alternative<float>(value)) {
+        return SetUniform(key, std::get<float>(value));
+    } else if (std::holds_alternative<double>(value)) {
+        return SetUniform(key, std::get<double>(value));
+    } else if (std::holds_alternative<LA::vec2>(value)) {
+        return SetUniform(key, std::get<LA::vec2>(value));
+    } else if (std::holds_alternative<LA::vec3>(value)) {
+        return SetUniform(key, std::get<LA::vec3>(value));
+    } else if (std::holds_alternative<LA::vec4>(value)) {
+        return SetUniform(key, std::get<LA::vec4>(value));
+    } else if (std::holds_alternative<LA::mat2>(value)) {
+        return SetUniform(key, std::get<LA::mat2>(value));
+    } else if (std::holds_alternative<LA::mat3>(value)) {
+        return SetUniform(key, std::get<LA::mat3>(value));
+    } else if (std::holds_alternative<LA::mat4>(value)) {
+        return SetUniform(key, std::get<LA::mat4>(value));
+    }
+    return false;
+}
+
 bool Renderer::SetDefaultUniforms() {
     if (_shaderHandler == nullptr) {
-        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::HasUniform: no shader bound" << std::endl;
+        MT_CORE_WARN("Renderer::HasUniform: no shader bound");
         return false;
     }
     std::string err;
     if (!ValidateShader(_shaderHandler->shader, err)) {
-        std::cout << "src/renderer/opengl/renderer.cpp: WARNING @ Renderer::HasUniform: bound shader is invalid" << std::endl;
+        MT_CORE_WARN("Renderer::HasUniform: bound shader is invalid");
         return false;
     }
 
@@ -659,9 +810,28 @@ bool Renderer::SetDefaultUniforms() {
     glUniform1f(glGetUniformLocation(_shaderHandler->program, "u_time"), time::Time::Instance().GetTime());
     glUniform1f(glGetUniformLocation(_shaderHandler->program, "u_time_delta"), time::Time::Instance().GetDeltaTime());
     glUniform1i(glGetUniformLocation(_shaderHandler->program, "u_frame_index"), _stats.frameIndex);
-    glUniformMatrix4fv(glGetUniformLocation(_shaderHandler->program, "u_model_view_projection"), 1, GL_FALSE, &GetModel()[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(_shaderHandler->program, "u_model"), 1, GL_FALSE, &GetModel()[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(_shaderHandler->program, "u_view"), 1, GL_FALSE, &GetView()[0][0]);
+    glUniformMatrix4fv(glGetUniformLocation(_shaderHandler->program, "u_projection"), 1, GL_FALSE, &GetProjection()[0][0]);
     /// TODO: set resolution from viewport
     glUniform2f(glGetUniformLocation(_shaderHandler->program, "u_resolution"), 0.0f, 0.0f);
+    return true;
+}
+
+/// TODO: add validation
+bool Renderer::SetMaterialUniforms(std::shared_ptr<Material> material) {
+    if (_shaderHandler == nullptr) {
+        MT_CORE_WARN("Renderer::SetMaterialUniforms: no shader bound");
+        return false;
+    }
+    // iterate through uniform map
+    const std::unordered_map<std::string, UniformProperty>& uniforms = material->GetUniforms();
+    for (auto it = uniforms.begin(); it != uniforms.end(); ++it) {
+        if (!SetUniform(it->first, it->second)) {
+            MT_CORE_WARN("Renderer::SetMaterialUniforms: failed to set uniform \"{}\"", it->first);
+            return false;
+        }
+    }
     return true;
 }
 

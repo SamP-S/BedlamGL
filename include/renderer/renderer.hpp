@@ -13,8 +13,8 @@
 #include "la_extended.h"
 #include "core/module.hpp"
 #include "renderer/mesh.hpp"
+#include "renderer/material.hpp"
 #include "renderer/shader.hpp"
-#include "renderer/default.hpp"
 
 namespace marathon {
 
@@ -201,6 +201,8 @@ public:
     virtual bool SetUniform(const std::string& key, const LA::mat2& m) = 0;
     virtual bool SetUniform(const std::string& key, const LA::mat3& m) = 0;
     virtual bool SetUniform(const std::string& key, const LA::mat4& m) = 0;
+    // uniform property
+    virtual bool SetUniform(const std::string& key, const UniformProperty& value) = 0;
     
     /// --- Debug Info ---
     virtual RenderStats GetRenderStats();

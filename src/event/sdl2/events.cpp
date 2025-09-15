@@ -1,9 +1,10 @@
 #include "SDL2/SDL_events.h"
 #include "SDL2/SDL.h"
 
+#include "core/logger.hpp"
 #include "events/sdl2/events.hpp"
 
-
+#include <iostream>
 
 namespace marathon {
 
@@ -19,7 +20,7 @@ Events::~Events() {}
 
 bool Events::Boot() {
     if (SDL_Init(SDL_INIT_EVENTS) != 0) {
-        std::cerr << "events/sdl2/events.cpp: SDL_Init Error = " << SDL_GetError() << std::endl;
+        MT_CORE_ERROR("events/sdl2/events.cpp: SDL_Init Error = {}", SDL_GetError());
     }
     // TODO: actually validate
     _active = true;
@@ -55,7 +56,7 @@ void Events::Clear() {
 std::shared_ptr<Signal> Events::Convert(const SDL_Event& e) {
     switch (e.type) {
         case SDL_QUIT:
-            return std::make_shared<Signal>("quit", std::unordered_map<std::string, Property>());
+            return std::make_shared<Signal>("quit", std::unordered_map<std::string, EventProperty>());
         case SDL_WINDOWEVENT:
             return ConvertWindowEvent(e);
         case SDL_MOUSEMOTION:
@@ -72,17 +73,17 @@ std::shared_ptr<Signal> Events::Convert(const SDL_Event& e) {
 }
 
 std::shared_ptr<Signal> Events::ConvertWindowEvent(const SDL_Event& e) {
-    std::unordered_map<std::string, Property> data;
+    std::unordered_map<std::string, EventProperty> data;
     switch (e.window.event) {
         case SDL_WINDOWEVENT_CLOSE:
             return std::make_shared<Signal>("window.close", data);
         case SDL_WINDOWEVENT_RESIZED:
-            data["width"] = Property(e.window.data1);
-            data["height"] = Property(e.window.data2);
+            data["width"] = EventProperty(e.window.data1);
+            data["height"] = EventProperty(e.window.data2);
             return std::make_shared<Signal>("window.resize", data);
         case SDL_WINDOWEVENT_MOVED:
-            data["x"] = Property(e.window.data1);
-            data["y"] = Property(e.window.data2);
+            data["x"] = EventProperty(e.window.data1);
+            data["y"] = EventProperty(e.window.data2);
             return std::make_shared<Signal>("window.move", data);
         case SDL_WINDOWEVENT_MINIMIZED:
             return std::make_shared<Signal>("window.minimize", data);
@@ -103,42 +104,42 @@ std::shared_ptr<Signal> Events::ConvertWindowEvent(const SDL_Event& e) {
     }
 }
 std::shared_ptr<Signal> Events::ConvertMouseEvent(const SDL_Event& e) {
-    std::unordered_map<std::string, Property> data;
+    std::unordered_map<std::string, EventProperty> data;
     switch (e.type) {
         case SDL_MOUSEMOTION:
-            data["x"] = Property(e.motion.x);
-            data["y"] = Property(e.motion.y);
-            data["dx"] = Property(e.motion.xrel);
-            data["dy"] = Property(e.motion.yrel);
+            data["x"] = EventProperty(e.motion.x);
+            data["y"] = EventProperty(e.motion.y);
+            data["dx"] = EventProperty(e.motion.xrel);
+            data["dy"] = EventProperty(e.motion.yrel);
             return std::make_shared<Signal>("mouse.move", data);
         case SDL_MOUSEBUTTONDOWN:
-            data["x"] = Property(e.button.x);
-            data["y"] = Property(e.button.y);
-            data["button"] = Property(e.button.button);
+            data["x"] = EventProperty(e.button.x);
+            data["y"] = EventProperty(e.button.y);
+            data["button"] = EventProperty(e.button.button);
             return std::make_shared<Signal>("mouse.down", data);
         case SDL_MOUSEBUTTONUP:
-            data["x"] = Property(e.button.x);
-            data["y"] = Property(e.button.y);
-            data["button"] = Property(e.button.button);
+            data["x"] = EventProperty(e.button.x);
+            data["y"] = EventProperty(e.button.y);
+            data["button"] = EventProperty(e.button.button);
             return std::make_shared<Signal>("mouse.up", data);
         case SDL_MOUSEWHEEL:
-            data["x"] = Property(e.wheel.x);
-            data["y"] = Property(e.wheel.y);
+            data["x"] = EventProperty(e.wheel.x);
+            data["y"] = EventProperty(e.wheel.y);
             return std::make_shared<Signal>("mouse.wheel", data);
         default:
             return nullptr;
     }
 }
 std::shared_ptr<Signal> Events::ConvertKeyboardEvent(const SDL_Event& e) {
-    std::unordered_map<std::string, Property> data;
+    std::unordered_map<std::string, EventProperty> data;
     switch (e.type) {
         case SDL_KEYDOWN:
-            data["key"] = Property(e.key.keysym.sym);
-            data["mod"] = Property(e.key.keysym.mod);
+            data["key"] = EventProperty(e.key.keysym.sym);
+            data["mod"] = EventProperty(e.key.keysym.mod);
             return std::make_shared<Signal>("key.down", data);
         case SDL_KEYUP:
-            data["key"] = Property(e.key.keysym.sym);
-            data["mod"] = Property(e.key.keysym.mod);
+            data["key"] = EventProperty(e.key.keysym.sym);
+            data["mod"] = EventProperty(e.key.keysym.mod);
             return std::make_shared<Signal>("key.up", data);
         default:
             return nullptr;

@@ -41,7 +41,6 @@ public:
 	UUID(int64_t uuid)
 		: _uuid(uuid) {}
 
-    UUID(const UUID&) = default;
 
     operator int64_t() const { return (int64_t)_uuid; }
 

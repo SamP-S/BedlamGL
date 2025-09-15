@@ -1,25 +1,18 @@
 #pragma once
 
 #include <string>
-#include <memory>
 
-#include "core/uuid.hpp"
+#include "core/object.hpp"
 
 namespace marathon {
 
-struct Resource {
+struct Resource : public Object {
 private:
-    UUID _uuid;
-    std::string _name;
+    std::string _mPath = "./";
 
 public:
-    Resource() = default;
-    Resource(const Resource&) = default;
-    Resource(const std::string& name="Resource");
+    Resource(const std::string& type);
     ~Resource() = default;
-
-    UUID GetUUID() const;
-    std::string GetName() const;
 
 };
 

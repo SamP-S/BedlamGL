@@ -22,6 +22,8 @@ endif()
 
 # add submodule libraries
 add_subdirectory("dependencies/la")
+add_subdirectory("dependencies/spdlog")
+add_subdirectory("dependencies/json")
 
 set(INCLUDE_DIRS
     "include"
@@ -32,8 +34,11 @@ message(STATUS "SRC_FILES: ${SRC_FILES}")
 
 # game engine
 add_library(marathon ${SRC_FILES})
+### TODO: la should be private and considered "external/third-party" to marathon
 target_include_directories(marathon PUBLIC ${INCLUDE_DIRS})
 target_link_libraries(marathon PUBLIC la)
+target_link_libraries(marathon PRIVATE spdlog)
+target_link_libraries(marathon PRIVATE nlohmann_json::nlohmann_json)
 
 find_package(OpenGL REQUIRED)
 target_include_directories(marathon PUBLIC ${OPENGL_INCLUDE_DIRS})
@@ -53,15 +58,10 @@ target_link_libraries(marathon PUBLIC ${GLEW_LIBRARIES})
 message(STATUS "GLEW included at ${GLEW_INCLUDE_DIRS}")
 message(STATUS "GLEW libraries are ${GLEW_LIBRARIES}")
 
-# # runtime
-# add_executable(bedlam "test/bedlam/src/main.cpp")
-# target_include_directories(bedlam PUBLIC "test/bedlam/include")
-# target_link_libraries(bedlam PUBLIC marathon)
-
-# test no driver
-add_executable(no_driver "test/no_driver/src/main.cpp")
-target_include_directories(no_driver PUBLIC "test/no_driver/include")
-target_link_libraries(no_driver PUBLIC marathon)
+# runtime
+add_executable(example "test/example/src/main.cpp")
+target_include_directories(example PUBLIC "test/example/include")
+target_link_libraries(example PUBLIC marathon)
 
 
 add_executable(la_test "test/la_test.cpp")

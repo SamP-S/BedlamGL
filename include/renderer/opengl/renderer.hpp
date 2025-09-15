@@ -3,9 +3,13 @@
 #include <algorithm>
 #include <unordered_map>
 
+// include opengl deps
+#define GL_VERSION_4_4
+#include <GL/glew.h>
+
 #include "renderer/mesh.hpp"
 #include "renderer/shader.hpp"
-#include "renderer/opengl/opengl.hpp"
+#include "renderer/material.hpp"
 #include "renderer/renderer.hpp"
 
 namespace marathon {
@@ -81,6 +85,13 @@ protected:
     int FindOrCreateMeshHandler(std::shared_ptr<Mesh> mesh);
     
     bool SetDefaultUniforms();
+    bool SetMaterialUniforms(std::shared_ptr<Material> material);
+
+    // internal opengl error state check methods
+    bool CheckError();
+    bool CheckFrameBufferError();
+    bool CheckShaderError(GLuint shader);
+    bool CheckProgramError(GLuint program);
 
 public:
     Renderer();
@@ -156,6 +167,8 @@ public:
     bool SetUniform(const std::string& key, const LA::mat2& m) override;
     bool SetUniform(const std::string& key, const LA::mat3& m) override;
     bool SetUniform(const std::string& key, const LA::mat4& m) override;
+    // uniform property
+    bool SetUniform(const std::string& key, const UniformProperty& value) override;
 
 };
 

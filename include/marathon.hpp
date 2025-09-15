@@ -8,7 +8,6 @@
 // include core modules
 #include "core/module.hpp"
 #include "core/uuid.hpp"
-#include "core/property.hpp"
 #include "core/resource.hpp"
 
 #include "window/window.hpp"
